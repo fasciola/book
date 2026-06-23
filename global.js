@@ -38,5 +38,6 @@
     applyTheme(localStorage.getItem('theme') === 'light' ? 'light' : 'dark');
     addAsset('link', 'mobile-navigation.css', 'data-mobile-navigation');
     addAsset('script', 'mobile-navigation.js', 'data-mobile-navigation-script');
+    addAsset('script', 'reader-route-fix.js', 'data-reader-route-fix');
   });
 })();
