@@ -1,71 +1,77 @@
-(() => {
-  'use strict';
-  const config = window.BOOK_READER_CONFIG;
-  if (!config) return;
+import * as mammothModule from 'mammoth/mammoth.browser';
+
+const mammoth = mammothModule.default || mammothModule;
+const config = window.BOOK_READER_CONFIG;
+const sourceFiles = import.meta.glob('./assets/books/*.docx.b64', {
+  query: '?raw',
+  import: 'default'
+});
+
+if (config) {
   const root = document.getElementById('source-book');
   const status = document.getElementById('reader-status');
-
-  function addLibrary() {
-    return new Promise((resolve, reject) => {
-      if (window.mammoth) return resolve();
-      const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/mammoth@1.9.1/mammoth.browser.min.js';
-      script.onload = resolve;
-      script.onerror = reject;
-      document.head.appendChild(script);
-    });
-  }
 
   function decodeBase64(text) {
     const raw = atob(text.replace(/\s+/g, ''));
     const data = new Uint8Array(raw.length);
-    for (let i = 0; i < raw.length; i += 1) data[i] = raw.charCodeAt(i);
+    for (let index = 0; index < raw.length; index += 1) data[index] = raw.charCodeAt(index);
     return data.buffer;
   }
 
   function display(html) {
-    const temp = document.createElement('div');
-    temp.innerHTML = html;
+    const source = document.createElement('div');
+    source.innerHTML = html;
+
     const fragment = document.createDocumentFragment();
     let card = document.createElement('div');
     card.className = 'book-card';
-    let count = 0;
-    for (const node of Array.from(temp.children)) {
-      if (/^H[1-3]$/.test(node.tagName) && card.childNodes.length) {
+    let paragraphCount = 0;
+
+    for (const element of Array.from(source.children)) {
+      const isHeading = /^H[1-3]$/.test(element.tagName);
+      if (isHeading && card.childNodes.length) {
         fragment.appendChild(card);
         card = document.createElement('div');
         card.className = 'book-card';
-        count = 0;
+        paragraphCount = 0;
       }
-      if (/^H[1-3]$/.test(node.tagName)) node.classList.add('source-heading', 'source-heading-secondary');
-      if (node.tagName === 'P') node.classList.add('source-paragraph');
-      card.appendChild(node);
-      count += 1;
-      if (count === 18) {
+
+      if (isHeading) element.classList.add('source-heading', 'source-heading-secondary');
+      if (element.tagName === 'P') element.classList.add('source-paragraph');
+      card.appendChild(element);
+      paragraphCount += 1;
+
+      if (paragraphCount >= 18) {
         fragment.appendChild(card);
         card = document.createElement('div');
         card.className = 'book-card';
-        count = 0;
+        paragraphCount = 0;
       }
     }
+
     if (card.childNodes.length) fragment.appendChild(card);
     root.replaceChildren(fragment);
   }
 
   async function start() {
     try {
-      await addLibrary();
-      const response = await fetch(`assets/books/book-${config.code}.docx.b64`, { cache: 'force-cache' });
-      if (!response.ok) throw new Error('Source document unavailable');
-      const converted = await window.mammoth.convertToHtml({ arrayBuffer: decodeBase64(await response.text()) });
-      display(converted.value);
+      const sourcePath = `./assets/books/book-${config.code}.docx.b64`;
+      const loadSource = sourceFiles[sourcePath];
+      if (!loadSource) throw new Error(`Missing source file: ${sourcePath}`);
+
+      const encodedDocument = await loadSource();
+      const result = await mammoth.convertToHtml({ arrayBuffer: decodeBase64(encodedDocument) });
+      display(result.value);
       if (status) status.remove();
     } catch (error) {
       console.error(error);
-      if (status) status.textContent = config.errorText || 'The text could not be loaded. Please refresh the page.';
+      if (status) {
+        status.classList.add('reader-load-error');
+        status.innerHTML = `<i class="fas fa-triangle-exclamation"></i><span>${config.errorText || 'The text could not be loaded. Please refresh the page.'}</span>`;
+      }
     }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
   else start();
-})();
+}
