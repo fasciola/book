@@ -16,18 +16,32 @@
     <div class="nav-links" id="navLinks"><a href="index.html">Languages</a><span class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon" id="themeIcon"></i></span></div>
   </nav>
   <main class="container">
-    <header style="text-align:center;margin-bottom:3rem;"><h1 class="book-title" id="readerTitle">Read Online</h1><div style="text-align:center;"><span class="sub-title">Spare Some Minutes of Your Time</span></div></header>
-    <div class="translated-reader-layout"><aside class="translated-reader-sidebar"><h3>Contents</h3><div class="toc"><a href="#source-book">Read the book</a></div></aside><section class="translated-reader-main" id="source-book"><p class="reader-loading" id="reader-status"><i class="fas fa-spinner fa-spin"></i><span>Loading…</span></p></section></div>
+    <header style="text-align:center;margin-bottom:3rem;"><h1 class="book-title" id="readerTitle">Read Online</h1><div style="text-align:center;"><span class="sub-title" id="readerSubtitle">Spare Some Minutes of Your Time</span></div></header>
+    <div class="translated-reader-layout"><aside class="translated-reader-sidebar"><h3 id="readerContents">Contents</h3><div class="toc"><a href="#source-book" id="readerLink">Read the book</a></div></aside><section class="translated-reader-main" id="source-book"><p class="reader-loading" id="reader-status"><i class="fas fa-spinner fa-spin"></i><span id="readerLoading">Loading…</span></p></section></div>
   </main>
   <script>
-    const allowed = new Set(['nl','sw']);
+    const editions = {
+      fr: { title: 'Message à ceux qui qui cherchent la vérité', subtitle: 'La terre est la patrie de tous', contents: 'Table des matières', action: 'Lire le livre…', script: 'latin', lang: 'fr' },
+      de: { title: 'Massage für allen Suchenden der Wahrheit', subtitle: 'Die Erde ist die Heimat aller Geschöpfen', contents: 'Inhalt', action: 'Das Buch lesen…', script: 'latin', lang: 'de' },
+      ru: { title: 'Русское издание', subtitle: 'Spare Some Minutes of Your Time', contents: 'Содержание', action: 'Читать книгу…', script: 'cyrillic', lang: 'ru' },
+      zh: { title: '中文版本', subtitle: 'Spare Some Minutes of Your Time', contents: '目录', action: '阅读本书…', script: 'cjk', lang: 'zh-CN' },
+      nl: { title: 'Nederlandse editie', subtitle: 'Spare Some Minutes of Your Time', contents: 'Inhoud', action: 'Lees het boek…', script: 'latin', lang: 'nl' },
+      sw: { title: 'Toleo la Kiswahili', subtitle: 'Spare Some Minutes of Your Time', contents: 'Yaliyomo', action: 'Soma kitabu…', script: 'latin', lang: 'sw' }
+    };
     const code = new URLSearchParams(location.search).get('lang');
-    if (!allowed.has(code)) location.replace('index.html');
+    const edition = editions[code];
+    if (!edition) location.replace('index.html');
+    document.documentElement.lang = edition.lang;
+    document.body.dataset.script = edition.script;
+    document.title = `${edition.title} — Spare Some Minutes of Your Time`;
+    document.getElementById('readerTitle').textContent = edition.title;
+    document.getElementById('readerSubtitle').textContent = edition.subtitle;
+    document.getElementById('readerContents').textContent = edition.contents;
+    document.getElementById('readerLink').textContent = edition.action;
+    document.getElementById('readerLoading').textContent = edition.action;
     window.BOOK_READER_CONFIG = { code, errorText: 'Unable to load this edition. Please refresh the page.' };
-    const labels = { nl: 'Nederlandse editie', sw: 'Toleo la Kiswahili' };
-    document.getElementById('readerTitle').textContent = labels[code] || 'Read Online';
   </script>
   <script src="global.js"></script>
-  <script src="reader-loader.js"></script>
+  <script type="module" src="reader-loader.js"></script>
 </body>
 </html>
