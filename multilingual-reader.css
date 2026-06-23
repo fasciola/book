@@ -1,0 +1,101 @@
+/* Direct HTML readers for the translated editions.
+   Content is rendered as text, not in a PDF or document-viewer frame. */
+.translated-reader-layout {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  align-items: flex-start;
+}
+.translated-reader-sidebar {
+  width: 280px;
+  flex: 0 0 280px;
+  position: sticky;
+  top: 100px;
+  max-height: calc(100vh - 140px);
+  overflow-y: auto;
+  background: var(--color-cream-dark);
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 1px solid var(--color-border);
+}
+.translated-reader-main {
+  min-width: 0;
+  flex: 1;
+  max-width: 800px;
+}
+.translated-reader-main .book-card { margin-bottom: 2rem; }
+.source-title-card {
+  text-align: center;
+}
+.source-title-card .source-paragraph {
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+}
+.source-paragraph {
+  max-width: none;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: normal;
+}
+.source-paragraph.source-align-center { text-align: center; }
+.source-paragraph.source-align-right { text-align: right; }
+.source-paragraph.source-align-left { text-align: left; }
+.source-heading {
+  color: var(--color-primary);
+  margin-top: .35rem;
+  margin-bottom: 1.15rem;
+}
+.source-heading.source-heading-secondary {
+  font-size: clamp(1.28rem, 2.6vw, 1.7rem);
+  color: var(--color-text);
+}
+.source-heading.source-align-center { text-align: center; }
+.source-run-bold { font-weight: 700; }
+.source-run-italic { font-style: italic; }
+.source-run-underline { text-decoration: underline; text-underline-offset: 0.16em; }
+.source-run-smallcaps { font-variant: small-caps; }
+.source-run-sup { vertical-align: super; font-size: .78em; }
+.source-run-sub { vertical-align: sub; font-size: .78em; }
+.source-footnote-ref { font-family: var(--font-ui); line-height: 0; }
+.source-footnote-ref a { padding: 0 .1rem; }
+.source-footnotes {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--color-border);
+}
+.source-footnotes h2 { font-size: 1.35rem; }
+.source-footnote {
+  max-width: none;
+  font-size: .92rem;
+  color: var(--color-secondary);
+  text-align: left;
+}
+.source-footnote-number { color: var(--color-primary); font-family: var(--font-ui); font-weight: 700; }
+.translated-reader-meta {
+  text-align: center;
+  margin: -1rem auto 1.25rem;
+  max-width: 70ch;
+  color: var(--color-secondary);
+}
+.translated-reader-meta a { font-family: var(--font-ui); font-size: .85rem; letter-spacing: .05em; text-transform: uppercase; }
+[data-script="cjk"] .source-paragraph { font-family: "Noto Serif CJK SC", "Songti SC", "SimSun", serif; line-height: 2.05; }
+[data-script="cyrillic"] .source-paragraph { font-family: "PT Serif", Georgia, serif; }
+[data-script="arabic-mixed"] .source-paragraph { line-height: 2; }
+@media (max-width: 992px) {
+  .translated-reader-sidebar { display: none; }
+  .translated-reader-main { max-width: none; }
+}
+@media (max-width: 640px) {
+  .translated-reader-layout { margin-top: 1.25rem; }
+  .translated-reader-main .book-card { padding: 1.25rem; }
+  .source-paragraph { text-align: left; }
+  [dir="rtl"] .source-paragraph { text-align: right; }
+}
+
+.reader-loading {
+  display:flex; align-items:center; gap:.7rem; color:var(--color-secondary);
+  font-family:var(--font-ui); font-size:.9rem; padding:1.25rem;
+}
+.reader-loading i { color:var(--color-primary); }
+.reader-load-error { color:#ef9a9a; }
