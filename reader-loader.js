@@ -1,1 +1,1 @@
-import './docx-reader.js';
+import './docx-reader-reviewed.js';
