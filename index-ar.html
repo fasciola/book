@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كتاب أعطني دقائق من وقتك — الصفحة الرئيسية للنسخة العربية</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Shared Style library -->
+    <link rel="stylesheet" href="global.css">
+    <!-- Immediate theme setter script to prevent flickering -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <style>
+        .arabic-hero {
+            padding: 5rem 2rem 4rem 2rem;
+            text-align: center;
+            background: rgba(22, 26, 32, 0.4);
+            border-bottom: 1px solid var(--color-border);
+            margin-bottom: 3rem;
+            border-radius: var(--radius-md);
+        }
+        .arabic-hero h1 {
+            font-family: 'Amiri', 'Playfair Display', serif;
+            font-size: clamp(2.4rem, 6vw, 3.8rem);
+            color: var(--color-accent);
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 1rem;
+        }
+        .arabic-hero .author-sig {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            color: var(--color-text);
+            margin-bottom: 1.5rem;
+            opacity: 0.9;
+        }
+        .arabic-hero .intro-paragraph {
+            max-width: 80ch;
+            margin: 0 auto 2.5rem auto;
+            font-size: clamp(1.1rem, 2.2vw, 1.3rem);
+            line-height: 2;
+            text-align: center;
+            color: var(--color-text);
+            opacity: 0.95;
+        }
+        .arabic-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .arabic-option-card {
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 2.2rem;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .arabic-option-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--color-accent);
+            box-shadow: var(--shadow-md);
+        }
+        .arabic-option-card h3 {
+            font-family: 'Amiri', var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--color-accent);
+            border-bottom: 1px dashed var(--color-border);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .arabic-option-card p {
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--color-secondary);
+            margin-bottom: 1.8rem;
+            text-align: justify;
+        }
+        .arabic-option-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            background: var(--color-primary);
+            color: #0f1115 !important;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-family: var(--font-ui);
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-decoration: none;
+            transition: all var(--transition-base);
+            border: 1px solid var(--color-primary);
+        }
+        .arabic-option-btn:hover {
+            background: #f1cf5f;
+            border-color: #f1cf5f;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.2);
+        }
+        .arabic-quran-box {
+            text-align: center;
+            margin-top: 4rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo-container">
+            <a href="index.html" class="logo" title="اختيار اللغة / Language Selection">
+                <img src="logo-black.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-black" onerror="this.style.display='none';">
+                <img src="logo-white.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-white" onerror="this.style.display='none';">
+                <span class="logo-text">أعطني دقائق من وقتك</span>
+            </a>
+        </div>
+
+        <div class="menu-icon" onclick="toggleMenu()" aria-label="Toggle Menu">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+            <a href="index-ar.html" class="active">الرئيسية</a>
+            <a href="read-ar.html">اقرأ بالعربية</a>
+            <a href="index-en.html">English Portal</a>
+            <a href="chapters.html">فصول الكتاب</a>
+            <a href="about.html">عن الكتاب</a>
+            <a href="author.html">المؤلف</a>
+            <a href="download.html">تحميل PDF</a>
+            <a href="contact.html">اتصل بنا</a>
+            <span class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <!-- Hero Section -->
+        <header class="arabic-hero">
+            <h1>أعطني دقائق من وقتك</h1>
+            <div class="author-sig">بقلم الصحفي والباحث: <strong>أحمد التجاني أحمد البدوي</strong></div>
+            <p class="intro-paragraph">
+                رسالة شخصية صادقة لكل باحث عن الحقيقة في أرجاء الأرض. كتاب يلخص رحلة دامت أكثر من عشر سنوات من الاطلاع والبحث المتواصل في التوراة، والإنجيل، والقرآن الكريم، ومذاهب الفلاسفة، خاضها المؤلف متقيداً بمباديء التفكر الصارمة: التناسق العقلي، الموثوقية التاريخية، والجمال الأخلاقي.
+            </p>
+            <div class="btn-group">
+                <a href="read-ar.html" class="btn">ابدأ القراءة فوراً</a>
+                <a href="download.html" class="btn btn-outline">تحميل النسخة الرقمية PDF</a>
+            </div>
+        </header>
+
+        <!-- Dynamic Grid of All Options -->
+        <section class="arabic-grid">
+            
+            <!-- Option 1: Read Arabic -->
+            <article class="arabic-option-card">
+                <div>
+                    <h3><i class="fas fa-book-open"></i> قراءة الكتاب كاملًا</h3>
+                    <p>استكشف الأجزاء الأربعة للكتاب إلكترونياً وبطريقة تفاعلية مريحة للعين، متوافقة مع شاشات الجوال والحواسب، ومصنفة لتسهيل التنقل والبحث.</p>
+                </div>
+                <a href="read-ar.html" class="arabic-option-btn">تصفح الكتاب بالعربية &larr;</a>
+            </article>
+
+            <!-- Option 2: Table of Chapters -->
+            <article class="arabic-option-card">
+                <div>
+                    <h3><i class="fas fa-list-ol"></i> فصول الكتاب وأبوابه</h3>
+                    <p>تعرّف على خارطة الطريق التي يسلكها الكاتب، تنقل مباشرة للأقسام والمحاور المهمة؛ كالتوحيد وكرامة الإنسان وحقوق المرأة والبيئة والسلم والتعايش.</p>
+                </div>
+                <a href="chapters.html" class="arabic-option-btn">عرض جدول الفصول &larr;</a>
+            </article>
+
+            <!-- Option 3: About Scientific Method -->
+            <article class="arabic-option-card">
+                <div>
+                    <h3><i class="fas fa-compass"></i> المنهج العلمي والبحثي</h3>
+                    <p>كيف توصّل الكاتب إلى هذه النتائج؟ وما هي المعايير التي صهر بها الشرائع والمعتقدات ليصل للسلام والطمأنينة وشمول الشريعة الإلهية؟</p>
+                </div>
+                <a href="about.html" class="arabic-option-btn">عن فكرة الكتاب والمنهج &larr;</a>
+            </article>
+
+            <!-- Option 4: About the Author -->
+            <article class="arabic-option-card">
+                <div>
+                    <h3><i class="fas fa-user-tie"></i> عن الباحث والكاتب</h3>
+                    <p>سيرة ذاتية مفصلة عن الكاتب والباحث والجروناليست السوداني أحمد التجاني أحمد البدوي، خطيب وإمام مسجد الرهد وكاتب ومحرر بموقع سودانايل والعديد من المنابر الثقافية.</p>
+                </div>
+                <a href="author.html" class="arabic-option-btn">سيرة المؤلف والتواصل معه &larr;</a>
+            </article>
+
+            <!-- Option 5: Free PDF Translations -->
+            <article class="arabic-option-card">
+                <div>
+                    <h3><i class="fas fa-cloud-download-alt"></i> تحميل الكتاب الرقمي</h3>
+                    <p>الحقيقة حق مشاع للبشرية جمعاء. يمكنك تحميل نسختك الرقمية مجاناً ومباشرة بسبع لغات مختلفة (العربية، الإنجليزية، الإسبانية، الألمانية، الصينية، الروسية، والهولندية).</p>
+                </div>
+                <a href="download.html" class="arabic-option-btn">تحميل النسخ المترجمة PDF &larr;</a>
+            </article>
+
+            <!-- Option 6: Direct Communications -->
+            <article class="arabic-option-card">
+                <div>
+                    <h3><i class="fas fa-comments"></i> تواصل ومشاركة فكرية</h3>
+                    <p>يرحب الكاتب بجميع الاستفسارات الصادقة، مشاركة الأطروحات والمناقشات المحترمة وحوارات الأديان من كل زوار الموقع بمختلف خلفياتهم الفكرية.</p>
+                </div>
+                <a href="contact.html" class="arabic-option-btn">قنوات الاتصال المباشرة &larr;</a>
+            </article>
+
+        </section>
+
+        <!-- Quote Block -->
+        <section class="arabic-quran-box">
+            <div class="quran-verse" dir="rtl" style="margin-top: 3rem;">
+                "قُلْ هَٰذِهِ سَبِيلِي أَدْعُو إِلَى اللَّهِ ۚ عَلَىٰ بَصِيرَةٍ أَنَا وَمَنِ اتَّبَعَنِي ۖ"
+            </div>
+        </section>
+
+    </main>
+
+    <!-- WhatsApp Direct Float Button -->
+    <a href="https://wa.me/249910438069" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="دردش واتساب">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <p>&copy; 2026 أحمد التجاني أحمد البدوي. متاح مجاناً بـ 7 لغات عالمية لترسيخ التعايش والسلام.</p>
+        <p>
+            <a href="contact.html">اتصل بنا</a> | 
+            <a href="about.html">عن فكرة الكتاب</a> | 
+            <a href="download.html">تحميلات PDF المباشرة</a>
+        </p>
+    </footer>
+
+    <!-- Shared interaction engine script -->
+    <script src="global.js"></script>
+</body>
+</html>

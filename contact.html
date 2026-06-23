@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact — Spare Some Minutes of Your Time</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Shared Style library -->
+    <link rel="stylesheet" href="global.css">
+    <!-- Immediate theme setter script to prevent flickering -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <style>
+        .contact-box {
+            background: var(--color-white);
+            padding: 2.5rem;
+            border-radius: 14px;
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+        }
+        .contact-method {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-top: 1.8rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        .contact-method:last-of-type {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+        .contact-icon {
+            font-size: 1.8rem;
+            color: var(--color-accent);
+            flex-shrink: 0;
+            background: rgba(212, 175, 55, 0.1);
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        .contact-details h3 {
+            margin-top: 0;
+            margin-bottom: 5px;
+            color: var(--color-primary);
+            font-family: var(--font-heading);
+        }
+        .contact-details p {
+            margin-bottom: 0;
+            color: var(--color-secondary);
+        }
+        .contact-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--color-primary);
+            color: #ffffff !important;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-family: var(--font-ui);
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-top: 10px;
+            transition: background 0.3s;
+            text-decoration: none;
+        }
+        .contact-btn:hover {
+            background: var(--color-accent);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo-container">
+            <a href="index.html" class="logo">
+                <img src="logo-black.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-black" onerror="this.style.display='none';">
+                <img src="logo-white.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-white" onerror="this.style.display='none';">
+                <span class="logo-text">Spare Some Minutes</span>
+            </a>
+        </div>
+
+        <div class="menu-icon" onclick="toggleMenu()" aria-label="Toggle Menu">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+            <a href="index-en.html">Home</a>
+            <a href="read.html">Read (EN)</a>
+            <a href="read-ar.html" lang="ar" dir="rtl">الكتاب (العربية)</a>
+            <a href="chapters.html">Chapters</a>
+            <a href="about.html">About</a>
+            <a href="author.html">Author</a>
+            <a href="download.html">Download</a>
+            <a href="contact.html">Contact</a>
+            <span class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container" style="max-width: 800px;">
+        
+        <header style="text-align: center; margin-bottom: 3rem;">
+            <h1 class="book-title">Contact Us</h1>
+            <div style="text-align: center;">
+                <span class="sub-title">Have any questions? Sincere dialogues are always welcome</span>
+            </div>
+        </header>
+
+        <section class="contact-box">
+            <p style="font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.5rem;">
+                Whether you have simple questions, interesting feedback, or request direct interfaith exchanges, the author welcome highly sincere and constructive conversations from searchers of all worldwide backgrounds.
+            </p>
+
+            <!-- Method 1: Email -->
+            <div class="contact-method">
+                <div class="contact-icon"><i class="fas fa-envelope"></i></div>
+                <div class="contact-details">
+                    <h3>Primary Email</h3>
+                    <p>For correspondence, question submissions, translation approvals, or direct feedback:</p>
+                    <a href="mailto:ahmedtijany@hotmail.com" class="contact-btn">
+                        ahmedtijany@hotmail.com
+                    </a>
+                </div>
+            </div>
+
+            <!-- Method 2: WhatsApp -->
+            <div class="contact-method">
+                <div class="contact-icon"><i class="fab fa-whatsapp"></i></div>
+                <div class="contact-details">
+                    <h3>WhatsApp Direct Chat</h3>
+                    <p>For faster inquiries or immediate mobile conversation directly with the author's lines:</p>
+                    <a href="https://wa.me/249910438069" class="contact-btn" target="_blank" rel="noopener noreferrer" style="background-color: #25d366;">
+                        <i class="fab fa-whatsapp" style="font-size: 1.1rem;"></i> Chat with Author
+                    </a>
+                </div>
+            </div>
+
+            <!-- Method 3: Response Time info -->
+            <div class="contact-method">
+                <div class="contact-icon"><i class="far fa-clock"></i></div>
+                <div class="contact-details">
+                    <h3>Response Expectations</h3>
+                    <p>
+                        The author receives letters from seekers around the globe and attempts to answer them personally. Please allow some days for detailed theological answers. Thank you immensely for your patience.
+                    </p>
+                </div>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- WhatsApp Floating Action -->
+    <a href="https://wa.me/249910438069" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <p>&copy; 2026 Ahmed Attijani Ahmed Albadawi. All rights reserved.</p>
+        <p>
+            <a href="contact.html">Contact Us</a> | 
+            <a href="about.html">About Book</a> | 
+            <a href="download.html">PDF Downloads</a>
+        </p>
+    </footer>
+
+    <!-- Shared interaction engine script -->
+    <script src="global.js"></script>
+</body>
+</html>

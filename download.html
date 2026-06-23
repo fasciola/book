@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download — Spare Some Minutes of Your Time</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Shared Style library -->
+    <link rel="stylesheet" href="global.css">
+    <!-- Immediate theme setter script to prevent flickering -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo-container">
+            <a href="index.html" class="logo">
+                <img src="logo-black.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-black" onerror="this.style.display='none';">
+                <img src="logo-white.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-white" onerror="this.style.display='none';">
+                <span class="logo-text">Spare Some Minutes</span>
+            </a>
+        </div>
+
+        <div class="menu-icon" onclick="toggleMenu()" aria-label="Toggle Menu">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+            <a href="index-en.html">Home</a>
+            <a href="read.html">Read (EN)</a>
+            <a href="read-ar.html" lang="ar" dir="rtl">الكتاب (العربية)</a>
+            <a href="chapters.html">Chapters</a>
+            <a href="about.html">About</a>
+            <a href="author.html">Author</a>
+            <a href="download.html">Download</a>
+            <a href="contact.html">Contact</a>
+            <span class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <header style="text-align: center; margin-bottom: 3rem;">
+            <h1 class="book-title">Download the Book</h1>
+            <div style="text-align: center;">
+                <span class="sub-title">The truth is free and belongs to all humanity</span>
+            </div>
+            <p style="margin: 0 auto; text-align: center; max-width: 70ch; font-size: 1.1rem; color: var(--color-secondary);">
+                No registrations required. No fees. No email lists. Please select your preferred translation language below to download your permanent free copy:
+            </p>
+        </header>
+
+        <!-- Download Cards Grid -->
+        <div class="download-grid">
+            
+            <!-- English -->
+            <article class="download-card">
+                <div>
+                    <div class="lang-header">
+                        <span class="lang-code">EN</span>
+                        <span class="lang-name">English</span>
+                    </div>
+                    <div class="file-info"><i class="far fa-file-pdf"></i> PDF e-Book · book-en.pdf</div>
+                </div>
+                <a href="downloads/book-en.pdf" class="btn-download" download><i class="fas fa-download"></i> Download PDF</a>
+            </article>
+
+            <!-- Arabic -->
+            <article class="download-card">
+                <div>
+                    <div class="lang-header">
+                        <span class="lang-code">AR</span>
+                        <span class="lang-name" lang="ar" dir="rtl">العربية (Arabic)</span>
+                    </div>
+                    <div class="file-info"><i class="far fa-file-pdf"></i> PDF e-Book · book-ar.pdf</div>
+                </div>
+                <a href="downloads/book-ar.pdf" class="btn-download" download><i class="fas fa-download"></i> تحميل الكتاب PDF</a>
+            </article>
+
+            <!-- Spanish -->
+            <article class="download-card">
+                <div>
+                    <div class="lang-header">
+                        <span class="lang-code">ES</span>
+                        <span class="lang-name">Español (Spanish)</span>
+                    </div>
+                    <div class="file-info"><i class="far fa-file-pdf"></i> PDF e-Book · book-es.pdf</div>
+                </div>
+                <a href="downloads/book-es.pdf" class="btn-download" download><i class="fas fa-download"></i> Descargar PDF</a>
+            </article>
+
+            <!-- German -->
+            <article class="download-card">
+                <div>
+                    <div class="lang-header">
+                        <span class="lang-code">DE</span>
+                        <span class="lang-name">Deutsch (German)</span>
+                    </div>
+                    <div class="file-info"><i class="far fa-file-pdf"></i> PDF e-Book · book-de.pdf</div>
+                </div>
+                <a href="downloads/book-de.pdf" class="btn-download" download><i class="fas fa-download"></i> Herunterladen PDF</a>
+            </article>
+
+            <!-- Chinese -->
+            <article class="download-card">
+                <div>
+                    <div class="lang-header">
+                        <span class="lang-code">ZH</span>
+                        <span class="lang-name">中文 (Chinese)</span>
+                    </div>
+                    <div class="file-info"><i class="far fa-file-pdf"></i> PDF e-Book · book-ch.pdf</div>
+                </div>
+                <a href="downloads/book-ch.pdf" class="btn-download" download><i class="fas fa-download"></i> 下载 PDF 电子书</a>
+            </article>
+
+            <!-- Russian -->
+            <article class="download-card">
+                <div>
+                    <div class="lang-header">
+                        <span class="lang-code">RU</span>
+                        <span class="lang-name">Русский (Russian)</span>
+                    </div>
+                    <div class="file-info"><i class="far fa-file-pdf"></i> PDF e-Book · book-rus.pdf</div>
+                </div>
+                <a href="downloads/book-rus.pdf" class="btn-download" download><i class="fas fa-download"></i> Скачать PDF</a>
+            </article>
+
+            <!-- Dutch -->
+            <article class="download-card">
+                <div>
+                    <div class="lang-header">
+                        <span class="lang-code">NL</span>
+                        <span class="lang-name">Nederlands (Dutch)</span>
+                    </div>
+                    <div class="file-info"><i class="far fa-file-pdf"></i> PDF e-Book · book-hl.pdf</div>
+                </div>
+                <a href="downloads/book-hl.pdf" class="btn-download" download><i class="fas fa-download"></i> Download PDF</a>
+            </article>
+
+        </div>
+
+        <section class="card" style="margin-top: 3rem; text-align: center;">
+            <h2 style="color: var(--color-primary);">Distribution Guidelines</h2>
+            <p style="margin: 0 auto; text-align: center; max-width: 80ch;">
+                You are highly encouraged and fully licensed to share, print, distribute, or upload these digital PDF copies anywhere. You can share them with friends, family, local libraries, reading circles, or place them on online repositories. The author asks only that the original content remains unmodified and appropriately attributed.
+            </p>
+        </section>
+
+    </main>
+
+    <!-- WhatsApp Floating Action -->
+    <a href="https://wa.me/249910438069" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <p>&copy; 2026 Ahmed Attijani Ahmed Albadawi. Available in 7 languages worldwide.</p>
+        <p>
+            <a href="contact.html">Contact Us</a> | 
+            <a href="about.html">About Book</a> | 
+            <a href="download.html">PDF Downloads</a>
+        </p>
+    </footer>
+
+    <!-- Shared interaction engine script -->
+    <script src="global.js"></script>
+</body>
+</html>

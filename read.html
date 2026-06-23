@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read Online — Spare Some Minutes of Your Time</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Shared Style library -->
+    <link rel="stylesheet" href="global.css">
+    <!-- Immediate theme setter script to prevent flickering -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <style>
+        /* Specific Reader Page Dual-Column Layout overrides */
+        .reader-layout {
+            display: flex;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        .reader-sidebar {
+            width: 280px;
+            flex-shrink: 0;
+            position: sticky;
+            top: 100px;
+            height: calc(100vh - 140px);
+            overflow-y: auto;
+            background: var(--color-cream-dark);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+        }
+        .reader-main {
+            flex-grow: 1;
+            max-width: 800px;
+        }
+        @media (max-width: 992px) {
+            .reader-sidebar {
+                display: none; /* Hide TOC sidebar on smaller devices */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo-container">
+            <a href="index.html" class="logo">
+                <img src="logo-black.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-black" onerror="this.style.display='none';">
+                <img src="logo-white.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-white" onerror="this.style.display='none';">
+                <span class="logo-text">Spare Some Minutes</span>
+            </a>
+        </div>
+
+        <div class="menu-icon" onclick="toggleMenu()" aria-label="Toggle Menu">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+            <a href="index-en.html">Home</a>
+            <a href="read.html">Read (EN)</a>
+            <a href="read-ar.html" lang="ar" dir="rtl">الكتاب (العربية)</a>
+            <a href="chapters.html">Chapters</a>
+            <a href="about.html">About</a>
+            <a href="author.html">Author</a>
+            <a href="download.html">Download</a>
+            <a href="contact.html">Contact</a>
+            <span class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Reading Container -->
+    <main class="container">
+        
+        <header style="text-align: center; margin-bottom: 3rem;">
+            <h1 class="book-title" id="cover">Spare Some Minutes of Your Time</h1>
+            <div style="text-align: center;">
+                <span class="sub-title">A Personal Letter to Every Truth-Seeker</span>
+            </div>
+        </header>
+
+        <div class="reader-layout">
+            
+            <!-- Table of Contents Sidebar -->
+            <aside class="reader-sidebar">
+                <h3 style="font-size: 1.1rem; border-bottom: 1px solid var(--color-border); padding-bottom: 8px; margin-bottom: 12px;">Chapters</h3>
+                <div class="toc" style="border: none; padding: 0; background: transparent; margin: 0;">
+                    <a href="#part1">Part One: To All Truth Seekers</a>
+                    <a href="#part2">Part Two: The Truth Found</a>
+                    <a href="#part3">Part Three: Where I Found It</a>
+                    <a href="#part4">Part Four: Details of the Truth</a>
+                    <a href="#oneness" style="padding-left: 15px; font-size: 0.9rem;">- Oneness of God</a>
+                    <a href="#prayer" style="padding-left: 15px; font-size: 0.9rem;">- Prayer & Community</a>
+                    <a href="#zakat" style="padding-left: 15px; font-size: 0.9rem;">- Zakat</a>
+                    <a href="#fasting" style="padding-left: 15px; font-size: 0.9rem;">- Fasting</a>
+                    <a href="#pilgrimage" style="padding-left: 15px; font-size: 0.9rem;">- Pilgrimage</a>
+                    <a href="#human-origins" style="padding-left: 15px; font-size: 0.9rem;">- Human Origins</a>
+                    <a href="#family" style="padding-left: 15px; font-size: 0.9rem;">- Family relations</a>
+                    <a href="#women" style="padding-left: 15px; font-size: 0.9rem;">- Women's Rights</a>
+                    <a href="#hijab" style="padding-left: 15px; font-size: 0.9rem;">- Hijab</a>
+                    <a href="#slavery" style="padding-left: 15px; font-size: 0.9rem;">- Slavery Phase-out</a>
+                    <a href="#environment" style="padding-left: 15px; font-size: 0.9rem;">- Environmental duty</a>
+                    <a href="#economy" style="padding-left: 15px; font-size: 0.9rem;">- Wealth & Work</a>
+                    <a href="#war" style="padding-left: 15px; font-size: 0.9rem;">- War & Peace</a>
+                    <a href="#prophethood" style="padding-left: 15px; font-size: 0.9rem;">- Prophethood</a>
+                    <a href="#author">About the Author</a>
+                </div>
+            </aside>
+
+            <!-- Main Interactive Reader Area -->
+            <section class="reader-main">
+
+                <div class="book-card">
+                    <h2 id="part1">Part One: A message addressed to all truth seekers</h2>
+                    <p>This message is addressed to every seeker of the truth on Earth, who is pursuing happiness and security. This message is addressed to all other people in the globe who, despite being different from me, are the object of my recognition and respect, for in the final analysis we all have proceeded from the same origin.</p>
+                    <p>We once shared the same parents who, upon exiting Paradise and coming to Earth, shared the same look, the same language and the same culture. However, due to variations in the environments of geographical locations, we came to be different in terms of color, look and language, but remained the same in terms of mind, heart and soul. My message will appeal to the heart and soul since they, not the outward appearance, are the message targets that count when we consider the value of humans.</p>
+                    <p>This is a message addressed to those who are denied access to the truth although they are inhabitants of this same earth of ours, where long distances have been shortened, barriers have been eliminated and interests have overlapped, wherein we share the same air and the same light of moon and sun and where we can monitor the happenings across a world in which communication and knowledge of each other’s culture have become easier for us (as if the entire humanity have been gathered in a single room) while being in our bedroom, under a tree in an African jungle or in high rises in America.</p>
+                    <p>Although the latest technological advancements have facilitated communication a great deal and achieved virtual proximity among us, we remain at variance in terms of thoughts and feelings and also remain in a dire need for a common source of reassurance. We are still in need of that stuff which would nurture our souls after we have satiated our physical needs. We are in no need of the current state of helter-skelter, killings, arrogance, turmoil, greed and selfishness. The current state of affairs is not appropriate for us for the fact that we have become intellectually mature and materially advanced due to the increase in education percentage, the mutual audio-visual culture prevalent in the entire world and the level of civilization we have reached. It is regrettable that the more progress man achieves in terms of thought and intellect, the more regression he makes as pertains to the treatment of other humans, a fact that is reflected in the oppression, degradation and the lack of regard for the sanctity of human life. It is a shame that man has been able to develop the computer and the mobile phone and the internet, and to land on the moon, yet has failed to provide for himself and to the creatures around, especially the human beings, decent life based on justice and equality, in which people may excel each other only by good deeds that would help develop the earth, solve its problems and save it from any potential disaster.</p>
+                    <p>If we are convinced that there is a need for us to rectify the situation, and in a need for a common factor that would unify our hearts and minds, then let us together start searching for the means by which we can reach that goal. Where can we find the necessary means? Is it in the Torah, the Gospel, the Torah and the Gospel combined, the Quran or the theories and assertions of thinkers? We ought to apply ourselves searching for the truth without being affected by our prejudices or having our minds blocked by insisting to adhere to the legacies of our predecessors. Our ever-sought-after goal should be the truth that unifies, strengthens and is a cause of happiness for all of us, the truth whereby the Earth is home for all humanity and the doing of good deeds is our common creed which is convenient to all and the adherence to which is conductive to security and tranquility.</p>
+                    <p>Therefore, I plead with all those interested in the search for the truth to come forward with their <strong>suggestions</strong> and solutions in order that we may set the record straight as concerns the dismal <strong>present</strong> conditions of ours and prevent a possibly bleak future. Let us start now.</p>
+                    <p>Just as others continue to search for the truth in different sources, I, too, have continued to look for it—without being in favor of any particular ideology—by researching, reading, analyzing and comparing. The final product of my search is this article which I hope will contain the object of our persistent pursuit. This is a message addressed to whoever is looking for the truth in an environment dominated by oppression and wherein people are disoriented and stuck in a quagmire, perhaps they might find the truth that would deliver them out of this predicament.</p>
+                </div>
+
+                <div class="book-card">
+                    <h2 id="part2">Part Two: The Truth I have found</h2>
+                    <p>Having searched thoroughly, I think I have found the truth and found the definitive answer that I wanted to share with you unless you call my credibility in question. Listen to me, hear me out, rush not to judging me and turn not away from me as I tell you the truth, for the truth is but a concept and concepts need to be listened to attentively and thought over thoroughly. So, once again, I implore you to lend me your ears, consider what I say, don’t be impatient and free your minds of all prejudgments so you can learn what I believe is the truth which we have been seeking for many years.</p>
+                    <p>We have sought the truth in the historical literature and stories of the previous generations. We have sought it, as well, in the theories spawning the multitude of modern inventions which we wrongly thought would bring us felicity, prosperity and security.</p>
+                    <p>If you happen to wonder what the truth is, I can say it is the value that endows man with his human respectability without him having to solicit it, helps him achieve his inalienable rights of happiness and dignity and enables him to identify his rights and responsibilities. This is the truth according to which there should be no excessive cutting down of trees, extravagance, prodigality, bloodshed, environmental destruction, injustice, property misappropriation, discrimination, or selfishness. This is the truth according to which people are judged by their useful ideas and accomplishments.</p>
+                    <p>If you asked me how I came to find this truth which conforms to the norms of the Universe, I would say that I came to know it after extensive search and after a long contemplation. I decided to search for the truth after I had become convinced that having done away with the physical barriers, humans ought to achieve proximity and together find nurture for the soul after their materialistic needs have been overly satiated. It is <strong>high</strong> time humans endeavored to achieve security and stability after turmoil has reigned supreme. It is <strong>high</strong> time they realized prosperity and luxury after wealth has been monopolized by the rich and by multinational companies, and after they have been divided into different classes by the factors of color, race and wealth.</p>
+                </div>
+
+                <div class="book-card">
+                    <h2 id="part3">Part Three: The Truth and where I have found it</h2>
+                    <p>The Holy Book in which I have found the truth is the one that was revealed as a continuation of the previous scriptures and a rectifier of their distortions. It is the one that confirms the verity of the previous divine messages, establishes the common origin of all faiths, proves the unity of God, watches over the previous scriptures and is the source of guidance for the entire humanity. The book in question, which is truly qualified to achieve all of the above-mentioned goals, is the one that I have found the truth in.</p>
+                </div>
+
+                <div class="book-card">
+                    <h2 id="part4">Part Four: The details of the truth I have found</h2>
+                    <p>I implore you to bear with me without reluctance or offhand dismissal while I hereby present to you in details the truth which I have found, and which the researchers have hitherto failed to reach.</p>
+                    <p>Having said that, I am fully aware of the fact that there are so many misconceptions about the truth, which stem from deliberate disruptions, animosity or unfair and biased prejudgments by people who reject dialogue, whose case in this context is similar to that of the idolaters who are quoted in the Holy Quran as saying, “Nay, but we found our fathers acting on this wise.”</p>
+                    
+                    <div class="quran-verse">
+                        “Nay, but we found our fathers acting on this wise.”
+                        <span class="citation">The Holy Quran, 26:74</span>
+                    </div>
+
+                    <p>The argument referred to in this Quranic verse is no longer valid, especially in this day and time, the age of knowledge when information is easily accessible via a multiplicity of media. Thus, there should be no place for any argument based on illogical legacy.</p>
+                    <p>The truth I am referring to was the main theme of all previous messages, but it was revealed in portions due to the fact that the previous messages contained specific teachings and targeted particular peoples in their respective periods of time, and the validity of these messages expired only when they fully served their purpose or were affected by distortion.</p>
+                    <p>In contrast, the truth I have found is perfect because it is intended for all humanity, it is valid at all times and places, it caters to all human needs and it has answers to all questions. I have found the truth in the book which invites people to worship one deity, to face the same direction at times of prayer and to unite as one community. I have found the truth in the Islamic teachings which no one is compelled to embrace, a fact attested by the following verses from the Holy Quran:</p>
+                    
+                    <div class="quran-verse">
+                        “There is no compulsion in religion.”
+                        <span class="citation">The Holy Quran, 2:256</span>
+                    </div>
+                    
+                    <div class="quran-verse">
+                        “Call unto the way of thy Lord with wisdom and fair exhortation, and reason with them in the better way.”
+                        <span class="citation">The Holy Quran, 16:125</span>
+                    </div>
+
+                    <p>Let us now embark on the presentation of the truth in details while totally disregarding preconceptions which act as confounding factors of the truth. Seekers of the truth are kindly advised not to let themselves be influenced by the actions of some so-called Muslims such as the takfiris (excommunicators) and bombings executors who have unrightfully committed atrocities in the name of Islam, the religion of mercy, peace and kindness. You are also urged not to heed the calls of hate mongers who maliciously oppose Islam and turn people away from it out of bigotry and loyalty to their legacies.</p>
+
+                    <h3 id="oneness">Oneness of God</h3>
+                    <p>The propagation of Islam was made possible by its rise in the Arabian Peninsula with its center-of-the-world geographical location and by the fact that It is the site of Allah’s house [The Ka’ba] which was erected by Prophet Abraham, the Patriarch of Prophets, to signify that all divine messages share one origin, the Abrahamic faith. Consequently, the site qualified to be the home of the first declaration by Prophet Muhammad (Peace and blessings of Allah be upon him) of the universality of Islam as indicated by the Quranic verse:</p>
+                    
+                    <div class="quran-verse">
+                        “Say [O Muhammad] O mankind, indeed I am the messenger of Allah to you all [from Him] to whom belongs the dominion of the heavens and the earth. There is no deity except Him; He gives life and causes death.’ So believe in Allah and His words, and follow him that you may be guided.”
+                        <span class="citation">The Holy Quran, 7:158</span>
+                    </div>
+
+                    <p>Islam found that the Arabs were people who worshipped idols and buried their young daughters alive. It censured them for grieving and hiding on account of shame when one of them was informed of having fathered a female child. Islam also found the Arabs to be people who consumed alcohol and practiced slavery.</p>
+                    <p>Slavery was a common practice in many societies and of impact on many races—including the blacks, but not exclusively confined to them, as many people believe. Proof that slavery was racially unselective is the fact that prominent figures such as Prophet Joseph, Companion of the Prophet, Shuaib the Roman (of European descent) and Companion of the Prophet, Bilal the Ethiopian (of African descent) were enslaved at some point in their lifetime. One of the common wrong practices among the Arabs is that they used to brag about their lineages. When Prophet Muhammad (Peace and blessings of Allah be upon him) was raised amongst them, he started remedying these ills gradually by first calling them to worshipping Allah alone. His approach was gentle; he did not begin by destroying their idols or maligning their beliefs. In response, they shunned idol worship and became monotheists; whereupon, the Prophet (Peace and blessings of Allah be upon him) taught them that belief in the previous prophets, scriptures and messages is an essential article of faith.</p>
+                    <p>The Prophet (Peace and blessings of Allah be upon him) then directed his attention to the People of the Book [The Jews and the Christians] and invited them to worship one god, Allah Who begot not nor was He begotten and Who has no equal. In this regard, The Almighty Allah says in the Holy Quran:</p>
+                    
+                    <div class="quran-verse">
+                        “Say: O People of the Scripture! Come to an agreement between us and you: that we shall worship none but Allah, and that we shall ascribe no partner unto Him, and that none of us shall take others for lords beside Allah. And if they turn away, then say: Bear witness that we are they who have surrendered (unto Him).”
+                        <span class="citation">The Holy Quran, 3:64</span>
+                    </div>
+
+                    <p>Allah is the creator who begot not nor was He begotten:</p>
+                    
+                    <div class="quran-verse">
+                        “the Originator of the heavens and the earth! How can He have a child, when there is for Him no consort, when He created all things and is Aware of all things? Such is Allah, your Lord. There is no God save Him, the Creator of all things, so worship Him. And He taketh care of all things. Vision comprehended Him not, but He comprehended (all) vision. He is the Subtle, the Aware.”
+                        <span class="citation">The Holy Quran, 6:101-103</span>
+                    </div>
+
+                    <p>The Almighty Allah is preceded by none for He is the First without a beginning and is followed by none for He is the Last without an end. He is not upon anything because He is not borne on any object, He has not proceeded from a thing because He is not a creature and He is not inside anything because He is not confined. “There is nothing like Him and He is the All Seer the All Hearer”. Such is the Lord whose command when He intends a thing is only that He says to it ‘Be!’ and it is. He is the One Whom no creature has the right to question about His actions, for He cannot be questioned as to what He does, He knows all while the creatures know not, He created the Heavens and the Earth with justice, He prescribed mercy for Himself, He refrains from dealing unjustly, He calls to paradise and forgiveness by His permission and He likes not disbelief for His slaves. Mercy is the rule with Him and chastisement is the exception, as evidenced by His saying:</p>
+                    
+                    <div class="quran-verse">
+                        “And My Mercy embraces all things”
+                        <span class="citation">The Holy Quran, 7:156</span>
+                    </div>
+
+                    <p>Islam calls upon humans to be one nation in the sense of following one religion, as evidenced by the verse:</p>
+                    
+                    <div class="quran-verse">
+                        “And verily, this your religion (of Islamic monotheism) is one religion, and I am your Lord, therefore worship Me Alone”
+                        <span class="citation">Holy Quran, 21:92</span>
+                    </div>
+
+                    <h3 id="prayer">Prayer & Community</h3>
+                    <p>Islam is a comprehensive religion that addresses all aspects of life spiritual and physical. It is manifested in the performance of prayers at mosques; in Shura (counsel), laws and constitution as elements of governance; in the economic, agricultural, pastoral and industrial activities; in the practice of engineering and medicine; in domestic life; in people’s traffic in the streets; in sports; in tourism; in recreation; in war and in peace.</p>
+                    <p>Let us then consider this fact in more details by reviewing the pillars of Islam, foremost of which is the testimony that nothing is worthy of worship except Allah and that Muhammad is His messenger, which qualifies a person to become a Muslim. This pillar is followed by prayer, an act of worship prescribed five times a day and performed either individually, or preferably, in a congregation. Congregational prayer is designed to form minor social units and achieve unity which is one of the goals of Islam. Muslims in mosques perfect prayers by standing shoulder to shoulder and foot to foot in organized ranks, a formation which shows no indication of superiority of a group over another or a noble over a wretched. According to Islam, prayer is observed as part and parcel of Friday services as well as of the two festivals [the Festival of Breaking the Fast and the Festival of Sacrifice] which are designated as weekly and annual occasions, respectively, on which Muslims assemble, exchange well wishes, effect reconciliation, feast together, exchange presents and visit families and friends.</p>
+                    
+                    <div class="quran-verse">
+                        “The believers are naught else than brothers”
+                        <span class="citation">Holy Quran, 49:10</span>
+                    </div>
+
+                    <h3 id="zakat">Zakat</h3>
+                    <p>Zakat (Almsgiving), another act of worship, is enjoined upon financially able Muslims whereby their excess money is collected from them and paid to the poor and needy. Islam advocates charity, providing food to the hungry, supporting the feeble, clothing the naked, comforting the afflicted, quenching the thirst of the thirsty, entertaining the guest, honoring the neighbor and treating the wayfarer hospitably, regardless of whether they are Muslims or Non-Muslims.</p>
+
+                    <h3 id="fasting">Fasting</h3>
+                    <p>Fasting is a pillar of Islam that enhances physical health, purifies the soul and is an expression of sympathy with the hungry.</p>
+
+                    <h3 id="pilgrimage">Pilgrimage</h3>
+                    <p>Pilgrimage in Islam is an occasion that witnesses the largest gathering of Muslims and functions as an annual Islamic conference which is attended by Muslims of different looks, colors, and languages. It is a show of unity and a practical implementation of the Quranic verse which states:</p>
+                    
+                    <div class="quran-verse">
+                        “The believers are naught else than brothers”
+                        <span class="citation">Holy Quran, 49:10</span>
+                    </div>
+
+                    <h3 id="human-origins">Human Origins</h3>
+                    <p>Besides the acts of worship, such as prayer, alms-giving, fasting and pilgrimage, Islam specifically tackled the topic of the origin and development of man, because bragging about lineages was a common practice among people in the past. In this connection, the Jews claimed that they were the children and beloved people of God. The Almighty Allah refuted their claim by saying:</p>
+                    
+                    <div class="quran-verse">
+                        “Nay, ye are but mortals of His creating.”
+                        <span class="citation">The Holy Quran, 5:18</span>
+                    </div>
+
+                    <p>Allah also settled the matter of man creation once and for all when He says:</p>
+                    
+                    <div class="quran-verse">
+                        “Verily, We created man from a product of wet earth.”
+                        <span class="citation">The Holy Quran, 23:12</span>
+                    </div>
+
+                    <p>The Almighty Allah also establishes the criterion for distinction among people as based not on color or race, but rather on good conduct. He says in The Holy Quran:</p>
+                    
+                    <div class="quran-verse">
+                        “O mankind, indeed We have created you from male and female and made you peoples and tribes that you may know one another. Lo! The noblest of you, in the sight of Allah, is the best in conduct. Lo! Allah is Knower, Aware.”
+                        <span class="citation">The Holy Quran, 49:13</span>
+                    </div>
+
+                    <p>The Prophet (Peace and blessings of Allah be upon him) emphasizes this point further by saying, “All of you belong to Adam, and Adam was created from mere dust.” Man and woman in this regard are equal. Allah says:</p>
+                    
+                    <div class="quran-verse">
+                        “O mankind! Be careful of your duty to your Lord Who created you from a single soul and from it created its mate and from them twain hath spread abroad a multitude of men and women.”
+                        <span class="citation">The Holy Quran, 4:1</span>
+                    </div>
+
+                    <h3 id="family">Family</h3>
+                    <p>Islam also devotes due attention to the family and encourages good relations between husband and wife. The prerequisites of good relations are high character of the husband and wife, legality of the marriage based on the presence of witnesses and a written contract, and the basing of the relationship between the two is on affection and mercy. This is evidenced by Prophet Muhammad’s tradition: “The best among you, men, is he who treats his wife well, and in this regard I am the best among you. Only the honorable man honors women and only the mean-spirited demeans them.” As for divorce, it is discouraged by Islam unless the relationship is too strained to continue. Before divorce there should be attempts at reconciliation because according to a prophetic tradition, “Divorce is the most hateful lawful act to Allah”. Also, the husband and wife retain the chance to revoke the divorce as long as it has not occurred three times. If reconciliation could not be achieved, then men should abide by the instruction carried in the following Quranic verse:</p>
+                    
+                    <div class="quran-verse">
+                        “Take them back in kindness or part from them in kindness”
+                        <span class="citation">The Holy Quran, 65:2</span>
+                    </div>
+
+                    <p>In this connection, the right to divorce, according to the book Fiqhassunnah (Understanding the Sunna), belongs exclusively to the husband who can announce it by himself, authorize the wife to divorce herself or can divorce by proxy. In all cases, the husband retains the right to divorce.</p>
+                    <p>Islam has not overlooked child-parent relationship; it orders children to be dutiful to their parents throughout their lifetime. Islam does not approve of children sending their parents to the infirmary, and encourages the children to maintain good relations with the kith and kin of their parents. The Almighty Allah says in The Holy Quran:</p>
+                    
+                    <div class="quran-verse">
+                        “Thy Lord hath decreed, that ye worship none save Him, and (that ye show) kindness to parents. If one of them or both of them attain old age with thee, say not «Fie» unto them nor repulse them, but speak unto them a gracious word. And lower unto them the wing of submission through mercy, and say: My Lord! Have mercy on them both as they did care for me when I was little.”
+                        <span class="citation">The Holy Quran, 17:23-24</span>
+                    </div>
+
+                    <p>A child in Islam should be welcomed jubilantly, brought up well, treated kindly and educated properly. Islam enjoins fathers to give good meaningful names to their children. According to Islamic traditions a feast is given on the seventh day from the child’s birth. Also, the child should be circumcised if it is a boy, but if it is a girl, the verdict concerning her circumcision is undecided, as it is a subject of dispute among the scholars. Part of the proper child rearing in Islam is the need for parents to have children sleep in separate beds when they reach the age of ten. As for orphaned children, Islam encourages caring of and being kind to them and faithfully guarding their properties. About orphan caretakers, the Prophet Muhammad (Peace and blessings of Allah be upon him) said, “The one who cares for an orphan and I will be together in paradise like this”, and, by way of illustration, he held up together his index and middle fingers.</p>
+
+                    <h3 id="women">Women's Rights</h3>
+                    <p>Islam has promoted woman from a status in which she was so insignificant that she was buried alive, a practice that was condemned by The Holy Quran in the following verses:</p>
+                    
+                    <div class="quran-verse">
+                        “And when the girl-child that was buried alive is asked. For what sin she was slain”
+                        <span class="citation">The Holy Quran, 81:8-9</span>
+                    </div>
+
+                    <p>In this regard, the Prophet (Peace and blessings of Allah be upon him) says, “Take good care of women.”</p>
+                    <p>Evidence that The Almighty Allah shows adequate regard to woman is that He heeded the complaint of a woman from seven heavens up, as the following verse indicates:</p>
+                    
+                    <div class="quran-verse">
+                        “Allah hath heard the saying of her that disputed with thee (Muhammad) concerning her husband, and complained unto Allah. And Allah heareth your colloquy. Lo! Allah is Hearer, Knower.”
+                        <span class="citation">The Holy Quran, 58:1</span>
+                    </div>
+
+                    <p>Women in Islam can become workers, doctors, merchants and combatants. The word ‘Ma’roof’ ‘Kind treatment’ is mentioned in chapter two ‘Albaqara’ of the Holy Quran twelve times; one of which in verse 228 is in connection with women.</p>
+                    <p>Concerning polygamy, Islam holds that it is a supererogatory performance and not a principle, a license rather than an injunction, a privilege which is contingent upon the ability to treat the co-wives justly, as indicated by the Quranic verse:</p>
+                    
+                    <div class="quran-verse">
+                        “And if ye fear that ye cannot do justice (to so many) then one (only)”
+                        <span class="citation">The Holy Quran, 4:3</span>
+                    </div>
+
+                    <p>Accordingly, a man has the privilege to marry up to four women after securing the consent of his current wife/wives, who can then have the right to refuse or request divorce.</p>
+                    
+                    <div class="quran-verse">
+                        “Then retain them in kindness or release them in kindness.”
+                        <span class="citation">The Holy Quran, 2:231</span>
+                    </div>
+
+                    <p>There are many possible motives for polygamy, including the infertility or old age of the wife, the unusual high libido of the husband, or the wife’s reluctance to have sexual intercourse. Whatever the motive is, polygamy is undoubtedly better than homosexual marriages, concubine and all sexual relations outside the wedlock.</p>
+                    <p>As regards the practice of shaking hands with women, it is not absolutely forbidden, unless seduction is feared as a result, or either the man or the woman or both deliberately aim to draw pleasure.</p>
+                    <p>When it comes to inheritance, Islam does not impose an absolute injunction to the effect that men’s portion is double that of women in all cases. The ratio is not constant and depends on the nature of the inheritance. In some cases women receive half the share of men, but in many other cases women get an equal share. The reason why men are accorded double the share of women is that they are the ones responsible for supporting the family while women are exempted from this obligation.</p>
+                    <p>Concerning the Islamic legal requirement that no less than two women may act as witness as opposed to one man, this condition is necessitated by women’s emotionality and tenderness, and liability to being influenced by factors and pressures relevant to the particular case in which they should testify.</p>
+                    <p>In this regard, it is worth mentioning that males and females in humans and in other living creatures are physiologically different, but complementary in terms of functions. This is based on the scientific fact that life is built on duality, on positive and negative, from a scale as small as an atom—which is made up of electrons and protons—to a scale as large as a galaxy. In all creatures there are gender-specific traits, such as physical structure, which qualify each sex to perform certain functions, a fact that makes males and females complementary to each other rather than incongruently different. In the populations of bees, ants, some arachnids and certain types of birds, it is the female that has the superiority. Therefore, Islam never advocates illusory gender equality nor does it offer women any promise to that effect, for it deems it necessary that the roles of men and women should be complementary in line with the fact that life is based on complementarity, and not on differentiation. However, Islam does establish equality between man and woman in relation to punishment for misdeeds and reward for good deeds. The Almighty Allah says:</p>
+                    
+                    <div class="quran-verse">
+                        “Whoever does righteousness, whether male or female, while he is a believer We will surely cause him to live a good life, and We will surely give them their reward [in the Hereafter] according to the best of what they used to do.”
+                        <span class="citation">Holy Quran, 16:97</span>
+                    </div>
+
+                    <h3 id="hijab">Hijab</h3>
+                    <p>As pertains to hijab (women’s Islamic garment), it is meant to guard women’s chastity, and to obviate a situation whereby woman becomes a sales article, a mere fashion model or a sex object. Therefore, hijab imparts to women a value higher than the sexual value. It does not stand to reason that men’s clothing is more decent than women’s, a current situation which is paradoxically accepted by hijab critics.</p>
+
+                    <h3 id="slavery">Slavery</h3>
+                    <p>On slavery again, Islam phased it out, and concerning bondsmen, the Prophet (Peace and blessings of Allah be upon him) said:</p>
+                    <p>“Truly, they are your brethren whom Allah has placed under your care. Let him under whose care Allah places a brother feed him from the very food he himself eats, clothe him from the very types of garments he himself wears and desist from burdening him with workload that he cannot bear; otherwise he should help him.”</p>
+                    <p>To encourage the liberation of slaves, the Almighty Allah included the emancipation of a slave in the categories of good deeds, considered it an act of atonement and dedicated to it a whole item of Zakat (obligatory alms giving) expenditures. Likewise, the consumption of Alcohol has been phased out.</p>
+                    <p>As for the Hudud [divine punishments specified in the Holy Quran] which have been prescribed for the most serious crimes considered outrageous in a Muslim society, they are designed to eradicate crime, rather than inflict harm on the culprits. Prophet Muhammad (Peace and blessings of Allah be upon him) says:</p>
+                    <p>“A person who is engaged in committing adultery/fornication or theft would not in the meantime be in a state of faithfulness.”</p>
+                    <p>Thus crime in Islam is tantamount to a cancerous organ that must be excised.</p>
+                    <p>Within the same context, a good Muslim is defined [According to a prophetic tradition] as one from whose tongue and hand other people are safe, and a true faithful believer is defined as one whom people can trust with their honor and properties.</p>
+
+                    <h3 id="environment">Environment</h3>
+                    <p>As far as Muslims’ interaction with entities outside the scope of Islam, they are urged to establish normal relations with non-Muslims, especially the People of the Book [The Jews and Christians] whom they ought to treat kindly, in whose joy and sorrow they should share, whose women they are allowed to marry and whose food they are permitted to eat. The interaction goes beyond relations with non-Muslims to include the environment. Hence is man’s obligation to sanitize the environment and to refrain from practicing cruelty against animals. When the Prophet (Peace and blessings of Allah be upon him) was asked whether people would be rewarded for taking care of animals, he answered:</p>
+                    <p>“A reward is in store for everyone who preserves the life of a living being.”</p>
+                    <p>This is evidenced by the prophetic tradition about the man who entered Heaven on account of his quenching the thirst of a dog, and about the woman who entered Hell on account of her tying and starving a cat to death.</p>
+                    <p>The Prophet (Peace and blessings of Allah be upon him) also ordered that animals hunted and trees cut down should not exceed the immediate need of the actor. He said:</p>
+                    <p>“A reward for an act of charity will be given to any Muslim who plants a plant or grows a crop and then a bird, a human or a beast eats from it.”</p>
+                    <p>He also said:</p>
+                    <p>“If the Hour (The Day of Resurrection) is about to come and one of you is holding a palm shoot, let him plant it before the Hour comes.”</p>
+                    <p>To maintain the environment in a clean condition, Islam prohibits defecation and urination in public places, in water sources, in shades and on public roads. In this regard, Islam teaches its followers the manner in which routines such as entering and exiting the toilet and relieving oneself are carried out.</p>
+                    <p>Islam encourages its followers to observe cleanliness. They are to clean themselves after they have used the toilet preferably with a combination of water and another object such as a stone or blank toilet paper. They should shave their hair in certain bodily areas and clip their nails. Muslims should be clean in body and garment. Thus Muslims wash their limbs at least five times a day in a repeated act called wudu (partial ablution performed before each prayer), brush their teeth, bathe and perform ghusl (Full ablution) after sexual activity.</p>
+                    <p>Islam comprehensively addresses all functions to be performed by a Muslim: It teaches men what to observe and utter during and after sexual intercourse with their wives. It also teaches them that if a woman is in her menses, the husband should refrain from having sexual intercourse with her until the end of the period.</p>
+                    <p>Regarding eating etiquettes, Islam prohibits gluttony as indicated by the prophetic tradition that states:</p>
+                    <p>“The son of Adam cannot fill a vessel worse than his stomach, as it is enough for him to take a few bites to straighten his back. If he cannot do it, then he may fill it with a third of his food, a third of his drink, and a third of his breath.”</p>
+                    <p>Reports have it that the Prophet (Peace and blessings of Allah be upon him) never ate two foods at the same time, never criticized a food (He would eat or refrain without a comment), would invoke Allah’s name over food, would take food with three fingers of his right hand, would supplicate as thus:</p>
+                    <p>“O’ Allah bless our food and change it to a better one.”</p>
+                    <p>And if he drank milk, he would supplicate as thus:</p>
+                    <p>“O’ Allah bless it and increase it, for nothing compensates the lack of food but milk.”</p>
+                    <p>Lastly, he would stop eating while he was still craving the food.</p>
+                    <p>Islam requires that major ablution should be administered to a dead body and that the will of the deceased should be executed. In this connection, Islam enjoins Muslims to participate in the funeral of another fellow Muslim, to offer condolences to his family for three days after the death and to provide food for them in the meantime.</p>
+
+                    <h3 id="economy">Economy</h3>
+                    <p>Islam urges Muslims to seek and disseminate knowledge. The obligation to pursue knowledge is evidenced by the prophetic tradition that states:</p>
+                    <p>“The pursuit of knowledge is a particular duty of every Muslim, male or female.”</p>
+                    <p>With regard to the economy, Islam prohibits the illicit devouring of other people’s property; encourages work and the perfection thereof and the dedication thereto. It enjoins lawful gain. It makes it incumbent on employers to treat their workers kindly and to pay them their wages before their sweat dries. Islam orders solidarity, cooperation and help for the needy. One tradition of Prophet Muhammad (Peace and blessings of Allah be upon him) says:</p>
+                    <p>“The morsel that you feed to the hungry is better than the morsel you yourself eat.”</p>
+                    <p>Another tradition declares:</p>
+                    <p>“Whosoever does not show mercy to other people, Allah will not show mercy to him.”</p>
+                    <p>As for business, Allah permits trading and forbids usury. The latter, by the way, is the main cause of the many problems and collapses the international economy has ever suffered. Islam intends for trade to be conducted freely, but imposes some restrictions represented in the abstinence from fraud, defraudment and the hoarding of foodstuff.</p>
+                    <p>Other Islamic injunctions include:</p>
+                    <ul>
+                        <li>
+                            Keeping the trust and dealing justly with people, as evidenced by this verse from The Holy Quran:
+                            <div class="quran-verse">
+                                “Lo! Allah commanded you that ye restore deposits to their owners, and, if ye judge between mankind, that ye judge justly.”
+                                <span class="citation">Quran, 4:58</span>
+                            </div>
+                        </li>
+                        <li>
+                            Preserving human life, an injunction that is contained in this verse from The Holy Quran:
+                            <div class="quran-verse">
+                                “Whosoever killed a human being for other than manslaughter or corruption in the earth, it shall be as if he had killed all mankind, and whoso saveth the life of one, it shall be as if he had saved the life of all mankind.”
+                                <span class="citation">The Holy Quran, 5:32</span>
+                            </div>
+                        </li>
+                        <li>
+                            Shura (Counsel) and considering the opinion of the other. Allah the Almighty says:
+                            <div class="quran-verse">
+                                “And consult with them upon the conduct of affairs.”
+                                <span class="citation">The Holy Quran, 3:159</span>
+                            </div>
+                            <div class="quran-verse">
+                                “And whose affairs are a matter of counsel”
+                                <span class="citation">The Holy Quran, 42:38</span>
+                            </div>
+                        </li>
+                    </ul>
+
+                    <h3 id="war">War & Peace</h3>
+                    <p>Islam has organized the relations of Muslims with other countries and peoples both at times of war and peace as is evident in this verse from The Holy Quran:</p>
+                    
+                    <div class="quran-verse">
+                        “Allah forbiddeth you not those who warred not against you on account of religion and drove you not out from your homes, that ye should show them kindness and deal justly with them. Lo! Allah loveth the just dealers.”
+                        <span class="citation">The Holy Quran, 60:8</span>
+                    </div>
+
+                    <p>Muslims have been ordered to arm and be on their guard against potential enemies as attested by this verse:</p>
+                    
+                    <div class="quran-verse">
+                        “Make ready for them all thou canst of (armed) force and of horses tethered, that thereby ye may dismay the enemy of Allah and your enemy, and others beside them whom ye know not. Allah knoweth them. Whatsoever ye spend in the way of Allah it will be repaid to you in full, and ye will not be wronged.”
+                        <span class="citation">The Holy Quran, 8:60</span>
+                    </div>
+
+                    <p>This verse does not aim to sanction terrorism or encourage animosity; it rather encompasses a modern military concept to the effect that preparations for war prevent a war. The verse does not accord Muslims an absolute right to fight, lest they should wreak havoc in the earth; on the contrary, it makes it clear that preparations for war and armament are predicated on capacity. Consequently, over armament and the possession of weapons of mass destruction are not a requirement. Moreover, it is the Almighty Allah who determines the time to declare war, identifies the enemy, designates the times when the enemy should be attacked and when it should be dismayed. He says:</p>
+                    
+                    <div class="quran-verse">
+                        “Sanction to fight (against the disbelievers) is given unto those who are fought against because they have been wronged, and Allah is indeed Able to give them victory. Those who have been driven from their homes unjustly only because they said: Our Lord is Allah”
+                        <span class="citation">The Holy Quran, 22:39</span>
+                    </div>
+                    
+                    <div class="quran-verse">
+                        “Fight in the way of Allah against those who fight against you, but begin not hostilities. Lo! Allah loveth not aggressors.”
+                        <span class="citation">The Holy Quran, 2:190</span>
+                    </div>
+                    
+                    <div class="quran-verse">
+                        “And one who attacketh you, attack him in like manner as he attacked you. Observe your duty to Allah, and know that Allah is with those who ward off (evil).”
+                        <span class="citation">The Holy Quran, 2:194</span>
+                    </div>
+
+                    <p>The above verses entail that the purpose of preparing for war is for Muslims to prevent possible attacks on them, and not for them to initiate attacks. Furthermore, when Muslims are compelled to engage in war, they should comply with the injunction issued by Prophet Muhammad (Peace and blessings of Allah be upon him) to his army in which he ordered:</p>
+                    <p>“Kill not a woman, nor a child nor an old man, and fell not a fruit-bearing tree.”</p>
+                    <p>On the other hand, Muslims by the virtue of the next verse are encouraged to reciprocate in connection with peace initiatives and to sign peace accords.</p>
+                    
+                    <div class="quran-verse">
+                        “And if they incline to peace, incline thou also to it.”
+                        <span class="citation">The Holy Quran, 8:61</span>
+                    </div>
+
+                    <p>Willingness to accept peace offers should be combined with willingness to honor covenants. In this regard, The Almighty Allah says in The Holy Quran:</p>
+                    
+                    <div class="quran-verse">
+                        “And keep the covenant. Lo! Of the covenant it will be asked.”
+                        <span class="citation">The Holy Quran, 2:194</span>
+                    </div>
+
+                    <h3 id="prophethood">Finality of Prophethood</h3>
+                    <p>In summary, Islam as a religion rose to unite people, not to divide them; to strengthen, not to weaken; to give glad tidings, not to repulse; to develop the Earth, not to destroy it; to give guidance, not to kill; to attract through endearment, not to frighten; to honor mankind, not to demean it; and as a religion of peace, not a religion of contention. Anyone who claims otherwise will, indeed, have made false accusations against it, for Islam adopts a gentle approach in its appeal to people and is in no need of violence to be propagated. The message of Islam is powerful enough to transcend all barriers without fighting, for its main weapon is persuasion. Thus the only forms of jihad (struggle) that we need are the struggle to discipline ourselves in order that we may reach out to the others and the physical struggle to defend the faith against its enemies or against Muslim renegades.</p>
+                    <p>Unlike the previous divine messages, Islam is a universal religion. The previous messages were addressed to particular people, including the messages of Prophet Moses and Prophet Jesus, who were sent specifically to the Children of Israel. Many apostles, such as Lot, Abraham, Moses and Jethro were raised in the same time period. According to my readings of the Old Testament and the New Testament and the Church-recognized gospels: Matthew, Mark, <strong>John</strong> and Luke, there is no text that proves that the previous messages were universal, especially Christianity and Judaism. Anyone who claims otherwise should produce his proof. This means that Judaism and Christianity were not meant for all humans, as they were exclusive to the Jews. To prove this point, below are quotations from certain scriptures:</p>
+
+                    <p><strong>Chapter 1 in the Gospel of Barnabas states:</strong></p>
+                    <div class="quran-verse">
+                        “In these last years a virgin called Mary, of the lineage of David, of the tribe of Judah, was visited by the angel Gabriel from God. This virgin, living in all holiness without any offense, being blameless, and abiding in prayer with fasting, being one day alone, there entered into her chamber the angel Gabriel, and he saluted her, saying: ‹God be with thee, O Mary›. The virgin was affrighted at the appearance of the angel; but the angel comforted her, saying: ‹Fear not, Mary, for thou hast found favor with God, who hath chosen thee to be mother of a prophet, whom he will send to the people of Israel in order that they may walk in his laws with truth of heart.›”
+                    </div>
+
+                    <p><strong>The Book of Matthew states:</strong></p>
+                    <div class="quran-verse">
+                        “The angel of the Lord appeared to him in a dream and said, ‘Joseph son of David, do not be afraid to take Mary home as your wife, because what is conceived in her is from the Holy Spirit.’”
+                    </div>
+
+                    <p><strong>Chapter 2 in the Gospel of Barnabas states:</strong></p>
+                    <div class="quran-verse">
+                        “Behold, whilst he slept, he was rebuked by the angel of God, saying ‹O Joseph, why art thou minded to put away Mary thy wife? Know that whatsoever hath been wrought in her hath all been done by the will of God. The virgin shall bring forth a son, whom thou shall call by the name Jesus; whom thou shalt keep from wine and strong drink and from every unclean meat, because he is a holy one of God from his mother’s womb. He is a prophet of God sent unto the people of Israel, in order that he may convert Judah to his heart, and that Israel may walk in the law of the Lord.”
+                    </div>
+
+                    <p><strong>The Book of Luke states:</strong></p>
+                    <div class="quran-verse">
+                        ‘God sent the angel Gabriel to Nazareth, a city in Galilee. The angel went to a virgin promised in marriage to a descendant of David named Joseph. The virgin’s name was Mary.’ When the angel entered her home, he greeted her and said, “You are favored by the Lord... you are to become a mother and have a son. You are to give him the name Jesus.’ Then the angel tells her that he is to be sent by God to the Children of Israel according to the laws of Moses.
+                    </div>
+
+                    <p><strong>Chapter 10 of the Gospel of Barnabas states:</strong></p>
+                    <div class="quran-verse">
+                        Jesus having come to the age of thirty years, the angel Gabriel presented to him as it were a shining mirror, a book. He said unto me: ‹Believe, Barnabas that I know every prophet with every prophecy, insomuch that whatever I say the whole bath come forth from that book.› Jesus, having received this vision, and knowing that he was a prophet sent to the house of Israel, revealed all to Mary his mother, telling her that he could not any longer abide with her to serve her.’’ Mary then granted him permission to depart.
+                    </div>
+
+                    <p>On the other hand, Islam is a universal religion which proved capable of transcending all physical and geographical barriers to “Warn whosoever lives, and that the word may be fulfilled against the disbelievers.” Any ideology or doctrine that might attempt to strip Islam of its universality and impart on it foreign elements that make it confined to sectorial, nationalistic, regional or familial doctrines would indeed be in contradiction with the precepts of Islam in letter and spirit. Therefore, the version of Islam that ought to be preached is the original one that admits of no alteration and is not subject to containment, the one that is standardized in terms of sources, means and goals. In this connection, there are many groups, sects and movements who have proven ineffective in the advocacy of Islam because they are preoccupied with infighting and mutual accusations of infidelity, and because they are concerned with increasing their membership and building an Islamic state over the corpses of Muslims and regardless of the displacement of the living Muslims and the destruction of their homes, more than they are concerned with their supposedly main and more important mission of inviting people to Islam.</p>
+                    <p>Most of these sects emerged after the periods of the three meritorious generations which Prophet Muhammad (Peace and blessings of Allah be upon him) mentioned in his statement:</p>
+                    <p>“The best people are those of my generation, then those who came after them, then those who came after them then those who came after them.”</p>
+                    <p>According to the assertions of many Islamic scholars, such as Al-Isfarayeeni in his book ‘The Variations among the Religious Sects’, many of these sects have been found to be in deviation of the established methodology of Prophet Muhammad (Peace and blessings of Allah be upon him) and the consensus of the majority of the Muslim nation.</p>
+                    <p>It is a well-known fact that establishing a state was never a concern of the messengers, nor was it ever addressed in the divine scriptures; rather, the messengers mainly concerned themselves with inviting people to believe in the oneness of God. This is exemplified by Noh’s staying among his people a thousand years less fifty years during which he did not contend with anyone for rule, by Abraham’s disputing with Nimrod over an issue not related to authority, by Moses not taking issue with Pharaoh’s authority, by Jesus’ noted refrain from vying with the Romans for power and his contentment of being just a reformer and a caller to the belief in God and by Muhammad’s (Peace and blessings of Allah be upon him) refusal to be crowned a king when the offer was made to him by Qureish Tribe. The attitude of the prophets is explained by their knowledge that sovereignty is an exclusive privilege that God conferred upon Himself, as evidenced by the Quranic verse:</p>
+                    
+                    <div class="quran-verse">
+                        “Say O’ Allah Owner of sovereignty, you give sovereignty to whom <strong>You</strong> will, and You take sovereignty away from whom You will.”
+                        <span class="citation">Holy Quran, 3:26</span>
+                    </div>
+
+                    <p>Nonetheless, it is recommendable that Muslims choose someone to regulate their affairs, provided that this function should not be a bone of contention, and that Muslims should put their priorities in order and give precedence to Da’wa (Missionary work.) According to the teachings of Prophet Muhammad (Peace and blessings of Allah be upon him), rebelling against a ruler, even if he is impressive, is impermissible unless the ruler orders a blatant act of disobedience to Allah or orders infidelity. This ruling reveals Islam’s keenness to safeguard people’s honor and properties. It is worth mentioning, in this respect, that all the destruction and all the infighting we are witnessing today are triggered by conflict over authority, which started as far back as the time of the Major Civil Strife between our noble Ali [Ibn Abi Talib] and our noble Muawia [Ibn Abi Sufyan], and gave rise to many sects and groups up until this day. In this connection, one might wonder about the meaning of the Quranic verse:</p>
+                    
+                    <div class="quran-verse">
+                        “And whoever does not judge by what Allah has revealed – then it is those who are disbelievers.”
+                        <span class="citation">The Holy Quran 5:44</span>
+                    </div>
+
+                    <p>In reality this verse refers to the ruler whom Allah has endowed with sovereignty concerning which He (Allah) will hold him accountable. Definitely, the verse is not a reference to individuals or groups, otherwise, all of the Muslim generations since the end of the Rightly-Guided Caliphs’ reign until the present would be considered disbelievers for the fact that these generations have not judged by what Allah has revealed. So, let it be known that Da’wa (Missionary work) takes priority over the establishment of a state, that is because Da’wa (Missionary work) engenders Muslim individuals who need not be subject to watching; rather, they are watchers over themselves. The realization of such a situation would render state and laws only necessary for addressing emerging anomalies in the Muslim society.</p>
+                    <p>Since it is in the precognition of Allah that after the mission of Muhammad (Peace and blessings of Allah be upon him) humanity would reach maturity science-wise and intellect-wise by virtue of modern technology and advances in communication and translation, He made the message of Muhammad (Peace and blessings of Allah be upon him) a final one valid in all times and places, thanks to culture interactions and similarities and the effective shortening of distances, all made possible by modern contraptions. The Muhammadan Community [Followers of Muhammad (Peace and blessings of Allah be upon him)] is tasked with the mission of conveying the Islamic message to the peoples of the world through the exploitation of present-day tools and facilities. It is common knowledge that all the divine messages were directed to the Middle East and all the messengers were raised therein. So, to those who might wonder whether a prophet was raised in regions outside the Middle East, I say there is no evidence to prove or disprove the fact. Nonetheless, the Quranic verse:</p>
+                    
+                    <div class="quran-verse">
+                        “And never would we punish until we sent a messenger”
+                        <span class="citation">Holy Quran, 17:15</span>
+                    </div>
+
+                    <p>gives a satisfactory explanation. This implies that those whom no messenger was sent to would be admitted to Paradise and those whom a messenger was sent to but did not believe in had always had miserable sequel: some were made to be swallowed by the earth, some were metamorphosed, some were made to drown and some had a wind sent upon them. On the Day of Resurrection these will be sent back to the severest of punishment. By comparison, those to whom no messenger was sent will have a better sequel than their opposites.</p>
+                    <p>The Islamic message is not only final, it is also comprehensive; in that it is inclusive of the messages of all prophets from Adam to Jesus (May the peace of Allah be upon them). This is elucidated in the following two Quranic verses:</p>
+                    
+                    <div class="quran-verse">
+                        “He hath ordained for you that religion which He commended unto Noah, and that which We inspire in thee (Muhammad), and that which We commended unto Abraham and Moses and Jesus, saying: Establish the religion, and be not divided therein.”
+                        <span class="citation">Holy Quran, 42:13</span>
+                    </div>
+                    
+                    <div class="quran-verse">
+                        “Say (O Muslims): We believe in Allah and that which is revealed unto us and that which was revealed unto Abraham, and Ishmael, and Isaac, and Jacob, and the tribes, and that which Moses and Jesus received, and that which the prophets received from their Lord. We make no distinction between any of them, and unto Him we have surrendered.”
+                        <span class="citation">Holy Quran, 2:136</span>
+                    </div>
+
+                    <p>The proof that Islam is the final message to humanity is the fact that no prophet, since the time of Adam until the time of Jesus, ever claimed that his message was the last one, in addition to the fact that Islam has remained contemporary and is constantly winning new followers. Another proof is that no one for the last fourteen hundred years, the duration of the Islamic message, has ever claimed to be a prophet or a messenger or has performed corroborative miracles.</p>
+                    <p>The information contained in this article is but a minuscule amount of what Islam has in store for the felicity of humanity and the betterment of the conditions thereof. If anyone needs further information, they are kindly advised to visit the internet. Coercion, violence and terrorism are not among the persuasive methods Islam employs, especially as relates to thoughts and beliefs. Let me now present you with the following exposition and you are completely free to either accept the contents thereof or reject them.</p>
+                    <p>He who desires to embrace Islam ought to examine and thoroughly understand its teachings, injunctions and obligations. Once he is convinced of it and has declared his conversion through the pronunciation of the testimony of faith and is contented with Allah as a sustainer and Muhammad (Peace and blessings of Allah be upon him) as a messenger, then he has made a covenant with Allah to adhere to the tenets of Islam, and has no right to object, for at this stage he does not have the freedom of choice which he enjoyed before conversion. If, for this matter, he breaks the covenant, he will be taken to account for it. So, if you, Non-Muslims are interested in Islam, I urge you to conduct careful examination of and think deeply about it, and then make an informed choice. Only then are you held accountable for your actions because the Quran states that every covenant shall be inquired into. Islam is a perfect whole which should be accepted in its entirety or left altogether. This does not mean that Muslims are expected to be infallible. A Muslim who errs should repent, for Allah forgives all sins except polytheism.</p>
+                    <p>This is the ever sought-after truth, and the merchandise we Muslims offer, and such is the Islamic faith which seeks to ultimately achieve felicity for mankind by sanctioning some things and prohibiting others. As far as prohibitions are concerned, the Almighty Allah says in the Holy Quran:</p>
+                    
+                    <div class="quran-verse">
+                        “Say: Come, I will recite unto you that which your Lord hath made a sacred duty for you: That ye ascribe no thing as partner unto Him and that ye do good to parents, and that ye slay not your children because of penury- We provide for you and for them- and that ye draw not nigh to lewd things whether open or concealed. And that ye slay not the life which Allah hath made sacred, save in the course of justice. This He hath command you, in order that ye may discern. And approach not the wealth of the orphan save with that which is better, till he reaches maturity. Give full measure and full weight, in justice. We task not any soul beyond its scope. And if ye give your word, do justice thereunto, even though it be (against) a kinsman; and fulfil the covenant of Allah. This He commanded you that haply ye may remember..”
+                        <span class="citation">Holy Quran 6:151-152</span>
+                    </div>
+
+                    <p>Other prohibitions are carried in this tradition of Prophet Muhammad (Peace and blessings of Allah be upon him): On the authority of Abu Huraira (may Allah be pleased with him) who said: The Messenger of Allah (may Allah’s peace and blessings be upon him) said:</p>
+                    <p>“Do not be envious of one another; do not artificially raise prices against one another; do not hate one another; do not turn one’s back on each other; and do not undercut one another in business transactions. And be, [O] servants of Allah, brethren. A Muslim is the brother of a Muslim. He does not wrong him. He does not fail him [when he needs him]. He does not lie to him. And he does not show contempt for him. Piety is here” – and he pointed to his chest three times. “It is enough of evil for a person to hold his brother Muslim in contempt. All of a Muslim is inviolable to another Muslim: his blood, his wealth and his honor.” (Reported by Muslim).</p>
+                    <p>Furthermore, the Almighty Allah says:</p>
+                    
+                    <div class="quran-verse">
+                        “And (He commanded you, saying): This is My straight path, so follow it. Follow not other ways, lest ye be parted from His way. This hath He ordained for you, that ye may ward off (evil).”
+                        <span class="citation">Holy Quran, 6:153</span>
+                    </div>
+
+                    <p>The completion of the perfect message of Islam is indicated by this Quranic verse:</p>
+                    
+                    <div class="quran-verse">
+                        “This day have I perfected your religion for you and completed My favour unto you, and have chosen for you as religion al-Islam.”
+                        <span class="citation">Holy Quran 5:3</span>
+                    </div>
+
+                    <p>We stand committed to dealing with the others according to the methodology Allah has prescribed for us in the following verse of The Holy Quran:</p>
+                    
+                    <div class="quran-verse">
+                        “And argue not with the People of the Scripture unless it be in (a way) that is better, save with such of them as do wrong; and say: We believe in that which hath been revealed unto us and revealed unto you; our God and your God is One, and unto Him we surrender.”
+                        <span class="citation">The Holy Quran, 29:46</span>
+                    </div>
+
+                    <p>This was an exposition of our most fundamental beliefs as Muslims. So, I call upon the Jews, Christians, philosophers and thinkers to reciprocate in the same manner. This is the doctrine we are bent upon promoting without coercion or fear-inspiration and without maligning the faiths of the others. This we believe is the way to knowing Allah and the belief in Him alone without associating partners with Him. This made clear; anyone who is interested in Islam can base their choice, whichever way it is, on insightful information. Such was the practice of Prophet Muhammad (Peace and blessings of Allah be upon him), which is the true methodology to advocate Islam.</p>
+                    
+                    <div class="quran-verse">
+                        “There is no compulsion in (acceptance) of the religion. The right course has become clear from the wrong. So whoever disbelieves in Satan and believes in Allah has grasped the most trustworthy handhold with no break in it. And Allah is hearing knowing.”
+                        <span class="citation">The Holy Quran, 2:256</span>
+                    </div>
+                    
+                    <div class="quran-verse">
+                        “Say: (It is) the truth from the Lord of you (all). Then whosoever will, let him believe, and whosoever will, let him disbelieve.”
+                        <span class="citation">The Holy Quran, 18:29</span>
+                    </div>
+                </div>
+
+                <div id="author" class="author-block">
+                    <h3 style="margin-top: 0;">About the author</h3>
+                    <ul>
+                        <li><strong>Name:</strong> Ahmad Attijani Ahmad Albadawi</li>
+                        <li><strong>Address:</strong> Khartoum, Sudan</li>
+                        <li><strong>Occupation:</strong> Imam of Arrahad Mosque - journalist with Sudanile newspaper, Assahafa newspaper and many websites</li>
+                        <li>Has written many books, some printed and some are in the process of being printed</li>
+                        <li>Has a page on Facebook</li>
+                        <li>Is currently preparing for the launch of a website entitled “Islam Tel” dedicated for the invitation to Islam “in a way that is better”</li>
+                    </ul>
+                    <p style="font-size: 0.85rem; opacity: 0.8; margin-top: 15px; text-align: left;">
+                        Spare Some Minutes of Your Time © Ahmad Attijani Ahmad Albadawi. All rights reserved.<br>
+                        This digital edition preserves the exact text of the original published work.
+                    </p>
+                </div>
+
+            </section>
+        </div>
+    </main>
+
+    <!-- WhatsApp Floating Action -->
+    <a href="https://wa.me/249910438069" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <p>&copy; 2026 Ahmad Attijani Ahmad Albadawi. All rights reserved.</p>
+        <p>
+            <a href="contact.html">Contact Us</a> | 
+            <a href="about.html">About Book</a> | 
+            <a href="download.html">PDF Downloads</a>
+        </p>
+    </footer>
+
+    <!-- Shared interaction engine script -->
+    <script src="global.js"></script>
+</body>
+</html>

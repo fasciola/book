@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About the Author — Spare Some Minutes of Your Time</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Shared Style library -->
+    <link rel="stylesheet" href="global.css">
+    <!-- Immediate theme setter script to prevent flickering -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <style>
+        .author-card {
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 14px;
+            padding: 2.2rem;
+            box-shadow: var(--shadow-sm);
+        }
+        .author-name {
+            font-size: 2rem;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-heading);
+            font-weight: 700;
+        }
+        .author-title {
+            color: var(--color-accent);
+            font-weight: bold;
+            font-family: var(--font-ui);
+            margin-bottom: 1.5rem;
+            display: block;
+            font-size: 1rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+        .author-bio p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+        .author-profile-details {
+            border-left: 3px solid var(--color-accent);
+            padding-left: 15px;
+            margin-bottom: 2rem;
+            font-style: italic;
+            color: var(--color-secondary);
+        }
+        .contact-section {
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 1px dashed var(--color-border);
+        }
+        .contact-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--color-primary);
+            color: #ffffff !important;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-family: var(--font-ui);
+            font-weight: bold;
+            margin-top: 10px;
+            transition: background 0.2s, transform 0.15s;
+            box-shadow: var(--shadow-sm);
+            text-decoration: none;
+        }
+        .contact-link:hover {
+            background: var(--color-accent);
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo-container">
+            <a href="index.html" class="logo">
+                <img src="logo-black.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-black" onerror="this.style.display='none';">
+                <img src="logo-white.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-white" onerror="this.style.display='none';">
+                <span class="logo-text">Spare Some Minutes</span>
+            </a>
+        </div>
+
+        <div class="menu-icon" onclick="toggleMenu()" aria-label="Toggle Menu">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+            <a href="index-en.html">Home</a>
+            <a href="read.html">Read (EN)</a>
+            <a href="read-ar.html" lang="ar" dir="rtl">الكتاب (العربية)</a>
+            <a href="chapters.html">Chapters</a>
+            <a href="about.html">About</a>
+            <a href="author.html">Author</a>
+            <a href="download.html">Download</a>
+            <a href="contact.html">Contact</a>
+            <span class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <header style="text-align: center; margin-bottom: 3rem;">
+            <h1 class="book-title">About the Author</h1>
+            <div style="text-align: center;">
+                <span class="sub-title">A scholar, writer, and journalist from Sudan</span>
+            </div>
+        </header>
+
+        <article class="author-card">
+            <h2 class="author-name">Ahmad Attijani Ahmad Albadawi</h2>
+            <span class="author-title">Scholar · Researcher · Journalist</span>
+
+            <div class="author-bio">
+                <div class="author-profile-details">
+                    <p style="margin-bottom: 5px;"><strong>Address:</strong> Khartoum, Sudan</p>
+                    <p style="margin-bottom: 0;"><strong>Occupation:</strong> Imam of Arrahad Mosque; Journalist with <em>Sudanile</em> newspaper, <em>Assahafa</em> newspaper, and many academic websites.</p>
+                </div>
+
+                <p>Ahmad Attijani Ahmad Albadawi is a distinguished scholar, researcher, and veteran journalist based in Khartoum, Sudan. For more than three decades, he has written widely on religion, philosophy, society, and culture — guided by the absolute conviction that Islam, properly understood, is an infinite message of mercy, wisdom, and peaceful coexistence, rather than extremism or hostility.</p>
+
+                <p>His mission is clean and direct: to present the original, universal, and merciful guidelines of Islam to a world that has too often seen only distorted depictions of it. He writes not merely for academic theological audiences, but directly for every single searcher of truth who has ever pondered on our human origins and destiny.</p>
+
+                <p>He considers this specific work — <em>Spare Some Minutes of Your Time</em> — to be his most crucial contribution because it was written not as an academic lecture, but as a personal letter directly addressed to you, the reader, inviting shared reflection.</p>
+
+                <p>He is the writer of numerous printed and forthcoming publications. He maintains an active presence on mainstream networks and is dedicated to inviting people to the peaceful invitation of Islam "in a way that is better."</p>
+            </div>
+
+            <div class="contact-section">
+                <h3 style="color: var(--color-primary);">Contact the Author</h3>
+                <p>The author welcomes sincere inquiries, feedback, and respectful interfaith dialogues from readers of all cultural or religious backgrounds.</p>
+                <a href="mailto:ahmedtijany@hotmail.com" class="contact-link">
+                    <i class="fas fa-envelope"></i> ahmedtijany@hotmail.com
+                </a>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- WhatsApp Floating Action -->
+    <a href="https://wa.me/249910438069" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <p>&copy; 2026 Ahmad Attijani Ahmad Albadawi. All rights reserved.</p>
+        <p>
+            <a href="contact.html">Contact Us</a> | 
+            <a href="about.html">About Book</a> | 
+            <a href="download.html">PDF Downloads</a>
+        </p>
+    </footer>
+
+    <!-- Shared interaction engine script -->
+    <script src="global.js"></script>
+</body>
+</html>

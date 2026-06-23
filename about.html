@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About the Book — Spare Some Minutes of Your Time</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Shared Style library -->
+    <link rel="stylesheet" href="global.css">
+    <!-- Immediate theme setter script to prevent flickering -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <style>
+        .key-messages-list {
+            list-style: none;
+            padding: 0;
+            margin: 1.5rem 0;
+        }
+        .key-message-item {
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            padding: 1.2rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s, border-left-color 0.2s;
+        }
+        .key-message-item:hover {
+            transform: translateX(5px);
+            border-left: 4px solid var(--color-accent);
+        }
+        .key-message-item a {
+            display: block;
+            font-weight: bold;
+            color: var(--color-primary);
+            margin-bottom: 0.5rem;
+            font-family: var(--font-heading);
+            font-size: 1.15rem;
+        }
+        .key-message-item span {
+            font-size: 0.95rem;
+            color: var(--color-secondary);
+            display: block;
+        }
+        .about-card {
+            background: var(--color-white);
+            border: 1px solid var(--color-border);
+            border-radius: 14px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo-container">
+            <a href="index.html" class="logo">
+                <img src="logo-black.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-black" onerror="this.style.display='none';">
+                <img src="logo-white.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-white" onerror="this.style.display='none';">
+                <span class="logo-text">Spare Some Minutes</span>
+            </a>
+        </div>
+
+        <div class="menu-icon" onclick="toggleMenu()" aria-label="Toggle Menu">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+            <a href="index-en.html">Home</a>
+            <a href="read.html">Read (EN)</a>
+            <a href="read-ar.html" lang="ar" dir="rtl">الكتاب (العربية)</a>
+            <a href="chapters.html">Chapters</a>
+            <a href="about.html">About</a>
+            <a href="author.html">Author</a>
+            <a href="download.html">Download</a>
+            <a href="contact.html">Contact</a>
+            <span class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container">
+        
+        <header style="text-align: center; margin-bottom: 3rem;">
+            <h1 class="book-title">About the Book</h1>
+            <div style="text-align: center;">
+                <span class="sub-title">A seeker's path to universal coherence</span>
+            </div>
+        </header>
+
+        <section class="about-card">
+            <p style="font-size: 1.15rem; font-style: italic; color: var(--color-accent); line-height: 1.8;">
+                A decade of reading, thinking, and searching — distilled into a personal letter to every truth-seeker on earth.
+            </p>
+
+            <h2 style="color: var(--color-primary); margin-top: 1.5rem;">The Question</h2>
+            <p>What if the divisions that tear our world apart — religious, racial, political, economic — are not inevitable? What if there exists a truth so universal, so rational, so merciful, that it could unite every honest human being who encounters it?</p>
+            <p>This book was born from that question. It is not a theological treatise written for scholars. It is not a polemic written against other religions. It is a personal letter, written by one human being to another, saying: I have searched. I have struggled. And I have found something I believe you deserve to know.</p>
+
+            <h2 style="color: var(--color-primary); margin-top: 1.5rem;">The Journey</h2>
+            <p>The author, Ahmed Attijani Ahmed Albadawi, is a Sudanese journalist and researcher who spent more than ten years reading the Torah, the Gospel, the Quran, and the major works of philosophy — not to confirm what he already believed, but to test it. He applied a single standard to every text: rational coherence, historical reliability, and moral beauty. Any message that failed any of these three tests, he refused to accept as divine.</p>
+
+            <h3 style="color: var(--color-accent); margin-top: 1.5rem;">The Awakening</h3>
+            <p>A journalist in Khartoum asks himself: "Do I believe because I was born to believe, or because I have found the truth?" The question terrifies him. He cannot live with the uncertainty.</p>
+
+            <h3 style="color: var(--color-accent);">The Method</h3>
+            <p>He resolves to test every scripture and every philosophy by three criteria: rational coherence, historical reliability, and moral beauty. No authority without evidence. No tradition without examination.</p>
+
+            <h3 style="color: var(--color-accent);">The Result</h3>
+            <p>He returns to the Quran as a seeker, not a born believer. He finds rational coherence in its pure monotheism, historical reliability in its preservation, and moral beauty in its commands. The search ends where it began — but now with certainty.</p>
+        </section>
+
+        <section class="about-card">
+            <h2>What Makes This Book Different</h2>
+            <ul style="padding-left: 20px; line-height: 1.8; margin-top: 10px;">
+                <li style="margin-bottom: 8px;"><strong>It is a personal letter, not a sermon.</strong> The author writes as a brother, not as an authority. He confesses his doubts, his struggles, and his mistakes. He invites the reader to judge for themselves.</li>
+                <li style="margin-bottom: 8px;"><strong>It respects all scriptures.</strong> The author does not insult the Torah or the Gospel. He honors them as divine revelations that have been partially preserved, and he shows how the Quran confirms and completes them.</li>
+                <li style="margin-bottom: 8px;"><strong>It demands no compulsion.</strong> The book's central argument is that truth must be chosen freely. "There is no compulsion in religion" is not a footnote — it is the foundation.</li>
+                <li style="margin-bottom: 8px;"><strong>It offers practical guidance.</strong> The book does not stop at belief. It explains prayer, fasting, charity, and pilgrimage in clear, accessible language, showing how each practice transforms the individual and society.</li>
+                <li style="margin-bottom: 8px;"><strong>It addresses every objection.</strong> Women's rights, slavery, war, the hijab — the author confronts the most difficult questions directly, with evidence from the Quran and the life of the Prophet, peace be upon him.</li>
+            </ul>
+        </section>
+
+        <section class="about-card">
+            <h2>Key Messages</h2>
+            <p>Click on any topic below to read the detailed explanation in the book:</p>
+
+            <ul class="key-messages-list">
+                <li class="key-message-item">
+                    <a href="read.html#oneness">Unity of God</a>
+                    <span>One Creator, without partner, without son, without image. This is not a mystery to be accepted beyond reason — it is the simplest, most elegant metaphysical proposition.</span>
+                </li>
+                <li class="key-message-item">
+                    <a href="read.html#human-origins">Justice & Equality</a>
+                    <span>All humans are equal before God. No race, tribe, or class holds privilege. The most noble in God's sight is the most righteous.</span>
+                </li>
+                <li class="key-message-item">
+                    <a href="read.html#part4">No Compulsion in Religion</a>
+                    <span>"There is no compulsion in religion. The right course has become clear from the wrong." Truth must be chosen freely. Faith imposed by force is not faith — it is fear.</span>
+                </li>
+                <li class="key-message-item">
+                    <a href="read.html#part4">Mercy over Punishment</a>
+                    <span>God's mercy precedes His wrath. Repentance is always open. Forgiveness is always near. No sin is too great for God's mercy, if the heart is sincere.</span>
+                </li>
+                <li class="key-message-item">
+                    <a href="read.html#women">Human Dignity & Women's Rights</a>
+                    <span>Every human being is born with innate dignity. Honor the human being, for they carry the spirit of God. No one may be degraded, enslaved, or exploited.</span>
+                </li>
+                <li class="key-message-item">
+                    <a href="read.html#environment">Environmental Care</a>
+                    <span>The earth is a trust. Stewardship of nature is a sacred duty. Waste, pollution, and destruction of the environment are sins against the Creator.</span>
+                </li>
+            </ul>
+
+            <div class="cta-buttons text-center" style="margin-top: 3rem;">
+                <h2>Start Reading</h2>
+                <p style="margin: 0 auto 1.5rem auto;">The journey is waiting. All you need is an open mind and a few minutes of your time.</p>
+                <div class="btn-group">
+                    <a href="read.html" class="btn">Read Online Now</a>
+                    <a href="download.html" class="btn btn-outline-primary">Download Free PDF</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- WhatsApp Floating Action -->
+    <a href="https://wa.me/249910438069" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <p>&copy; 2026 Ahmed Attijani Ahmed Albadawi. Available in 7 languages worldwide.</p>
+        <p>
+            <a href="contact.html">Contact Us</a> | 
+            <a href="about.html">About Book</a> | 
+            <a href="download.html">PDF Downloads</a>
+        </p>
+    </footer>
+
+    <!-- Shared interaction engine script -->
+    <script src="global.js"></script>
+</body>
+</html>

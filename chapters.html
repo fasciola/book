@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chapters — Spare Some Minutes of Your Time</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Shared Style library -->
+    <link rel="stylesheet" href="global.css">
+    <!-- Immediate theme setter script to prevent flickering -->
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('theme');
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+            }
+        })();
+    </script>
+    <style>
+        .chapter-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .chapter-item {
+            background: var(--color-white);
+            padding: 1.8rem;
+            margin-bottom: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--color-border);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .chapter-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+        .chapter-title {
+            font-family: var(--font-heading);
+            font-weight: bold;
+            font-size: 1.35rem;
+            color: var(--color-primary);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--color-border);
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+        }
+        .chapter-meta {
+            font-family: var(--font-ui);
+            font-size: 0.85rem;
+            color: var(--color-accent);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .read-link-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .read-link {
+            color: var(--color-primary);
+            text-decoration: none;
+            font-weight: bold;
+            font-family: var(--font-ui);
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            background: var(--color-cream-dark);
+            transition: all 0.2s;
+        }
+        .read-link:hover {
+            color: var(--color-accent);
+            border-color: var(--color-accent);
+            background: var(--color-white);
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo-container">
+            <a href="index.html" class="logo">
+                <img src="logo-black.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-black" onerror="this.style.display='none';">
+                <img src="logo-white.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-white" onerror="this.style.display='none';">
+                <span class="logo-text">Spare Some Minutes</span>
+            </a>
+        </div>
+
+        <div class="menu-icon" onclick="toggleMenu()" aria-label="Toggle Menu">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+            <a href="index-en.html">Home</a>
+            <a href="read.html">Read (EN)</a>
+            <a href="read-ar.html" lang="ar" dir="rtl">الكتاب (العربية)</a>
+            <a href="chapters.html">Chapters</a>
+            <a href="about.html">About</a>
+            <a href="author.html">Author</a>
+            <a href="download.html">Download</a>
+            <a href="contact.html">Contact</a>
+            <span class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="container chapter-container">
+        <header style="text-align: center; margin-bottom: 3rem;">
+            <h1 class="book-title">Table of Chapters</h1>
+            <div style="text-align: center;">
+                <span class="sub-title">A Roadmap Through the Journey</span>
+            </div>
+        </header>
+
+        <!-- Chapter 1 -->
+        <article class="chapter-item">
+            <div class="chapter-title">
+                <span>Part 1: A Message to Truth-Seekers</span>
+                <span lang="ar" dir="rtl" style="font-size: 1.1rem; color: var(--color-secondary);">الجزء الأول: رسالة إلى الباحثين عن الحقيقة</span>
+            </div>
+            <div class="chapter-meta"><i class="far fa-clock"></i> ~12 min read / ١٢ دقيقة للقراءة</div>
+            <p>The author's personal awakening, reflections on human origins, shared value, technical progress, and the search for an absolute, unifying standard of inner peace.</p>
+            <div class="read-link-group">
+                <a href="read.html#part1" class="read-link">Read in English &rarr;</a>
+                <a href="read-ar.html#part1" class="read-link" lang="ar" dir="rtl">اقرأ بالعربية &larr;</a>
+            </div>
+        </article>
+
+        <!-- Chapter 2 -->
+        <article class="chapter-item">
+            <div class="chapter-title">
+                <span>Part 2: The Truth I Have Found</span>
+                <span lang="ar" dir="rtl" style="font-size: 1.1rem; color: var(--color-secondary);">الجزء الثاني: الحقيقة التي وجدتها</span>
+            </div>
+            <div class="chapter-meta"><i class="far fa-clock"></i> ~8 min read / ٨ دقائق للقراءة</div>
+            <p>Philosophical definitions of truth, human respect, core responsibilities, and avoiding environmental harm or societal class divisions.</p>
+            <div class="read-link-group">
+                <a href="read.html#part2" class="read-link">Read in English &rarr;</a>
+                <a href="read-ar.html#part2" class="read-link" lang="ar" dir="rtl">اقرأ بالعربية &larr;</a>
+            </div>
+        </article>
+
+        <!-- Chapter 3 -->
+        <article class="chapter-item">
+            <div class="chapter-title">
+                <span>Part 3: Where I Have Found It</span>
+                <span lang="ar" dir="rtl" style="font-size: 1.1rem; color: var(--color-secondary);">الجزء الثالث: الحقيقة وأين وجدتها؟</span>
+            </div>
+            <div class="chapter-meta"><i class="far fa-clock"></i> ~5 min read / ٥ دقائق للقراءة</div>
+            <p>Continuity of scriptures, the role of divine messages as rectifiers, and finding the perfect, complete message of peace.</p>
+            <div class="read-link-group">
+                <a href="read.html#part3" class="read-link">Read in English &rarr;</a>
+                <a href="read-ar.html#part3" class="read-link" lang="ar" dir="rtl">اقرأ بالعربية &larr;</a>
+            </div>
+        </article>
+
+        <!-- Chapter 4 -->
+        <article class="chapter-item">
+            <div class="chapter-title">
+                <span>Part 4: Details of the Truth</span>
+                <span lang="ar" dir="rtl" style="font-size: 1.1rem; color: var(--color-secondary);">الجزء الرابع: تفاصيل الحقيقة التي وجدتها</span>
+            </div>
+            <div class="chapter-meta"><i class="far fa-clock"></i> ~45 min read / ٤٥ دقيقة للقراءة</div>
+            <p>The detailed specifications of the message, featuring Islamic jurisprudence, social pillars, family relationships, women’s rights, environmental stewards, justice, usury prohibitions, and peace accords.</p>
+            <div class="read-link-group">
+                <a href="read.html#part4" class="read-link">Read in English &rarr;</a>
+                <a href="read-ar.html#part4" class="read-link" lang="ar" dir="rtl">اقرأ بالعربية &larr;</a>
+            </div>
+            <div style="margin-top: 15px; border-top: 1px dashed var(--color-border); padding-top: 10px;">
+                <p style="font-size: 0.9rem; font-weight: bold; margin-bottom: 5px;">Specific sections / تصفح الأقسام المباشرة:</p>
+                <div class="read-link-group" style="gap: 10px;">
+                    <a href="read.html#oneness" class="read-link" style="font-size:0.8rem; padding:4px 8px;">Oneness of God / التوحيد</a>
+                    <a href="read.html#women" class="read-link" style="font-size:0.8rem; padding:4px 8px;">Women's Rights / حقوق المرأة</a>
+                    <a href="read.html#environment" class="read-link" style="font-size:0.8rem; padding:4px 8px;">Environment / البيئة والكائنات</a>
+                    <a href="read.html#war" class="read-link" style="font-size:0.8rem; padding:4px 8px;">War & Peace / السلم والحرب</a>
+                </div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- WhatsApp Float action -->
+    <a href="https://wa.me/249910438069" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+    <footer>
+        <p>&copy; 2026 Ahmad Attijani Ahmad Albadawi. All rights reserved.</p>
+        <p>
+            <a href="contact.html">Contact Us</a> | 
+            <a href="about.html">About Book</a> | 
+            <a href="download.html">PDF Downloads</a>
+        </p>
+    </footer>
+
+    <!-- Shared interaction engine script -->
+    <script src="global.js"></script>
+</body>
+</html>

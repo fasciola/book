@@ -1,0 +1,6 @@
+{
+  "name": "Spare Some Minutes of Your Time",
+  "description": "A beautifully unified, fully integrated responsive book reader exploring the search for truth across the Torah, the Gospel, the Quran, and philosophy.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
