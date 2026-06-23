@@ -1,4 +1,5 @@
 import * as mammothModule from 'mammoth/mammoth.browser';
+import { decorateQuranVerses } from './quran-styler.js';
 
 const mammoth = mammothModule.default || mammothModule;
 const config = window.BOOK_READER_CONFIG;
@@ -51,6 +52,7 @@ if (config) {
 
     if (card.childNodes.length) fragment.appendChild(card);
     root.replaceChildren(fragment);
+    decorateQuranVerses(root, config.code);
   }
 
   async function start() {
