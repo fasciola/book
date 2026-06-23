@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Auf Deutsch lesen — Spare Some Minutes of Your Time</title>
+  <title>Massage für allen Suchenden der Wahrheit — Spare Some Minutes of Your Time</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="global.css">
-  <link rel="stylesheet" href="language-portal.css">
+  <link rel="stylesheet" href="multilingual-reader.css">
   <script>
     (function() {
       const savedTheme = localStorage.getItem('theme');
@@ -15,25 +15,28 @@
     })();
   </script>
 </head>
-<body class="reader-page">
+<body data-script="latin">
   <nav>
-  <div class="logo-container"><a href="index.html" class="logo"><img src="logo-black.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-black" onerror="this.style.display='none';"><img src="logo-white.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-white" onerror="this.style.display='none';"><span class="logo-text">Spare Some Minutes</span></a></div>
-  <div class="menu-icon" onclick="toggleMenu()" aria-label="Toggle Menu"><i class="fas fa-bars"></i></div>
-  <div class="nav-links" id="navLinks"><a href="index.html">Andere Sprache wählen</a><span class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode"><i class="fas fa-moon" id="themeIcon"></i></span></div>
-</nav>
-  <main class="reader-main">
-    <header class="reader-heading"><h1>Auf Deutsch lesen</h1><p>Diese Ausgabe wird direkt aus der Quelldatei angezeigt, damit Text, Fußnoten und Formatierung erhalten bleiben.</p></header>
-    <div class="reader-actions">
-      <a class="btn btn-outline-primary" href="index-de.html"><i class="fas fa-arrow-left"></i> Andere Sprache wählen</a>
-      <a class="btn" id="downloadSource" href="#"><i class="fas fa-file-word"></i> Originaldokument herunterladen</a>
+    <div class="logo-container"><a href="index.html" class="logo" title="Sprache wählen"><img src="logo-black.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-black" onerror="this.style.display='none';"><img src="logo-white.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-white" onerror="this.style.display='none';"><span class="logo-text">Spare Some Minutes</span></a></div>
+    <div class="menu-icon" onclick="toggleMenu()" aria-label="Menu"><i class="fas fa-bars"></i></div>
+    <div class="nav-links" id="navLinks"><a href="index-de.html">Startseite</a><a href="read-de.html" class="active">Das Buch lesen</a><a href="index.html">Sprache</a><span class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme"><i class="fas fa-moon" id="themeIcon"></i></span></div>
+  </nav>
+  <main class="container">
+    <header style="text-align:center; margin-bottom:3rem;"><h1 class="book-title" id="cover">Massage für allen Suchenden der Wahrheit</h1><div style="text-align:center;"><span class="sub-title">Die Erde ist die Heimat aller Geschöpfen</span></div></header>
+    <div class="translated-reader-layout">
+      <aside class="translated-reader-sidebar"><h3 style="font-size:1.1rem; border-bottom:1px solid var(--color-border); padding-bottom:8px; margin-bottom:12px;">Inhalt</h3><div class="toc" style="border:none; padding:0; background:transparent; margin:0;"><a href="#section-1">Erster Teil:</a>
+<a href="#section-2">Die Message</a>
+<a href="#section-3">Teil zwei</a>
+<a href="#section-5">Teil drei</a>
+<a href="#section-7">Teil vier</a>
+<a href="#section-8">Der Autor:</a></div></aside>
+      <section class="translated-reader-main" id="source-book" aria-label="Deutsch edition"><p class="reader-loading" id="reader-status"><i class="fas fa-spinner fa-spin"></i><span>Das Buch lesen…</span></p></section>
     </div>
-    <p class="reader-fallback" id="readerStatus" aria-live="polite">Loading the book…</p>
-    <iframe class="reader-frame" id="bookReader" title="Deutsch book reader" allowfullscreen loading="eager"></iframe>
-    <p class="reader-fallback">If the reader does not load in your browser, use the original document download above.</p>
   </main>
+  <a href="https://wa.me/249910438069" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp with Author"><i class="fab fa-whatsapp"></i></a>
   <footer><p>&copy; 2026 Ahmad Attijani Ahmad Albadawi.</p></footer>
-  <script>window.BOOK_READER_CONFIG = { code: 'de', loadingText: 'Loading the book…' };</script>
+  <script>window.BOOK_READER_CONFIG = { code: 'de', parts: ['01','02','03'], errorText: 'Unable to load this edition. Please refresh the page.' };</script>
   <script src="global.js"></script>
-  <script src="source-reader.js"></script>
+  <script src="reader-loader.js"></script>
 </body>
 </html>
