@@ -1,75 +1,42 @@
-/* ============================================
-   SPARE SOME MINUTES OF YOUR TIME
-   Global JS Helper Actions
-   ============================================ */
-
-(function() {
+/* Shared theme controls and mobile navigation loader */
+(function () {
   'use strict';
 
-  // Toggle mobile navigation menu
-  window.toggleMenu = function() {
-    const navLinks = document.getElementById('navLinks');
-    if (navLinks) {
-      navLinks.classList.toggle('active');
-    }
+  window.toggleMenu = function () {
+    const links = document.getElementById('navLinks');
+    if (links) links.classList.toggle('active');
   };
 
-  // Toggle Dark/Light themes
-  window.toggleTheme = function() {
-    const doc = document.documentElement;
-    const isDark = doc.getAttribute('data-theme') === 'dark';
-    const nextTheme = isDark ? 'light' : 'dark';
-    
-    applyTheme(nextTheme);
+  window.toggleTheme = function () {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    applyTheme(dark ? 'light' : 'dark');
   };
 
-  // Internal application of theme state selection
   function applyTheme(theme) {
-    const doc = document.documentElement;
     const icons = document.querySelectorAll('#themeIcon');
-    
     if (theme === 'dark') {
-      doc.setAttribute('data-theme', 'dark');
+      document.documentElement.setAttribute('data-theme', 'dark');
       localStorage.setItem('theme', 'dark');
-      icons.forEach(icon => {
-        icon.classList.remove('fa-moon');
-        icon.classList.add('fa-sun');
-      });
+      icons.forEach((icon) => { icon.classList.remove('fa-moon'); icon.classList.add('fa-sun'); });
     } else {
-      doc.removeAttribute('data-theme');
+      document.documentElement.removeAttribute('data-theme');
       localStorage.setItem('theme', 'light');
-      icons.forEach(icon => {
-        icon.classList.remove('fa-sun');
-        icon.classList.add('fa-moon');
-      });
+      icons.forEach((icon) => { icon.classList.remove('fa-sun'); icon.classList.add('fa-moon'); });
     }
   }
 
-  // Pre-load correct saved theme on document initialization
-  function initTheme() {
-    const savedTheme = localStorage.getItem('theme');
-    
-    // Default to the majestic Sophisticated Dark brand theme
-    if (savedTheme === 'light') {
-      applyTheme('light');
-    } else {
-      applyTheme('dark');
-    }
+  function addAsset(type, url, attribute) {
+    if (document.querySelector(`[${attribute}]`)) return;
+    const element = document.createElement(type);
+    if (type === 'link') { element.rel = 'stylesheet'; element.href = url; }
+    else element.src = url;
+    element.setAttribute(attribute, 'true');
+    document.head.appendChild(element);
   }
 
-  // Bind key actions on DOM Load
   document.addEventListener('DOMContentLoaded', () => {
-    initTheme();
-
-    // Close mobile menu on clicking any links or pressing Escape key
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        const navLinks = document.getElementById('navLinks');
-        if (navLinks && navLinks.classList.contains('active')) {
-          navLinks.classList.remove('active');
-        }
-      }
-    });
+    applyTheme(localStorage.getItem('theme') === 'light' ? 'light' : 'dark');
+    addAsset('link', 'mobile-navigation.css', 'data-mobile-navigation');
+    addAsset('script', 'mobile-navigation.js', 'data-mobile-navigation-script');
   });
-
 })();
