@@ -24,32 +24,14 @@
   max-width: 800px;
 }
 .translated-reader-main .book-card { margin-bottom: 2rem; }
-.source-title-card {
-  text-align: center;
-}
-.source-title-card .source-paragraph {
-  text-align: center;
-  margin-left: auto;
-  margin-right: auto;
-}
-.source-paragraph {
-  max-width: none;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-  word-break: normal;
-}
+.source-title-card { text-align: center; }
+.source-title-card .source-paragraph { text-align: center; margin-left: auto; margin-right: auto; }
+.source-paragraph { max-width: none; white-space: pre-wrap; overflow-wrap: break-word; word-break: normal; }
 .source-paragraph.source-align-center { text-align: center; }
 .source-paragraph.source-align-right { text-align: right; }
 .source-paragraph.source-align-left { text-align: left; }
-.source-heading {
-  color: var(--color-primary);
-  margin-top: .35rem;
-  margin-bottom: 1.15rem;
-}
-.source-heading.source-heading-secondary {
-  font-size: clamp(1.28rem, 2.6vw, 1.7rem);
-  color: var(--color-text);
-}
+.source-heading { color: var(--color-primary); margin-top: .35rem; margin-bottom: 1.15rem; }
+.source-heading.source-heading-secondary { font-size: clamp(1.28rem, 2.6vw, 1.7rem); color: var(--color-text); }
 .source-heading.source-align-center { text-align: center; }
 .source-run-bold { font-weight: 700; }
 .source-run-italic { font-style: italic; }
@@ -59,26 +41,50 @@
 .source-run-sub { vertical-align: sub; font-size: .78em; }
 .source-footnote-ref { font-family: var(--font-ui); line-height: 0; }
 .source-footnote-ref a { padding: 0 .1rem; }
-.source-footnotes {
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--color-border);
-}
+.source-footnotes { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--color-border); }
 .source-footnotes h2 { font-size: 1.35rem; }
-.source-footnote {
+.source-footnote { max-width: none; font-size: .92rem; color: var(--color-secondary); text-align: left; }
+.source-footnote-number { color: var(--color-primary); font-family: var(--font-ui); font-weight: 700; }
+.translated-reader-meta { text-align: center; margin: -1rem auto 1.25rem; max-width: 70ch; color: var(--color-secondary); }
+.translated-reader-meta a { font-family: var(--font-ui); font-size: .85rem; letter-spacing: .05em; text-transform: uppercase; }
+
+/* Quran quotations use the same gold-accented treatment as the Arabic reader. */
+.translated-reader-main .quran-verse {
+  background: rgba(212, 175, 55, 0.04);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+  border-left: 4px solid var(--color-primary);
+  padding: 1.8rem 2.2rem;
+  margin: 2rem 0;
+  border-radius: var(--radius-sm);
+  font-family: 'Amiri', 'Spectral', Georgia, serif;
+}
+.translated-reader-main .quran-verse .quran-verse-text {
   max-width: none;
-  font-size: .92rem;
-  color: var(--color-secondary);
+  margin: 0;
+  color: var(--color-text);
+  font-size: clamp(1.1rem, 2.2vw, 1.35rem);
+  line-height: 2.2;
   text-align: left;
 }
-.source-footnote-number { color: var(--color-primary); font-family: var(--font-ui); font-weight: 700; }
-.translated-reader-meta {
-  text-align: center;
-  margin: -1rem auto 1.25rem;
-  max-width: 70ch;
-  color: var(--color-secondary);
+.translated-reader-main .quran-verse .citation {
+  display: block;
+  max-width: none;
+  margin: .95rem 0 0;
+  color: var(--color-accent);
+  font-family: var(--font-ui);
+  font-size: .9rem;
+  font-weight: 700;
+  letter-spacing: .01em;
+  line-height: 1.6;
+  text-align: right;
 }
-.translated-reader-meta a { font-family: var(--font-ui); font-size: .85rem; letter-spacing: .05em; text-transform: uppercase; }
+.translated-reader-main .quran-citation-only .citation { margin: 0; }
+[dir="rtl"] .translated-reader-main .quran-verse {
+  border-left: 1px solid rgba(212, 175, 55, 0.15);
+  border-right: 5px solid var(--color-accent);
+}
+[dir="rtl"] .translated-reader-main .quran-verse .quran-verse-text { text-align: right; }
+[dir="rtl"] .translated-reader-main .quran-verse .citation { text-align: left; }
 [data-script="cjk"] .source-paragraph { font-family: "Noto Serif CJK SC", "Songti SC", "SimSun", serif; line-height: 2.05; }
 [data-script="cyrillic"] .source-paragraph { font-family: "PT Serif", Georgia, serif; }
 [data-script="arabic-mixed"] .source-paragraph { line-height: 2; }
@@ -91,11 +97,8 @@
   .translated-reader-main .book-card { padding: 1.25rem; }
   .source-paragraph { text-align: left; }
   [dir="rtl"] .source-paragraph { text-align: right; }
+  .translated-reader-main .quran-verse { padding: 1.4rem 1.25rem; }
 }
-
-.reader-loading {
-  display:flex; align-items:center; gap:.7rem; color:var(--color-secondary);
-  font-family:var(--font-ui); font-size:.9rem; padding:1.25rem;
-}
+.reader-loading { display:flex; align-items:center; gap:.7rem; color:var(--color-secondary); font-family:var(--font-ui); font-size:.9rem; padding:1.25rem; }
 .reader-loading i { color:var(--color-primary); }
 .reader-load-error { color:#ef9a9a; }
