@@ -3,54 +3,61 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Spare Some Minutes of Your Time — Select Your Language</title>
+  <title>Spare Some Minutes of Your Time — Selection Portal</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
   <link rel="stylesheet" href="global.css">
   <script>
-    (function() {
-      const savedTheme = localStorage.getItem('theme');
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (savedTheme === 'dark' || (!savedTheme && prefersDark)) document.documentElement.setAttribute('data-theme', 'dark');
-    })();
+    (function() { const savedTheme = localStorage.getItem('theme'); const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches; if (savedTheme === 'dark' || (!savedTheme && prefersDark)) document.documentElement.setAttribute('data-theme', 'dark'); })();
   </script>
   <style>
-    .classif-hero { text-align:center; padding:3.5rem 1.5rem 2.25rem; }
-    .classif-hero h1 { font-size:clamp(2.2rem, 5vw, 3.4rem); margin-bottom:.5rem; letter-spacing:-.01em; }
-    .classif-hero p { max-width:760px; margin:0 auto 1.25rem; font-size:clamp(1.05rem, 2vw, 1.3rem); color:var(--color-accent); font-family:var(--font-heading); font-style:italic; }
-    .classif-intro { max-width:75ch; margin:0 auto; line-height:1.8; font-size:1.05rem; color:var(--color-text); opacity:.85; }
-    .classif-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:1.35rem; margin-bottom:4rem; }
-    .classif-card { background:var(--color-white); border:1px solid var(--color-border); border-top:3px solid var(--color-primary); border-radius:var(--radius-md); padding:1.8rem 1.45rem; box-shadow:var(--shadow-sm); transition:all var(--transition-base); display:flex; flex-direction:column; justify-content:space-between; text-align:center; }
-    .classif-card:hover { transform:translateY(-5px); border-color:var(--color-accent); box-shadow:var(--shadow-md); }
-    .classif-icon { font-size:2.15rem; color:var(--color-accent); margin-bottom:1rem; }
-    .classif-card h2 { font-size:1.45rem; color:var(--color-primary); margin-bottom:.7rem; border-bottom:0; padding-bottom:0; }
-    .classif-card p { font-size:.95rem; color:var(--color-secondary); margin:0 0 1.35rem; line-height:1.65; text-align:center; }
-    .classif-btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:11px 18px; background:var(--color-primary); color:#0f1115!important; border-radius:var(--radius-sm); font-family:var(--font-ui); font-weight:700; font-size:.78rem; text-transform:uppercase; letter-spacing:.08em; text-decoration:none; transition:all var(--transition-base); border:1px solid var(--color-primary); }
-    .classif-btn:hover { background:#f1cf5f; border-color:#f1cf5f; transform:translateY(-2px); box-shadow:0 4px 12px rgba(212,175,55,.2); }
-    .classif-arabic-btn { font-family:'Amiri','Spectral',serif; font-size:1rem; text-transform:none; letter-spacing:normal; }
-  </style>
+.classif-hero { text-align: center; padding: 3.5rem 1.5rem 2.5rem; }
+.classif-hero h1 { font-size: clamp(2.2rem, 5vw, 3.4rem); margin-bottom: .5rem; letter-spacing: -.01em; }
+.classif-hero p { margin: 0 auto 1.2rem; text-align: center; font-size: clamp(1.1rem, 2vw, 1.35rem); color: var(--color-accent); font-family: var(--font-heading); font-style: italic; }
+.classif-intro { max-width: 75ch; margin: 0 auto 3rem; text-align: center; line-height: 1.8; font-size: 1.05rem; color: var(--color-text); opacity: .85; }
+.classif-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-bottom: 4rem; }
+.classif-card { background: var(--color-white); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.75rem; box-shadow: var(--shadow-sm); transition: all var(--transition-base); display: flex; flex-direction: column; justify-content: space-between; text-align: center; position: relative; overflow: hidden; }
+.classif-card:hover { transform: translateY(-5px); border-color: var(--color-accent); box-shadow: var(--shadow-md); }
+.classif-icon { font-size: 2.2rem; color: var(--color-accent); margin-bottom: 1rem; }
+.classif-card h2 { font-size: 1.5rem; color: var(--color-primary); margin-bottom: .65rem; border-bottom: none; padding-bottom: 0; }
+.classif-card p { font-size: .95rem; color: var(--color-secondary); margin-bottom: 1.5rem; line-height: 1.65; text-align: center; }
+.classif-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 12px 18px; background: var(--color-primary); color: #0f1115 !important; border-radius: var(--radius-sm); font-family: var(--font-ui); font-weight: 700; font-size: .78rem; text-transform: uppercase; letter-spacing: .08em; text-decoration: none; transition: all var(--transition-base); border: 1px solid var(--color-primary); }
+.classif-btn:hover { background: #f1cf5f; border-color: #f1cf5f; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(212, 175, 55, .2); }
+.classif-arabic-btn { font-family: 'Amiri', 'Spectral', serif; font-size: 1rem; text-transform: none; letter-spacing: normal; }
+</style>
 </head>
 <body>
   <div class="video-container" aria-hidden="true"><video autoplay muted loop playsinline id="bg-video"><source src="back.mp4" type="video/mp4"></video></div>
   <div class="overlay" aria-hidden="true"></div>
-  <nav style="justify-content:center; border-bottom:1px solid rgba(212,175,55,.1);">
-    <div class="logo-container"><div class="logo" style="cursor:default;"><img src="logo-black.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-black" onerror="this.style.display='none';"><img src="logo-white.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-white" onerror="this.style.display='none';"><span class="logo-text">Spare Some Minutes of Your Time</span></div></div>
-  </nav>
+  <nav style="justify-content:center; border-bottom:1px solid rgba(212,175,55,.1);"><div class="logo-container"><div class="logo" style="cursor:default;"><img src="logo-black.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-black" onerror="this.style.display='none';"><img src="logo-white.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-white" onerror="this.style.display='none';"><span class="logo-text">Spare Some Minutes of Your Time</span></div></div></nav>
   <main class="container">
-    <header class="classif-hero">
-      <h1>Select Your Language</h1>
-      <p>A Personal Letter to Every Truth-Seeker</p>
-      <div class="classif-intro">Choose an edition to read the book in your preferred language. Each newly added edition opens the original source document directly, preserving its text, quotations, Qur’anic verses, notes, and formatting.</div>
-    </header>
+    <header class="classif-hero"><h1>Select Your Language Portal</h1><p>A Personal Letter to Every Truth-Seeker</p><div class="classif-intro">Choose the language you want to read. Every edition opens as a direct HTML reader using the same dark, chapter-based layout as the English and Arabic editions.</div></header>
     <section class="classif-grid" aria-label="Book language editions">
-      <article class="classif-card"><div><div class="classif-icon"><i class="fas fa-landmark"></i></div><h2 lang="ar" dir="rtl">اللغة العربية</h2><p lang="ar" dir="rtl" style="font-family:'Amiri','Spectral',serif;font-size:1.05rem;">اقرأ النسخة العربية الكاملة للكتاب.</p></div><a href="index-ar.html" class="classif-btn classif-arabic-btn" lang="ar" dir="rtl">الدخول إلى النسخة العربية</a></article>
-      <article class="classif-card"><div><div class="classif-icon"><i class="fas fa-book-reader"></i></div><h2>English</h2><p>Explore the complete English edition, including its online reading experience and book resources.</p></div><a href="index-en.html" class="classif-btn">English Edition <i class="fas fa-arrow-right"></i></a></article>
-      <article class="classif-card"><div><div class="classif-icon"><i class="fas fa-language"></i></div><h2 lang="fr">Français</h2><p>Lire l’édition française complète dans sa mise en page d’origine.</p></div><a href="index-fr.html" class="classif-btn">Édition française <i class="fas fa-arrow-right"></i></a></article>
-      <article class="classif-card"><div><div class="classif-icon"><i class="fas fa-language"></i></div><h2 lang="de">Deutsch</h2><p>Die vollständige deutsche Ausgabe in der ursprünglichen Gestaltung lesen.</p></div><a href="index-de.html" class="classif-btn">Deutsche Ausgabe <i class="fas fa-arrow-right"></i></a></article>
-      <article class="classif-card"><div><div class="classif-icon"><i class="fas fa-language"></i></div><h2 lang="ru">Русский</h2><p>Читайте полное русское издание в исходном оформлении.</p></div><a href="index-ru.html" class="classif-btn">Русское издание <i class="fas fa-arrow-right"></i></a></article>
-      <article class="classif-card"><div><div class="classif-icon"><i class="fas fa-language"></i></div><h2 lang="zh-CN">中文</h2><p>阅读保留原始排版的完整中文版本。</p></div><a href="index-zh.html" class="classif-btn">中文版 <i class="fas fa-arrow-right"></i></a></article>
-      <article class="classif-card"><div><div class="classif-icon"><i class="fas fa-language"></i></div><h2 lang="nl">Nederlands</h2><p>Lees de volledige Nederlandse editie in de oorspronkelijke opmaak.</p></div><a href="index-nl.html" class="classif-btn">Nederlandse editie <i class="fas fa-arrow-right"></i></a></article>
-      <article class="classif-card"><div><div class="classif-icon"><i class="fas fa-language"></i></div><h2 lang="sw">Kiswahili</h2><p>Soma toleo kamili la Kiswahili lenye mpangilio wake wa asili.</p></div><a href="index-sw.html" class="classif-btn">Toleo la Kiswahili <i class="fas fa-arrow-right"></i></a></article>
-    </section>
+<article class="classif-card" style="border-top:3px solid var(--color-primary);">
+  <div><div class="classif-icon"><i class="fas fa-landmark"></i></div><h2 lang="ar" dir="rtl">اللغة العربية</h2><p lang="ar" dir="rtl">ادخل إلى النسخة العربية الكاملة للكتاب.</p></div>
+  <a href="index-ar.html" class="classif-btn classif-arabic-btn" lang="ar" dir="rtl">الدخول إلى النسخة العربية <i class="fas fa-arrow-right"></i></a>
+</article><article class="classif-card" style="border-top:3px solid var(--color-primary);">
+  <div><div class="classif-icon"><i class="fas fa-book-reader"></i></div><h2>English</h2><p>Explore the complete English edition, including its online reading experience.</p></div>
+  <a href="index-en.html" class="classif-btn">English Edition <i class="fas fa-arrow-right"></i></a>
+</article><article class="classif-card" style="border-top:3px solid var(--color-primary);">
+  <div><div class="classif-icon"><i class="fas fa-language"></i></div><h2>Français</h2><p>Lire l’édition française complète en ligne.</p></div>
+  <a href="index-fr.html" class="classif-btn">Lire en ligne <i class="fas fa-arrow-right"></i></a>
+</article><article class="classif-card" style="border-top:3px solid var(--color-primary);">
+  <div><div class="classif-icon"><i class="fas fa-language"></i></div><h2>Deutsch</h2><p>Die vollständige deutsche Ausgabe online lesen.</p></div>
+  <a href="index-de.html" class="classif-btn">Online lesen <i class="fas fa-arrow-right"></i></a>
+</article><article class="classif-card" style="border-top:3px solid var(--color-primary);">
+  <div><div class="classif-icon"><i class="fas fa-language"></i></div><h2>Русский</h2><p>Читайте полное русское издание онлайн.</p></div>
+  <a href="index-ru.html" class="classif-btn">Читать онлайн <i class="fas fa-arrow-right"></i></a>
+</article><article class="classif-card" style="border-top:3px solid var(--color-primary);">
+  <div><div class="classif-icon"><i class="fas fa-language"></i></div><h2>中文</h2><p>在线阅读完整中文版本。</p></div>
+  <a href="index-zh.html" class="classif-btn">在线阅读 <i class="fas fa-arrow-right"></i></a>
+</article><article class="classif-card" style="border-top:3px solid var(--color-primary);">
+  <div><div class="classif-icon"><i class="fas fa-language"></i></div><h2>Nederlands</h2><p>Lees de volledige Nederlandse editie online.</p></div>
+  <a href="index-nl.html" class="classif-btn">Online lezen <i class="fas fa-arrow-right"></i></a>
+</article><article class="classif-card" style="border-top:3px solid var(--color-primary);">
+  <div><div class="classif-icon"><i class="fas fa-language"></i></div><h2>Kiswahili</h2><p>Soma toleo kamili la Kiswahili mtandaoni.</p></div>
+  <a href="index-sw.html" class="classif-btn">Soma mtandaoni <i class="fas fa-arrow-right"></i></a>
+</article>
+</section>
   </main>
   <a href="https://wa.me/249910438069" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp with Author"><i class="fab fa-whatsapp"></i></a>
   <footer style="margin-top:4rem;"><p>&copy; 2026 Ahmad Attijani Ahmad Albadawi. Sincere interfaith dialogues are warmly welcome.</p><p><a href="contact.html">Contact Author</a> | <a href="about.html">About Book</a> | <a href="download.html">Translations PDF Download</a></p></footer>
