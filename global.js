@@ -1,4 +1,4 @@
-/* Shared theme controls and mobile navigation loader */
+/* Shared theme controls, navigation loader, and site logo */
 (function () {
   'use strict';
 
@@ -34,8 +34,38 @@
     document.head.appendChild(element);
   }
 
+  function applySiteLogo() {
+    if (!document.getElementById('shared-site-logo-style')) {
+      const style = document.createElement('style');
+      style.id = 'shared-site-logo-style';
+      style.textContent = `
+        nav .logo { display: inline-flex; align-items: center; min-width: 0; }
+        nav .logo .site-logo-image { display: block; width: auto; height: 48px; max-width: min(300px, 46vw); object-fit: contain; }
+        nav .logo.has-site-logo > :not(.site-logo-image) { display: none !important; }
+        @media (max-width: 992px) {
+          nav .logo .site-logo-image { height: 38px; max-width: min(240px, 56vw); }
+        }
+      `;
+      document.head.appendChild(style);
+    }
+
+    document.querySelectorAll('nav .logo').forEach((logo) => {
+      if (logo.querySelector('.site-logo-image')) return;
+
+      const image = document.createElement('img');
+      image.className = 'site-logo-image';
+      image.src = '/logo.png';
+      image.alt = 'Spare Some Minutes of Your Time';
+      image.decoding = 'async';
+      image.addEventListener('load', () => logo.classList.add('has-site-logo'), { once: true });
+      image.addEventListener('error', () => image.remove(), { once: true });
+      logo.prepend(image);
+    });
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
     applyTheme(localStorage.getItem('theme') === 'light' ? 'light' : 'dark');
+    applySiteLogo();
     addAsset('link', 'mobile-navigation.css', 'data-mobile-navigation');
     addAsset('script', 'mobile-navigation.js', 'data-mobile-navigation-script');
     addAsset('script', 'reader-route-fix.js', 'data-reader-route-fix');
