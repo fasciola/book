@@ -8,6 +8,7 @@ export default defineConfig(() => ({
   resolve: { alias: { '@': path.resolve(__dirname, '.') } },
   server: { hmr: process.env.DISABLE_HMR !== 'true', watch: process.env.DISABLE_HMR === 'true' ? null : {} },
   build: {
+    copyPublicDir: true,
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html'),
