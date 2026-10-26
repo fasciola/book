@@ -77,6 +77,15 @@ const editionFromScreenName=title=>{
   return 'Unclassified';
 };
 const periodDays={7:7,30:30,90:90};
+
+// Server-side in-memory caching to protect hourly Google Analytics Data API quotas
+let cachedRealtimeData = null;
+let cachedRealtimeTimestamp = 0;
+const REALTIME_CACHE_TTL_MS = 75 * 1000; // 75-second cache for realtime stream
+
+const cachedReportData = new Map();
+const REPORT_CACHE_TTL_MS = 180 * 1000; // 3-minute cache for historical reports
+
 export default {async fetch(request,env){
   const url=new URL(request.url);
   const host=request.headers.get('host')||url.host||'';
@@ -90,92 +99,147 @@ export default {async fetch(request,env){
     if(url.pathname==='/api/realtime'){
       if(request.method!=='GET')return json({error:'Method not allowed'},405);
       if(!/^\d+$/.test(env.GA4_PROPERTY_ID||''))return json({error:'GA4 numeric property ID is not configured'},503);
-      const token=await getGoogleToken(env),p=env.GA4_PROPERTY_ID;
-      const [total,countries,minutes,screens,devices,events]=await Promise.all([
-        runRealtimeReport(token,p,{
-          metrics:[{name:'activeUsers'}],
-          minuteRanges:[{name:'last_30_minutes',startMinutesAgo:29,endMinutesAgo:0}],
-          metricAggregations:['TOTAL']
-        }),
-        runRealtimeReport(token,p,{
-          dimensions:[{name:'country'}],
-          metrics:[{name:'activeUsers'}],
-          orderBys:[{metric:{metricName:'activeUsers'},desc:true}],
-          limit:'10'
-        }),
-        runRealtimeReport(token,p,{
-          dimensions:[{name:'minutesAgo'}],
-          metrics:[{name:'activeUsers'}],
-          orderBys:[{dimension:{dimensionName:'minutesAgo'},desc:false}],
-          limit:'30'
-        }),
-        runRealtimeReport(token,p,{
-          dimensions:[{name:'unifiedScreenName'}],
-          metrics:[{name:'activeUsers'},{name:'screenPageViews'}],
-          orderBys:[{metric:{metricName:'activeUsers'},desc:true}],
-          limit:'25'
-        }),
-        runRealtimeReport(token,p,{
-          dimensions:[{name:'deviceCategory'}],
-          metrics:[{name:'activeUsers'}],
-          orderBys:[{metric:{metricName:'activeUsers'},desc:true}]
-        }),
-        runRealtimeReport(token,p,{
-          dimensions:[{name:'eventName'}],
-          metrics:[{name:'eventCount'}],
-          orderBys:[{metric:{metricName:'eventCount'},desc:true}],
-          limit:'15'
-        })
-      ]);
-      const activeUsers=metricSum(total,0)||Number(total.rows?.[0]?.metricValues?.[0]?.value||0);
-      const minuteMap={};
-      for(let i=0;i<30;i++){minuteMap[String(i).padStart(2,'0')]=0;}
-      for(const r of rows(minutes)){minuteMap[String(val(r,0)).padStart(2,'0')]=val(r,0,true);}
-      const minuteActivity=Object.entries(minuteMap).map(([m,users])=>({minutesAgo:Number(m),users})).sort((a,b)=>a.minutesAgo-b.minutesAgo);
-
-      const editionMap={};
-      const supportedEditions=['Arabic','Chinese','Dutch','English','French','German','Russian','Swahili'];
-      supportedEditions.forEach(ed=>{
-        editionMap[ed]={edition:ed,activeUsers:0,views:0,screens:[]};
-      });
-
-      const screenRows=rows(screens);
-      for(const r of screenRows){
-        const title=val(r,0)||'Untitled';
-        const users=val(r,0,true);
-        const views=val(r,1,true);
-        const classified=editionFromScreenName(title);
-        if(!editionMap[classified]){
-          editionMap[classified]={edition:classified,activeUsers:0,views:0,screens:[]};
-        }
-        editionMap[classified].activeUsers=Math.max(editionMap[classified].activeUsers,users);
-        editionMap[classified].views+=views;
-        editionMap[classified].screens.push({title,activeUsers:users,views});
+      
+      const isForceFresh = url.searchParams.get('fresh') === '1';
+      const now = Date.now();
+      if(!isForceFresh && cachedRealtimeData && (now - cachedRealtimeTimestamp < REALTIME_CACHE_TTL_MS)){
+        return json({...cachedRealtimeData, cached: true});
       }
 
-      const liveEditions=Object.values(editionMap).filter(e=>supportedEditions.includes(e.edition)||e.activeUsers>0);
+      const supportedEditions=['Arabic','Chinese','Dutch','English','French','German','Russian','Swahili'];
+      try {
+        const token=await getGoogleToken(env),p=env.GA4_PROPERTY_ID;
+        // Consolidated queries: combines country and deviceCategory into a single query to conserve hourly quota tokens
+        const [total,geoAndDevice,minutes,screens,events]=await Promise.all([
+          runRealtimeReport(token,p,{
+            metrics:[{name:'activeUsers'}],
+            minuteRanges:[{name:'last_30_minutes',startMinutesAgo:29,endMinutesAgo:0}],
+            metricAggregations:['TOTAL']
+          }),
+          runRealtimeReport(token,p,{
+            dimensions:[{name:'country'},{name:'deviceCategory'}],
+            metrics:[{name:'activeUsers'}],
+            orderBys:[{metric:{metricName:'activeUsers'},desc:true}],
+            limit:'30'
+          }),
+          runRealtimeReport(token,p,{
+            dimensions:[{name:'minutesAgo'}],
+            metrics:[{name:'activeUsers'}],
+            orderBys:[{dimension:{dimensionName:'minutesAgo'},desc:false}],
+            limit:'30'
+          }),
+          runRealtimeReport(token,p,{
+            dimensions:[{name:'unifiedScreenName'}],
+            metrics:[{name:'activeUsers'},{name:'screenPageViews'}],
+            orderBys:[{metric:{metricName:'activeUsers'},desc:true}],
+            limit:'25'
+          }),
+          runRealtimeReport(token,p,{
+            dimensions:[{name:'eventName'}],
+            metrics:[{name:'eventCount'}],
+            orderBys:[{metric:{metricName:'eventCount'},desc:true}],
+            limit:'15'
+          })
+        ]);
+        const activeUsers=metricSum(total,0)||Number(total.rows?.[0]?.metricValues?.[0]?.value||0);
+        
+        // Aggregate country & device from the unified geoAndDevice query
+        const countryMap={};
+        const deviceMap={};
+        for(const r of rows(geoAndDevice)){
+          const c=val(r,0)||'Unknown / Direct';
+          const d=val(r,1)||'desktop';
+          const u=val(r,0,true);
+          countryMap[c]=(countryMap[c]||0)+u;
+          deviceMap[d]=(deviceMap[d]||0)+u;
+        }
+        const countriesList=Object.entries(countryMap).map(([name,value])=>({name,value})).filter(x=>x.value>0).sort((a,b)=>b.value-a.value).slice(0,10);
+        const devicesList=Object.entries(deviceMap).map(([name,value])=>({name,value})).filter(x=>x.value>0).sort((a,b)=>b.value-a.value);
 
-      return json({
-        ok:true,
-        activeUsers,
-        countries:rows(countries).map(r=>({name:val(r,0)||'Unknown / Direct',value:val(r,0,true)})).filter(x=>x.value>0),
-        devices:rows(devices).map(r=>({name:val(r,0),value:val(r,0,true)})).filter(x=>x.value>0),
-        events:rows(events).map(r=>({name:val(r,0),count:val(r,0,true)})),
-        minuteActivity,
-        liveEditions,
-        screens:screenRows.map(r=>({
-          title:val(r,0)||'Untitled',
-          edition:editionFromScreenName(val(r,0)),
-          activeUsers:val(r,0,true),
-          views:val(r,1,true)
-        })),
-        updatedAt:new Date().toISOString()
-      });
+        const minuteMap={};
+        for(let i=0;i<30;i++){minuteMap[String(i).padStart(2,'0')]=0;}
+        for(const r of rows(minutes)){minuteMap[String(val(r,0)).padStart(2,'0')]=val(r,0,true);}
+        const minuteActivity=Object.entries(minuteMap).map(([m,users])=>({minutesAgo:Number(m),users})).sort((a,b)=>a.minutesAgo-b.minutesAgo);
+
+        const editionMap={};
+        supportedEditions.forEach(ed=>{
+          editionMap[ed]={edition:ed,activeUsers:0,views:0,screens:[]};
+        });
+
+        const screenRows=rows(screens);
+        for(const r of screenRows){
+          const title=val(r,0)||'Untitled';
+          const users=val(r,0,true);
+          const views=val(r,1,true);
+          const classified=editionFromScreenName(title);
+          if(!editionMap[classified]){
+            editionMap[classified]={edition:classified,activeUsers:0,views:0,screens:[]};
+          }
+          editionMap[classified].activeUsers=Math.max(editionMap[classified].activeUsers,users);
+          editionMap[classified].views+=views;
+          editionMap[classified].screens.push({title,activeUsers:users,views});
+        }
+
+        const liveEditions=Object.values(editionMap).filter(e=>supportedEditions.includes(e.edition)||e.activeUsers>0);
+
+        const resultPayload={
+          ok:true,
+          activeUsers,
+          countries:countriesList,
+          devices:devicesList,
+          events:rows(events).map(r=>({name:val(r,0),count:val(r,0,true)})),
+          minuteActivity,
+          liveEditions,
+          screens:screenRows.map(r=>({
+            title:val(r,0)||'Untitled',
+            edition:editionFromScreenName(val(r,0)),
+            activeUsers:val(r,0,true),
+            views:val(r,1,true)
+          })),
+          updatedAt:new Date().toISOString()
+        };
+
+        cachedRealtimeData=resultPayload;
+        cachedRealtimeTimestamp=Date.now();
+        return json(resultPayload);
+      } catch (err) {
+        const isQuota=/exhausted property tokens|resource_exhausted|quota/i.test(err.message||'');
+        if(isQuota){
+          if(cachedRealtimeData){
+            return json({
+              ...cachedRealtimeData,
+              quotaPaused:true,
+              quotaNotice:'Google Analytics 1-hour token quota cooling down. Displaying latest captured live reader session.',
+              cached:true
+            });
+          }
+          return json({
+            ok:true,
+            activeUsers:0,
+            quotaPaused:true,
+            quotaNotice:'Google Analytics 1-hour token quota cooling down. Tokens replenish automatically in under an hour.',
+            countries:[],
+            devices:[],
+            events:[],
+            minuteActivity:[],
+            liveEditions:supportedEditions.map(ed=>({edition:ed,activeUsers:0,views:0,screens:[]})),
+            screens:[],
+            updatedAt:new Date().toISOString()
+          });
+        }
+        throw err;
+      }
     }
     if(url.pathname==='/api/report'){
       if(request.method!=='GET')return json({error:'Method not allowed'},405);
       if(!/^\d+$/.test(env.GA4_PROPERTY_ID||''))return json({error:'GA4 numeric property ID is not configured'},503);
       const days=periodDays[Number(url.searchParams.get('days'))]||30;
+      const isForceFresh = url.searchParams.get('fresh') === '1';
+      const cached = cachedReportData.get(days);
+      if(!isForceFresh && cached && (Date.now() - cached.timestamp < REPORT_CACHE_TTL_MS)){
+        return json({...cached.data, cached:true});
+      }
+
       const range=[{startDate:`${days}daysAgo`,endDate:'today'}];
       const token=await getGoogleToken(env),p=env.GA4_PROPERTY_ID;
       const base={dateRanges:range,limit:'250'};
@@ -196,7 +260,7 @@ export default {async fetch(request,env){
         views:val(r,1,true),
         isToday:val(r,0)===todayStr
       }));
-      return json({
+      const reportPayload = {
         periodDays:days,
         updatedAt:new Date().toISOString(),
         notes:[
@@ -218,7 +282,9 @@ export default {async fetch(request,env){
         languages:Object.values(languages).sort((a,b)=>b.views-a.views),
         pages:rows(pages).slice(0,30).map(r=>({path:val(r,0),views:val(r,0,true),engagementSeconds:val(r,2,true)})),
         events:rows(events).map(r=>({name:val(r,0),count:val(r,0,true)}))
-      });
+      };
+      cachedReportData.set(days, {data: reportPayload, timestamp: Date.now()});
+      return json(reportPayload);
     }
     return env.ASSETS.fetch(request);
   }catch(e){return json({error:url.pathname.startsWith('/api/')?(e.message||'Request failed'):'Access denied'},url.pathname.startsWith('/api/')?403:403)};

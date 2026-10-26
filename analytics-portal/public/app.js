@@ -120,7 +120,10 @@ const table = (headers, rows) => `
 function renderRealtimePill() {
   const pill = $('#live-pill-count');
   if (!pill) return;
-  if (realtimeError) {
+  if (realtimeData && realtimeData.quotaPaused) {
+    pill.textContent = (realtimeData.activeUsers > 0 ? fmt(realtimeData.activeUsers) + ' · ' : '') + 'Quota cooling';
+    pill.style.color = '#fde047';
+  } else if (realtimeError) {
     pill.textContent = 'Offline';
     pill.style.color = '#f87171';
   } else if (realtimeData !== null) {
@@ -146,14 +149,32 @@ function render() {
 
   const o = data.overview;
 
-  // Realtime display logic
+  // Realtime display logic with graceful quota fallback
   let liveCardValue = '—';
   let liveCardDesc = 'Checking real-time...';
   let liveBadge = '<span class="live-badge-inline"><span class="pulse-dot" style="margin-right:4px;width:6px;height:6px"></span> LIVE</span>';
   let realtimeMinutesHtml = '';
   let realtimeCountryHtml = '';
 
-  if (realtimeError) {
+  if (realtimeData && realtimeData.quotaPaused) {
+    liveCardValue = fmt(realtimeData.activeUsers);
+    liveCardDesc = realtimeData.activeUsers > 0
+      ? 'Latest live readers (hourly quota cooling down)'
+      : 'Hourly quota cooling down — auto-resumes once tokens replenish';
+    liveBadge = '<span class="live-badge-inline" style="background:#451a03;color:#fde047;border-color:#b45309"><span class="pulse-dot" style="background:#fde047;margin-right:4px;width:6px;height:6px"></span> QUOTA COOLING</span>';
+    realtimeMinutesHtml = minuteHistogram(realtimeData.minuteActivity);
+    if (realtimeData.countries && realtimeData.countries.length > 0) {
+      realtimeCountryHtml = `
+        <div style="margin-top:14px;padding-top:14px;border-top:1px solid #213348">
+          <div class="realtime-widget-title">
+            <span>Live readers by country (latest session)</span>
+            <span style="color:#fde047">Quota cooling</span>
+          </div>
+          ${bars(realtimeData.countries)}
+        </div>
+      `;
+    }
+  } else if (realtimeError) {
     liveCardValue = 'Unavailable';
     liveCardDesc = 'Realtime API check failed';
     liveBadge = '<span class="live-badge-inline" style="background:#451a1a;color:#fca5a5;border-color:#7f1d1d">Error</span>';
@@ -184,7 +205,7 @@ function render() {
   const totalLiveEditionUsers = activeTranslationEditions.reduce((max, e) => Math.max(max, e.activeUsers), 0);
 
   let liveEditionsHtml = '';
-  if (realtimeError) {
+  if (realtimeError && !realtimeData) {
     liveEditionsHtml = `<p class="empty" style="color:#f87171">Realtime edition data currently unavailable.</p>`;
   } else if (realtimeData) {
     if (activeAllEditions.length > 0) {
@@ -214,13 +235,14 @@ function render() {
         </div>
         <p class="realtime-disclaimer">
           * Live counts reflect active readers per edition recorded in GA4's in-memory stream over the last 30 minutes. A visitor navigating across multiple editions is counted within each visited edition; deduplicated reach is reported at the total portal level.
+          ${realtimeData.quotaPaused ? '<br><span style="color:#fde047">ℹ️ Live stream quota is currently cooling down; showing latest recorded reader activity.</span>' : ''}
         </p>
       `;
     } else {
       liveEditionsHtml = `
         <div class="live-empty-state">
           <span class="pulse-dot" style="opacity:0.5"></span>
-          <p>No active edition readers recorded in the last 30 minutes. Real-time reader activity will appear here automatically as visitors navigate book translations.</p>
+          <p>${realtimeData.quotaPaused ? 'Live stream hourly quota cooling down. Tokens replenish automatically in under an hour.' : 'No active edition readers recorded in the last 30 minutes. Real-time reader activity will appear here automatically as visitors navigate book translations.'}</p>
         </div>
       `;
     }
@@ -239,6 +261,16 @@ function render() {
     </div>
   ` : '';
 
+  const quotaNoticeHtml = (realtimeData && realtimeData.quotaPaused) ? `
+    <div class="processing-notice" style="border-left-color: #d97706; background: rgba(217, 119, 6, 0.08); margin-bottom: 24px;">
+      <div class="notice-icon">⏱️</div>
+      <div>
+        <strong style="color: #fbbf24;">Realtime Quota Cooling Down (Tokens Refresh Hourly)</strong>
+        <p style="color: #cbd5e1;">Google Analytics enforces an hourly token budget for realtime streaming queries on standard properties. Live polling has automatically slowed to 5-minute intervals to allow tokens to refill. ${realtimeData.cached ? 'Displaying latest captured live session data above.' : ''} Historical reporting and portal navigation remain fully operational.</p>
+      </div>
+    </div>
+  ` : '';
+
   const overview = `
     <div class="kpis">
       ${card('Live Visitors', liveCardValue, liveCardDesc, true, liveBadge)}
@@ -247,6 +279,7 @@ function render() {
       ${card('Sessions', fmt(o.sessions))}
       ${card('Engagement rate', (100 * o.engagementRate).toFixed(1) + '%')}
     </div>
+    ${quotaNoticeHtml}
     ${processingNoticeHtml}
     <div class="panels">
       ${panel('Visitor activity', 'Daily users through today (preliminary)', lineChart(data.traffic))}
@@ -286,6 +319,7 @@ function render() {
       ${card('Average session', Math.round(o.averageSessionDuration) + ' sec')}
       ${card('Countries', fmt(data.countries.length || (realtimeData?.countries?.length || 0)), data.countries.length ? 'Countries in report' : 'Active countries (Live)')}
     </div>
+    ${quotaNoticeHtml}
     ${processingNoticeHtml}
     <div class="panels">
       ${panel('Visitors by country', audienceCountriesTitle, bars(audienceCountries))}
@@ -301,6 +335,7 @@ function render() {
       ${card('Edition views (Hist.)', fmt(data.languages.filter(x => x.language !== 'Language Selector' && x.language !== 'Other / site').reduce((s, x) => s + x.views, 0)), 'Finalized historical reports')}
       ${card('Languages supported', '8', 'Full editions available')}
     </div>
+    ${quotaNoticeHtml}
     ${panel('Active Editions (Last 30 Minutes)', 'Real-time reader activity across translations from GA4 stream', liveEditionsHtml)}
     ${processingNoticeHtml}
     <div class="panels">
@@ -332,6 +367,7 @@ function render() {
         : card('Download events', fmt(histDownloads), 'Only recorded GA4 events')}
       ${card('Audio events', fmt(audio.reduce((n, x) => n + x.count, 0)), 'Requires website event instrumentation')}
     </div>
+    ${quotaNoticeHtml}
     ${processingNoticeHtml}
     <div class="panels">
       ${panel('Top content', contentPagesSubtitle, table(contentPagesHeaders, contentPages))}
@@ -342,38 +378,54 @@ function render() {
   $('#view').innerHTML = ({ overview, audience, languages, content })[view];
 }
 
-async function loadRealtime() {
+function restartPolling(ms = 75000) {
+  if (realtimePollInterval) clearInterval(realtimePollInterval);
+  realtimePollInterval = setInterval(() => {
+    if (document.visibilityState === 'visible') {
+      loadRealtime();
+    }
+  }, ms);
+}
+
+async function loadRealtime(fresh = false) {
   if (realtimeLoading) return;
   realtimeLoading = true;
   try {
-    const res = await fetch('/api/realtime', { credentials: 'same-origin', cache: 'no-store' });
+    const res = await fetch('/api/realtime' + (fresh ? '?fresh=1' : ''), { credentials: 'same-origin', cache: 'no-store' });
     const val = await res.json();
     if (!res.ok) throw Error(val.error || 'Realtime API failed');
     realtimeData = val;
     realtimeError = null;
+    if (val.quotaPaused) {
+      restartPolling(300000); // 5 min interval while quota is cooling down
+    } else {
+      restartPolling(75000); // 75s regular interval
+    }
     render();
   } catch (err) {
     realtimeError = err.message;
     console.warn('Realtime fetch failed:', err.message);
+    if (/quota|exhausted/i.test(err.message)) {
+      restartPolling(300000);
+    }
     render();
   } finally {
     realtimeLoading = false;
   }
 }
 
-async function load() {
+async function load(fresh = false) {
   const alert = $('#alert');
   alert.hidden = true;
   $('#refresh').disabled = true;
   try {
-    const res = await fetch('/api/report?days=' + encodeURIComponent($('#period').value), { credentials: 'same-origin', cache: 'no-store' });
+    const res = await fetch('/api/report?days=' + encodeURIComponent($('#period').value) + (fresh ? '&fresh=1' : ''), { credentials: 'same-origin', cache: 'no-store' });
     const value = await res.json();
     if (!res.ok) throw Error(value.error || 'Analytics request failed');
     data = value;
     $('#updated').textContent = 'Updated ' + new Date(value.updatedAt).toLocaleString();
     render();
-    // Also fetch realtime data in parallel
-    loadRealtime();
+    loadRealtime(fresh);
   } catch (e) {
     data = null;
     alert.textContent = 'Analytics unavailable: ' + e.message + '. Check Cloudflare Access, the numeric GA4 property ID, and the service account permissions.';
@@ -390,17 +442,19 @@ document.querySelectorAll('.nav').forEach(b => b.addEventListener('click', () =>
   render();
 }));
 
-$('#period').addEventListener('change', load);
+$('#period').addEventListener('change', () => load());
 $('#refresh').addEventListener('click', () => {
-  load();
-  loadRealtime();
+  load(true);
 });
 
-// Periodic background polling every 60 seconds without overlapping requests
-if (realtimePollInterval) clearInterval(realtimePollInterval);
-realtimePollInterval = setInterval(() => {
-  loadRealtime();
-}, 60000);
+// Throttling: only poll when tab is visible to prevent wasting token quota in background
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible' && !realtimeLoading) {
+    loadRealtime();
+  }
+});
 
-// Initial Load
+// Initial Load & start background polling (75s)
+restartPolling(75000);
 load();
+
