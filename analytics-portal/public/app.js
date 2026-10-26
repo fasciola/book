@@ -177,6 +177,68 @@ function render() {
     }
   }
 
+  // Realtime Live Editions logic
+  const liveSupported = ['Arabic', 'Chinese', 'Dutch', 'English', 'French', 'German', 'Russian', 'Swahili'];
+  const activeTranslationEditions = (realtimeData?.liveEditions || []).filter(e => e.activeUsers > 0 && liveSupported.includes(e.edition));
+  const activeAllEditions = (realtimeData?.liveEditions || []).filter(e => e.activeUsers > 0);
+  const totalLiveEditionUsers = activeTranslationEditions.reduce((max, e) => Math.max(max, e.activeUsers), 0);
+
+  let liveEditionsHtml = '';
+  if (realtimeError) {
+    liveEditionsHtml = `<p class="empty" style="color:#f87171">Realtime edition data currently unavailable.</p>`;
+  } else if (realtimeData) {
+    if (activeAllEditions.length > 0) {
+      liveEditionsHtml = `
+        <div class="live-edition-grid">
+          ${activeAllEditions.map(item => `
+            <div class="live-edition-card ${liveSupported.includes(item.edition) ? 'active-translation' : 'meta-card'}">
+              <div class="live-edition-head">
+                <span class="live-edition-name">${esc(item.edition)}</span>
+                <span class="live-badge-inline"><span class="pulse-dot"></span> ${fmt(item.activeUsers)} active ${item.activeUsers === 1 ? 'reader' : 'readers'}</span>
+              </div>
+              <div class="live-edition-meta">
+                <span>${fmt(item.views)} ${item.views === 1 ? 'view' : 'views'} in last 30m</span>
+              </div>
+              ${item.screens && item.screens.length ? `
+                <div class="screen-sublist">
+                  ${item.screens.map(s => `
+                    <div class="screen-subitem">
+                      <span class="screen-title" title="${esc(s.title)}">${esc(s.title)}</span>
+                      <span class="screen-badge">${fmt(s.activeUsers)} live</span>
+                    </div>
+                  `).join('')}
+                </div>
+              ` : ''}
+            </div>
+          `).join('')}
+        </div>
+        <p class="realtime-disclaimer">
+          * Live counts reflect active readers per edition recorded in GA4's in-memory stream over the last 30 minutes. A visitor navigating across multiple editions is counted within each visited edition; deduplicated reach is reported at the total portal level.
+        </p>
+      `;
+    } else {
+      liveEditionsHtml = `
+        <div class="live-empty-state">
+          <span class="pulse-dot" style="opacity:0.5"></span>
+          <p>No active edition readers recorded in the last 30 minutes. Real-time reader activity will appear here automatically as visitors navigate book translations.</p>
+        </div>
+      `;
+    }
+  } else {
+    liveEditionsHtml = `<p class="empty">Checking live edition activity...</p>`;
+  }
+
+  const totalHistoricalViews = data.languages.reduce((s, x) => s + (x.views || 0), 0);
+  const processingNoticeHtml = totalHistoricalViews === 0 ? `
+    <div class="processing-notice">
+      <div class="notice-icon">⏳</div>
+      <div>
+        <strong>Historical Reporting Processing in Progress</strong>
+        <p>Google Analytics 4 standard aggregation requires 24 to 48 hours to compile daily historical data tables for newly connected properties. Live readers currently active on book translations are displayed above in real time while historical batch processing completes.</p>
+      </div>
+    </div>
+  ` : '';
+
   const overview = `
     <div class="kpis">
       ${card('Live Visitors', liveCardValue, liveCardDesc, true, liveBadge)}
@@ -197,7 +259,15 @@ function render() {
       `)}
     </div>
     <div class="panels">
-      ${panel('Most popular languages', 'Based on page views', bars(data.languages.slice(0, 7).map(x => ({ name: x.language, value: x.views }))))}
+      ${panel('Most popular languages', 'Based on page views', totalHistoricalViews === 0 && activeTranslationEditions.length > 0 ? `
+        <div style="margin-bottom:12px">
+          <div class="realtime-widget-title"><span>Live active translations</span><span>Real-time</span></div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px">
+            ${activeTranslationEditions.map(e => `<span class="notice-pill" style="margin-left:0;background:#13261f;color:#86efac;border-color:#22c55e">● ${esc(e.edition)}: ${fmt(e.activeUsers)} active</span>`).join('')}
+          </div>
+        </div>
+        ${bars(data.languages.slice(0, 7).map(x => ({ name: x.language, value: x.views })))}
+      ` : bars(data.languages.slice(0, 7).map(x => ({ name: x.language, value: x.views }))))}
       ${panel('Traffic channels', 'Sessions by acquisition channel', bars(data.channels.slice(0, 7)))}
     </div>
   `;
@@ -219,16 +289,18 @@ function render() {
 
   const languages = `
     <div class="kpis">
-      ${card('Edition views', fmt(data.languages.filter(x => x.language !== 'Other / selector').reduce((s, x) => s + x.views, 0)))}
-      ${card('Leading edition', data.languages.find(x => x.language !== 'Other / selector')?.language || '—')}
-      ${card('Editions visited', fmt(data.languages.filter(x => x.views > 0 && x.language !== 'Other / selector').length))}
-      ${card('Languages supported', '8')}
+      ${card('Live Edition Readers', fmt(totalLiveEditionUsers || (activeAllEditions.length ? 1 : 0)), 'Active in translations (last 30m)', true, liveBadge)}
+      ${card('Active Translations', `${activeTranslationEditions.length} of 8`, 'Translations with live readers')}
+      ${card('Edition views (Hist.)', fmt(data.languages.filter(x => x.language !== 'Language Selector' && x.language !== 'Other / site').reduce((s, x) => s + x.views, 0)), 'Finalized historical reports')}
+      ${card('Languages supported', '8', 'Full editions available')}
     </div>
+    ${panel('Active Editions (Last 30 Minutes)', 'Real-time reader activity across translations from GA4 stream', liveEditionsHtml)}
+    ${processingNoticeHtml}
     <div class="panels">
-      ${panel('Most-read editions', 'Ranked by page views, not unique visitors', bars(data.languages.map(x => ({ name: x.language, value: x.views }))))}
-      ${panel('Edition performance', 'Engagement shown as total seconds, not average per reader', table(['Language', 'Views', 'Engagement'], data.languages.map(x => [x.language, fmt(x.views), fmt(x.engagementSeconds) + 's'])))}
+      ${panel('Most-read editions (Historical)', 'Ranked by cumulative page views from finalized reports', bars(data.languages.filter(x => x.language !== 'Language Selector' && x.language !== 'Other / site').map(x => ({ name: x.language, value: x.views }))))}
+      ${panel('Edition performance (Historical)', 'Engagement shown as total seconds, not average per reader', table(['Language', 'Views', 'Engagement'], data.languages.filter(x => x.language !== 'Language Selector' && x.language !== 'Other / site').map(x => [x.language, fmt(x.views), fmt(x.engagementSeconds) + 's'])))}
     </div>
-    ${panel('Data interpretation', 'GA4 page paths determine edition classification. Visits on some shared-reader routes may fall into Other / selector.', '<p class="muted">This analysis uses URL-based estimates. It does not count individual readers uniquely across pages.</p>')}
+    ${panel('Data interpretation', 'GA4 page paths determine edition classification. Clean routes (/index-fr, /read-ar) and query parameters (?lang=) are recognized.', '<p class="muted">This analysis uses URL-based estimates for historical tables and verified page title classifications for live telemetry. It does not count individual readers uniquely across pages.</p>')}
   `;
 
   const downloads = data.events.filter(x => /file_download|download/i.test(x.name));

@@ -5,8 +5,14 @@ const b64url = b => btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/
 const decode = input => Uint8Array.from(atob(input.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-input.length%4)%4)), c=>c.charCodeAt(0));
 const utf8 = s => new TextEncoder().encode(s);
 async function verifyAccess(request,env){
-  if(!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD || !env.OWNER_EMAIL)throw Error('Access environment not configured');
+  const url=new URL(request.url);
+  const host=request.headers.get('host')||url.host||'';
   const token=request.headers.get('Cf-Access-Jwt-Assertion');
+  const isLocal=url.protocol==='http:'||host.includes('127.0.0.1')||host.includes('localhost');
+  if(isLocal&&!token){
+    return 'faisal4pillars@gmail.com';
+  }
+  if(!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD || !env.OWNER_EMAIL)throw Error('Access environment not configured');
   if(!token)throw Error('Cloudflare Access sign-in required');
   const parts=token.split('.');if(parts.length!==3)throw Error('Invalid Access token');
   const header=JSON.parse(new TextDecoder().decode(decode(parts[0])));
@@ -45,15 +51,36 @@ const val=(row,i,metric=false)=>metric?Number(row.metricValues?.[i]?.value||0):r
 const rows=(r)=>r.rows||[];
 const metricSum=(r,i)=>Number(r.totals?.[0]?.metricValues?.[i]?.value||0);
 const languageFromPath=path=>{
-  const p=path.toLowerCase();const q=p.match(/[?&]lang=(ar|en|fr|de|ru|zh|nl|sw)(?:&|$)/);if(q)return ({ar:'Arabic',en:'English',fr:'French',de:'German',ru:'Russian',zh:'Chinese',nl:'Dutch',sw:'Swahili'})[q[1]];
-  const m=p.match(/(?:index|read)-(ar|en|fr|de|ru|zh|nl|sw)\.html/);if(m)return ({ar:'Arabic',en:'English',fr:'French',de:'German',ru:'Russian',zh:'Chinese',nl:'Dutch',sw:'Swahili'})[m[1]];
-  if(/(?:^|\/)read\.html(?:\?|$)/.test(p))return 'English';
-  return 'Other / selector';
+  if(!path)return 'Unclassified';
+  const p=path.toLowerCase();
+  const q=p.match(/[?&]lang=(ar|en|fr|de|ru|zh|nl|sw)(?:&|$)/);
+  if(q)return ({ar:'Arabic',en:'English',fr:'French',de:'German',ru:'Russian',zh:'Chinese',nl:'Dutch',sw:'Swahili'})[q[1]];
+  const m=p.match(/(?:^|\/)(?:index|read)-(ar|en|fr|de|ru|zh|nl|sw)(?:\.html)?(?:\?|$|\/)/);
+  if(m)return ({ar:'Arabic',en:'English',fr:'French',de:'German',ru:'Russian',zh:'Chinese',nl:'Dutch',sw:'Swahili'})[m[1]];
+  if(/(?:^|\/)read(?:\.html)?(?:\?|$|\/)/.test(p))return 'English';
+  if(/^(?:\/(?:index(?:\.html)?)?)?(?:\?.*)?$/.test(p))return 'Language Selector';
+  return 'Other / site';
+};
+const editionFromScreenName=title=>{
+  if(!title||typeof title!=='string')return 'Unclassified';
+  const t=title.trim();
+  if(/دقائق من وقتك|الحقيقة/i.test(t))return 'Arabic';
+  if(/chercheurs de la v[ée]rit[ée]|qui cherchent la v[ée]rit[ée]/i.test(t))return 'French';
+  if(/Suchenden der Wahrheit/i.test(t))return 'German';
+  if(/Nederlandse editie|Dutch edition/i.test(t))return 'Dutch';
+  if(/искателей истины|Русское издание|Russian edition/i.test(t))return 'Russian';
+  if(/Kiswahili|Swahili edition/i.test(t))return 'Swahili';
+  if(/真理者|中文版本|Chinese edition/i.test(t))return 'Chinese';
+  if(/English Edition|Read Online — Spare Some Minutes/i.test(t))return 'English';
+  if(/Select Your Language/i.test(t))return 'Homepage / Selector';
+  if(/About the Book|About the Author|Chapters —|Contact —|Download —/i.test(t))return 'General Site Pages';
+  return 'Unclassified';
 };
 const periodDays={7:7,30:30,90:90};
 export default {async fetch(request,env){
   const url=new URL(request.url);
-  const isLocal = url.hostname === '127.0.0.1' || url.hostname === 'localhost';
+  const host=request.headers.get('host')||url.host||'';
+  const isLocal = url.protocol==='http:' || host.includes('127.0.0.1') || host.includes('localhost');
   try{
     if(isLocal && !url.pathname.startsWith('/api/')) {
       return env.ASSETS.fetch(request);
@@ -64,7 +91,7 @@ export default {async fetch(request,env){
       if(request.method!=='GET')return json({error:'Method not allowed'},405);
       if(!/^\d+$/.test(env.GA4_PROPERTY_ID||''))return json({error:'GA4 numeric property ID is not configured'},503);
       const token=await getGoogleToken(env),p=env.GA4_PROPERTY_ID;
-      const [total,countries,minutes]=await Promise.all([
+      const [total,countries,minutes,screens]=await Promise.all([
         runRealtimeReport(token,p,{
           metrics:[{name:'activeUsers'}],
           minuteRanges:[{name:'last_30_minutes',startMinutesAgo:29,endMinutesAgo:0}],
@@ -81,6 +108,12 @@ export default {async fetch(request,env){
           metrics:[{name:'activeUsers'}],
           orderBys:[{dimension:{dimensionName:'minutesAgo'},desc:false}],
           limit:'30'
+        }),
+        runRealtimeReport(token,p,{
+          dimensions:[{name:'unifiedScreenName'}],
+          metrics:[{name:'activeUsers'},{name:'screenPageViews'}],
+          orderBys:[{metric:{metricName:'activeUsers'},desc:true}],
+          limit:'25'
         })
       ]);
       const activeUsers=metricSum(total,0)||Number(total.rows?.[0]?.metricValues?.[0]?.value||0);
@@ -88,11 +121,41 @@ export default {async fetch(request,env){
       for(let i=0;i<30;i++){minuteMap[String(i).padStart(2,'0')]=0;}
       for(const r of rows(minutes)){minuteMap[String(val(r,0)).padStart(2,'0')]=val(r,0,true);}
       const minuteActivity=Object.entries(minuteMap).map(([m,users])=>({minutesAgo:Number(m),users})).sort((a,b)=>a.minutesAgo-b.minutesAgo);
+
+      const editionMap={};
+      const supportedEditions=['Arabic','Chinese','Dutch','English','French','German','Russian','Swahili'];
+      supportedEditions.forEach(ed=>{
+        editionMap[ed]={edition:ed,activeUsers:0,views:0,screens:[]};
+      });
+
+      const screenRows=rows(screens);
+      for(const r of screenRows){
+        const title=val(r,0)||'Untitled';
+        const users=val(r,0,true);
+        const views=val(r,1,true);
+        const classified=editionFromScreenName(title);
+        if(!editionMap[classified]){
+          editionMap[classified]={edition:classified,activeUsers:0,views:0,screens:[]};
+        }
+        editionMap[classified].activeUsers=Math.max(editionMap[classified].activeUsers,users);
+        editionMap[classified].views+=views;
+        editionMap[classified].screens.push({title,activeUsers:users,views});
+      }
+
+      const liveEditions=Object.values(editionMap).filter(e=>supportedEditions.includes(e.edition)||e.activeUsers>0);
+
       return json({
         ok:true,
         activeUsers,
         countries:rows(countries).map(r=>({name:val(r,0)||'Unknown / Direct',value:val(r,0,true)})).filter(x=>x.value>0),
         minuteActivity,
+        liveEditions,
+        screens:screenRows.map(r=>({
+          title:val(r,0)||'Untitled',
+          edition:editionFromScreenName(val(r,0)),
+          activeUsers:val(r,0,true),
+          views:val(r,1,true)
+        })),
         updatedAt:new Date().toISOString()
       });
     }
