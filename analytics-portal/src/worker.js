@@ -71,9 +71,9 @@ const editionFromScreenName=title=>{
   if(/искателей истины|Русское издание|Russian edition/i.test(t))return 'Russian';
   if(/Kiswahili|Swahili edition/i.test(t))return 'Swahili';
   if(/真理者|中文版本|Chinese edition/i.test(t))return 'Chinese';
-  if(/English Edition|Read Online — Spare Some Minutes/i.test(t))return 'English';
+  if(/seekers of truth|English Edition|Read Online — Spare Some Minutes/i.test(t))return 'English';
   if(/Select Your Language/i.test(t))return 'Homepage / Selector';
-  if(/About the Book|About the Author|Chapters —|Contact —|Download —/i.test(t))return 'General Site Pages';
+  if(/Truth Seekers —|About the Book|About the Author|Chapters —|Contact —|Download —/i.test(t))return 'General Site Pages';
   return 'Unclassified';
 };
 const periodDays={7:7,30:30,90:90};
@@ -91,7 +91,7 @@ export default {async fetch(request,env){
       if(request.method!=='GET')return json({error:'Method not allowed'},405);
       if(!/^\d+$/.test(env.GA4_PROPERTY_ID||''))return json({error:'GA4 numeric property ID is not configured'},503);
       const token=await getGoogleToken(env),p=env.GA4_PROPERTY_ID;
-      const [total,countries,minutes,screens]=await Promise.all([
+      const [total,countries,minutes,screens,devices,events]=await Promise.all([
         runRealtimeReport(token,p,{
           metrics:[{name:'activeUsers'}],
           minuteRanges:[{name:'last_30_minutes',startMinutesAgo:29,endMinutesAgo:0}],
@@ -114,6 +114,17 @@ export default {async fetch(request,env){
           metrics:[{name:'activeUsers'},{name:'screenPageViews'}],
           orderBys:[{metric:{metricName:'activeUsers'},desc:true}],
           limit:'25'
+        }),
+        runRealtimeReport(token,p,{
+          dimensions:[{name:'deviceCategory'}],
+          metrics:[{name:'activeUsers'}],
+          orderBys:[{metric:{metricName:'activeUsers'},desc:true}]
+        }),
+        runRealtimeReport(token,p,{
+          dimensions:[{name:'eventName'}],
+          metrics:[{name:'eventCount'}],
+          orderBys:[{metric:{metricName:'eventCount'},desc:true}],
+          limit:'15'
         })
       ]);
       const activeUsers=metricSum(total,0)||Number(total.rows?.[0]?.metricValues?.[0]?.value||0);
@@ -148,6 +159,8 @@ export default {async fetch(request,env){
         ok:true,
         activeUsers,
         countries:rows(countries).map(r=>({name:val(r,0)||'Unknown / Direct',value:val(r,0,true)})).filter(x=>x.value>0),
+        devices:rows(devices).map(r=>({name:val(r,0),value:val(r,0,true)})).filter(x=>x.value>0),
+        events:rows(events).map(r=>({name:val(r,0),count:val(r,0,true)})),
         minuteActivity,
         liveEditions,
         screens:screenRows.map(r=>({

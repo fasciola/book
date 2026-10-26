@@ -247,6 +247,7 @@ function render() {
       ${card('Sessions', fmt(o.sessions))}
       ${card('Engagement rate', (100 * o.engagementRate).toFixed(1) + '%')}
     </div>
+    ${processingNoticeHtml}
     <div class="panels">
       ${panel('Visitor activity', 'Daily users through today (preliminary)', lineChart(data.traffic))}
       ${panel('Active Audience (Realtime & Top)', 'Live location & top countries', `
@@ -272,17 +273,23 @@ function render() {
     </div>
   `;
 
+  const audienceDevices = data.devices.length > 0 ? data.devices : (realtimeData?.devices || []);
+  const audienceDevicesTitle = data.devices.length > 0 ? 'Active users by device' : 'Active users by device (Live stream)';
+  const audienceCountries = data.countries.length > 0 ? data.countries : (realtimeData?.countries || []);
+  const audienceCountriesTitle = data.countries.length > 0 ? 'Top countries by active users' : 'Live readers by country (Realtime)';
+
   const audience = `
     <div class="kpis">
       ${card('Live Visitors', liveCardValue, liveCardDesc, true, liveBadge)}
       ${card('Active users', fmt(o.activeUsers))}
       ${card('Sessions', fmt(o.sessions))}
       ${card('Average session', Math.round(o.averageSessionDuration) + ' sec')}
-      ${card('Countries', fmt(data.countries.length), 'Countries in report')}
+      ${card('Countries', fmt(data.countries.length || (realtimeData?.countries?.length || 0)), data.countries.length ? 'Countries in report' : 'Active countries (Live)')}
     </div>
+    ${processingNoticeHtml}
     <div class="panels">
-      ${panel('Visitors by country', 'Top countries by active users', bars(data.countries))}
-      ${panel('Device breakdown', 'Active users by device', bars([...data.devices].sort((a, b) => b.value - a.value)))}
+      ${panel('Visitors by country', audienceCountriesTitle, bars(audienceCountries))}
+      ${panel('Device breakdown', audienceDevicesTitle, bars([...audienceDevices].sort((a, b) => b.value - a.value)))}
     </div>
     ${panel('Acquisition channels', 'How visitors reached the book', bars(data.channels))}
   `;
@@ -305,17 +312,30 @@ function render() {
 
   const downloads = data.events.filter(x => /file_download|download/i.test(x.name));
   const audio = data.events.filter(x => /audio|play|listen/i.test(x.name));
+  const histDownloads = downloads.reduce((n, x) => n + x.count, 0);
+  const liveDownloads = (realtimeData?.events || []).find(x => /download/i.test(x.name))?.count || 0;
+  const contentEvents = data.events.length > 0 ? data.events.map(x => [x.name, fmt(x.count)]) : (realtimeData?.events || []).map(x => [x.name, fmt(x.count)]);
+  const contentEventsSubtitle = data.events.length > 0 ? 'GA4 event names and counts' : 'Live stream event counts (last 30m)';
+
+  const contentPages = data.pages.length > 0 
+    ? data.pages.slice(0, 24).map(x => [x.path, fmt(x.views), fmt(x.engagementSeconds) + 's'])
+    : (realtimeData?.screens || []).map(x => [x.title, fmt(x.views), fmt(x.activeUsers) + ' live']);
+  const contentPagesHeaders = data.pages.length > 0 ? ['Page path', 'Views', 'Engagement'] : ['Page / Screen title', 'Views (30m)', 'Active users'];
+  const contentPagesSubtitle = data.pages.length > 0 ? 'Pages ranked by views' : 'Active screens in the last 30 minutes (Live)';
 
   const content = `
     <div class="kpis">
       ${card('Book page views', fmt(o.views))}
       ${card('Average session', Math.round(o.averageSessionDuration) + ' sec')}
-      ${card('Download events', fmt(downloads.reduce((n, x) => n + x.count, 0)), 'Only recorded GA4 events')}
+      ${liveDownloads > 0 && histDownloads === 0 
+        ? card('Download events', fmt(liveDownloads), 'Recorded in last 30m (Live)', true, liveBadge)
+        : card('Download events', fmt(histDownloads), 'Only recorded GA4 events')}
       ${card('Audio events', fmt(audio.reduce((n, x) => n + x.count, 0)), 'Requires website event instrumentation')}
     </div>
+    ${processingNoticeHtml}
     <div class="panels">
-      ${panel('Top content', 'Pages ranked by views', table(['Page path', 'Views', 'Engagement'], data.pages.slice(0, 24).map(x => [x.path, fmt(x.views), fmt(x.engagementSeconds) + 's'])))}
-      ${panel('Events being collected', 'GA4 event names and counts', table(['Event name', 'Count'], data.events.map(x => [x.name, fmt(x.count)])))}
+      ${panel('Top content', contentPagesSubtitle, table(contentPagesHeaders, contentPages))}
+      ${panel('Events being collected', contentEventsSubtitle, table(['Event name', 'Count'], contentEvents))}
     </div>
   `;
 
