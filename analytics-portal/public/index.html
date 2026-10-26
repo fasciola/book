@@ -1,1 +1,58 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#101827"><title>Truth Seekers | Audience Insights</title><link rel="stylesheet" href="/style.css" /></head><body><aside class="rail"><div class="brand"><span class="brand-mark">✦</span><div><strong>TRUTH SEEKERS</strong><small>Audience Insights</small></div></div><div class="nav-label">ANALYTICS</div><nav aria-label="Dashboard sections"><button class="nav active" data-view="overview">◫ <span>Overview</span></button><button class="nav" data-view="audience">◎ <span>Audience & Reach</span></button><button class="nav" data-view="languages">文 <span>Language Editions</span></button><button class="nav" data-view="content">▤ <span>Reader Engagement</span></button></nav><div class="rail-bottom"><span class="live-dot"></span> Secure owner portal<small>GA4 · The Truth Book</small></div></aside><main><header class="topbar"><div><div class="eyebrow">THE TRUTH BOOK / REPORTING</div><h1 id="section-title">Audience overview</h1><p id="section-subtitle">A clearer picture of your book's reach around the world.</p></div><div class="tools"><label for="period">Reporting period</label><select id="period"><option value="7">Last 7 days</option><option value="30" selected>Last 30 days</option><option value="90">Last 90 days</option></select><button id="refresh" title="Refresh analytics">↻ Refresh</button></div></header><div id="alert" class="alert" hidden role="status"></div><div class="content" id="view"></div><footer><span>TRUTH SEEKERS · OWNER ANALYTICS</span><span id="updated">Connected to Google Analytics 4</span></footer></main><script type="module" src="/app.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101827">
+  <title>Truth Seekers | Audience Insights</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <aside class="rail">
+    <div class="brand">
+      <span class="brand-mark">✦</span>
+      <div><strong>TRUTH SEEKERS</strong><small>Audience Insights</small></div>
+    </div>
+    <div class="nav-label">ANALYTICS</div>
+    <nav aria-label="Dashboard sections">
+      <button class="nav active" data-view="overview">◫ <span>Overview</span></button>
+      <button class="nav" data-view="audience">◎ <span>Audience & Reach</span></button>
+      <button class="nav" data-view="languages">文 <span>Language Editions</span></button>
+      <button class="nav" data-view="content">▤ <span>Reader Engagement</span></button>
+    </nav>
+    <div class="rail-bottom">
+      <span class="live-dot"></span> Secure owner portal
+      <small>GA4 · The Truth Book</small>
+    </div>
+  </aside>
+  <main>
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">THE TRUTH BOOK / REPORTING</div>
+        <h1 id="section-title">Audience overview</h1>
+        <p id="section-subtitle">A clearer picture of your book's reach around the world.</p>
+      </div>
+      <div class="tools">
+        <div class="live-indicator-pill" id="live-pill" title="Live visitors active in the last 30 minutes">
+          <span class="pulse-dot"></span>
+          <span id="live-pill-text">Live: <strong id="live-pill-count">—</strong></span>
+        </div>
+        <label for="period">Reporting period</label>
+        <select id="period">
+          <option value="7">Last 7 days</option>
+          <option value="30" selected>Last 30 days</option>
+          <option value="90">Last 90 days</option>
+        </select>
+        <button id="refresh" title="Refresh analytics and live data">↻ Refresh</button>
+      </div>
+    </header>
+    <div id="alert" class="alert" hidden role="status"></div>
+    <div class="content" id="view"></div>
+    <footer>
+      <span>TRUTH SEEKERS · OWNER ANALYTICS</span>
+      <span id="updated">Connected to Google Analytics 4</span>
+    </footer>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

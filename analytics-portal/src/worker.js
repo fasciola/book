@@ -36,6 +36,10 @@ async function runReport(token,property,body){
  const res=await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${encodeURIComponent(property)}:runReport`,{method:'POST',headers:{authorization:'Bearer '+token,'content-type':'application/json'},body:JSON.stringify(body)});
  const data=await res.json();if(!res.ok)throw Error('GA4 request failed: '+(data.error?.message||res.status));return data;
 }
+async function runRealtimeReport(token,property,body){
+ const res=await fetch(`https://analyticsdata.googleapis.com/v1beta/properties/${encodeURIComponent(property)}:runRealtimeReport`,{method:'POST',headers:{authorization:'Bearer '+token,'content-type':'application/json'},body:JSON.stringify(body)});
+ const data=await res.json();if(!res.ok)throw Error('GA4 realtime request failed: '+(data.error?.message||res.status));return data;
+}
 const dim=(d,m)=>({dimensions:d.map(name=>({name})),metrics:m.map(name=>({name}))});
 const val=(row,i,metric=false)=>metric?Number(row.metricValues?.[i]?.value||0):row.dimensionValues?.[i]?.value||'';
 const rows=(r)=>r.rows||[];
@@ -56,11 +60,47 @@ export default {async fetch(request,env){
     }
     const email=await verifyAccess(request,env);
     if(url.pathname==='/api/health')return json({ok:true,authenticated:true,email,configured:!!(env.GA4_PROPERTY_ID&&env.GOOGLE_SERVICE_ACCOUNT_JSON)});
+    if(url.pathname==='/api/realtime'){
+      if(request.method!=='GET')return json({error:'Method not allowed'},405);
+      if(!/^\d+$/.test(env.GA4_PROPERTY_ID||''))return json({error:'GA4 numeric property ID is not configured'},503);
+      const token=await getGoogleToken(env),p=env.GA4_PROPERTY_ID;
+      const [total,countries,minutes]=await Promise.all([
+        runRealtimeReport(token,p,{
+          metrics:[{name:'activeUsers'}],
+          minuteRanges:[{name:'last_30_minutes',startMinutesAgo:29,endMinutesAgo:0}],
+          metricAggregations:['TOTAL']
+        }),
+        runRealtimeReport(token,p,{
+          dimensions:[{name:'country'}],
+          metrics:[{name:'activeUsers'}],
+          orderBys:[{metric:{metricName:'activeUsers'},desc:true}],
+          limit:'10'
+        }),
+        runRealtimeReport(token,p,{
+          dimensions:[{name:'minutesAgo'}],
+          metrics:[{name:'activeUsers'}],
+          orderBys:[{dimension:{dimensionName:'minutesAgo'},desc:false}],
+          limit:'30'
+        })
+      ]);
+      const activeUsers=metricSum(total,0)||Number(total.rows?.[0]?.metricValues?.[0]?.value||0);
+      const minuteMap={};
+      for(let i=0;i<30;i++){minuteMap[String(i).padStart(2,'0')]=0;}
+      for(const r of rows(minutes)){minuteMap[String(val(r,0)).padStart(2,'0')]=val(r,0,true);}
+      const minuteActivity=Object.entries(minuteMap).map(([m,users])=>({minutesAgo:Number(m),users})).sort((a,b)=>a.minutesAgo-b.minutesAgo);
+      return json({
+        ok:true,
+        activeUsers,
+        countries:rows(countries).map(r=>({name:val(r,0)||'Unknown / Direct',value:val(r,0,true)})).filter(x=>x.value>0),
+        minuteActivity,
+        updatedAt:new Date().toISOString()
+      });
+    }
     if(url.pathname==='/api/report'){
       if(request.method!=='GET')return json({error:'Method not allowed'},405);
       if(!/^\d+$/.test(env.GA4_PROPERTY_ID||''))return json({error:'GA4 numeric property ID is not configured'},503);
       const days=periodDays[Number(url.searchParams.get('days'))]||30;
-      const range=[{startDate:`${days}daysAgo`,endDate:'yesterday'}];
+      const range=[{startDate:`${days}daysAgo`,endDate:'today'}];
       const token=await getGoogleToken(env),p=env.GA4_PROPERTY_ID;
       const base={dateRanges:range,limit:'250'};
       const [overview,traffic,countries,channels,devices,pages,events]=await Promise.all([
@@ -73,8 +113,36 @@ export default {async fetch(request,env){
         runReport(token,p,{...base,...dim(['eventName'],['eventCount']),orderBys:[{metric:{metricName:'eventCount'},desc:true}],limit:'50'})
       ]);
       const languages={};for(const row of rows(pages)){const lang=languageFromPath(val(row,0));const x=languages[lang]||{language:lang,views:0,usersPageSum:0,engagementSeconds:0};x.views+=val(row,0,true);x.usersPageSum+=val(row,1,true);x.engagementSeconds+=val(row,2,true);languages[lang]=x;}
-      // Per-page user counts cannot be summed to unique users across a language's pages.
-      return json({periodDays:days,updatedAt:new Date().toISOString(),notes:['Language views are classified from GA4 page URLs. Users across pages are not deduplicated; language ranking uses views.','GA4 data shown through yesterday; recent activity may not be fully processed.'],overview:{users:metricSum(overview,0),activeUsers:metricSum(overview,1),sessions:metricSum(overview,2),views:metricSum(overview,3),engagementRate:metricSum(overview,4),averageSessionDuration:metricSum(overview,5)},traffic:rows(traffic).map(r=>({date:val(r,0),users:val(r,0,true),views:val(r,1,true)})),countries:rows(countries).map(r=>({name:val(r,0),value:val(r,0,true)})),channels:rows(channels).map(r=>({name:val(r,0),value:val(r,0,true)})),devices:rows(devices).map(r=>({name:val(r,0),value:val(r,0,true)})),languages:Object.values(languages).sort((a,b)=>b.views-a.views),pages:rows(pages).slice(0,30).map(r=>({path:val(r,0),views:val(r,0,true),engagementSeconds:val(r,2,true)})),events:rows(events).map(r=>({name:val(r,0),count:val(r,0,true)}))});
+      const todayStr=new Date().toISOString().slice(0,10).replace(/-/g,'');
+      const trafficList=rows(traffic).map(r=>({
+        date:val(r,0),
+        users:val(r,0,true),
+        views:val(r,1,true),
+        isToday:val(r,0)===todayStr
+      }));
+      return json({
+        periodDays:days,
+        updatedAt:new Date().toISOString(),
+        notes:[
+          'Language views are classified from GA4 page URLs. Users across pages are not deduplicated; language ranking uses views.',
+          'Data includes today\'s activity. Today\'s numbers are preliminary and update as GA4 processes events; previous days are finalized.'
+        ],
+        overview:{
+          users:metricSum(overview,0),
+          activeUsers:metricSum(overview,1),
+          sessions:metricSum(overview,2),
+          views:metricSum(overview,3),
+          engagementRate:metricSum(overview,4),
+          averageSessionDuration:metricSum(overview,5)
+        },
+        traffic:trafficList,
+        countries:rows(countries).map(r=>({name:val(r,0),value:val(r,0,true)})),
+        channels:rows(channels).map(r=>({name:val(r,0),value:val(r,0,true)})),
+        devices:rows(devices).map(r=>({name:val(r,0),value:val(r,0,true)})),
+        languages:Object.values(languages).sort((a,b)=>b.views-a.views),
+        pages:rows(pages).slice(0,30).map(r=>({path:val(r,0),views:val(r,0,true),engagementSeconds:val(r,2,true)})),
+        events:rows(events).map(r=>({name:val(r,0),count:val(r,0,true)}))
+      });
     }
     return env.ASSETS.fetch(request);
   }catch(e){return json({error:url.pathname.startsWith('/api/')?(e.message||'Request failed'):'Access denied'},url.pathname.startsWith('/api/')?403:403)};
