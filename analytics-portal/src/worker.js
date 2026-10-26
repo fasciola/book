@@ -12,7 +12,8 @@ async function verifyAccess(request,env){
   const header=JSON.parse(new TextDecoder().decode(decode(parts[0])));
   const claims=JSON.parse(new TextDecoder().decode(decode(parts[1])));
   const expectedIssuer='https://'+env.ACCESS_TEAM_DOMAIN.replace(/^https?:\/\//,'').replace(/\/$/,'');
-  if(header.alg!=='RS256'||!header.kid||claims.iss!==expectedIssuer || !(Array.isArray(claims.aud)?claims.aud.includes(env.ACCESS_AUD):claims.aud===env.ACCESS_AUD) || Number(claims.exp)<=Date.now()/1000 || Number(claims.nbf||0)>Date.now()/1000 || String(claims.email||'').toLowerCase()!==env.OWNER_EMAIL.trim().toLowerCase())throw Error('Access policy denied');
+  const allowedEmails=(env.OWNER_EMAIL||'').split(',').map(e=>e.trim().toLowerCase()).filter(Boolean);
+  if(header.alg!=='RS256'||!header.kid||claims.iss!==expectedIssuer || !(Array.isArray(claims.aud)?claims.aud.includes(env.ACCESS_AUD):claims.aud===env.ACCESS_AUD) || Number(claims.exp)<=Date.now()/1000 || Number(claims.nbf||0)>Date.now()/1000 || (allowedEmails.length>0 && !allowedEmails.includes(String(claims.email||'').toLowerCase())))throw Error('Access policy denied');
   const keys=await fetch(expectedIssuer+'/cdn-cgi/access/certs').then(r=>{if(!r.ok)throw Error('Access keys unavailable');return r.json()});
   const key=keys.keys?.find(k=>k.kid===header.kid && k.kty==='RSA');if(!key)throw Error('Access signing key not found');
   const cryptoKey=await crypto.subtle.importKey('jwk',key,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['verify']);
