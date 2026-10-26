@@ -1,4 +1,4 @@
-import { existsSync, mkdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, rmSync, statSync, writeFileSync, readFileSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { execFileSync } from 'node:child_process';
 
@@ -42,3 +42,13 @@ const sizeMiB = statSync(backgroundVideo).size / 1024 / 1024;
 console.log(`[verify] dist/videos/back.mp4: ${sizeMiB.toFixed(2)} MiB`);
 
 if (sizeMiB > 24) throw new Error('Background video exceeds Cloudflare’s 25 MiB asset limit.');
+
+// Prevent deploying a stale homepage to the isolated redesign preview.
+const previewHtml = readFileSync(resolve('dist', 'index.html'), 'utf8');
+for (const token of ['/Banner.jpg','/Design1.jpg','/Design2.jpg','/Design3.jpg','truth-seekers-redesign']) {
+  if (!previewHtml.includes(token)) throw new Error('Redesign build is missing expected homepage token: ' + token);
+}
+for (const filename of ['Banner.jpg','Design1.jpg','Design2.jpg','Design3.jpg']) {
+  if (!existsSync(resolve('dist', filename))) throw new Error('Redesign image missing from dist: ' + filename);
+}
+console.log('[verify] Redesign homepage, four images and existing video are included in dist');
