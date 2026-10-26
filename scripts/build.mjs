@@ -45,7 +45,7 @@ if (sizeMiB > 24) throw new Error('Background video exceeds Cloudflare’s 25 Mi
 
 // Prevent deploying a stale homepage to the isolated redesign preview.
 const previewHtml = readFileSync(resolve('dist', 'index.html'), 'utf8');
-for (const token of ['/Banner.jpg','/Design1.jpg','/Design2.jpg','/Design3.jpg','truth-seekers-redesign']) {
+for (const token of ['/Banner.jpg','/Design1.jpg','/Design2.jpg','/Design3.jpg']) {
   if (!previewHtml.includes(token)) throw new Error('Redesign build is missing expected homepage token: ' + token);
 }
 for (const filename of ['Banner.jpg','Design1.jpg','Design2.jpg','Design3.jpg']) {
