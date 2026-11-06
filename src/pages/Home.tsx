@@ -21,6 +21,13 @@ export default function Home() {
         <Cut name="sparkles" ext="jpg" screen speed={-50} className="fill" style={{ opacity: 0.6 }} />
         <Cut name="mountains-near" speed={-10} className="hero-mtn-near" />
 
+        <nav className="hero-langs" aria-label="Read in your language">
+          <span>Read in</span>
+          {LANGUAGES.map((l) => (
+            <a key={l.code} href={l.href} lang={l.lang} dir={l.rtl ? 'rtl' : undefined}>{l.code === 'ar' ? 'العربية' : l.name}</a>
+          ))}
+        </nav>
+
         <div className="hero-copy">
           <span className="eyebrow">A personal letter to every truth-seeker</span>
           <h1>The Earth is <em>Home</em> to all Creatures</h1>
@@ -216,7 +223,8 @@ export default function Home() {
             {LANGUAGES.map((l, i) => (
               <a key={l.code} href={l.href} lang={l.lang} className="orb" style={{ ['--a' as string]: `${i * 45}deg` }}>
                 <b>{l.glyph}</b>
-                <span>{l.name.length > 9 ? l.code.toUpperCase() : l.name}</span>
+                <span className="s">{l.name.length > 9 ? l.code.toUpperCase() : l.name}</span>
+                <span className="f">{l.name}</span>
               </a>
             ))}
           </div>

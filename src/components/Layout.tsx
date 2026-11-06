@@ -2,6 +2,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { NAV, READ, SITE } from '../data';
+import LangMenu from './LangMenu';
 
 export function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
   return (
@@ -44,6 +45,7 @@ export default function Layout() {
           <a href={READ.ar} lang="ar" dir="rtl" className="ar-link">الكتاب</a>
           <a href={READ.en} className="cta-link">Read</a>
         </nav>
+        <LangMenu />
         <button className="burger" aria-expanded={open} aria-label="Menu" onClick={() => setOpen(!open)}>
           <span /><span />
         </button>
