@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Cut } from '../components/Cut';
 import { Reveal } from '../components/Layout';
 import TreeMap from '../components/TreeMap';
+import VideoCard from '../components/VideoCard';
 import { KEY_MESSAGES, LANGUAGES, PARTS, QUESTIONS, READ, SITE } from '../data';
 
 export default function Home() {
@@ -38,6 +39,22 @@ export default function Home() {
           </div>
         </div>
         <span className="scroll-cue" aria-hidden="true">Scroll</span>
+      </section>
+
+      {/* 1b · WATCH — the introduction films */}
+      <section className="dusk watch">
+        <Cut name="rays" ext="jpg" screen speed={-30} className="fill" style={{ opacity: 0.4 }} />
+        <div className="wrap">
+          <Reveal className="head center">
+            <span className="eyebrow">Watch</span>
+            <h2>Begin with the introduction</h2>
+            <p>Two short films, about a minute and a quarter each. Press play — nothing downloads until you do.</p>
+          </Reveal>
+          <div className="watch-grid">
+            <Reveal><VideoCard src="/videos/story-1.mp4" ratio={478 / 850} still={4} title="The Introduction" caption="“Dear reader…” — a letter, opened" className="portrait" /></Reveal>
+            <Reveal delay={0.12}><VideoCard src="/videos/story-2.mp4" ratio={848 / 478} still={5} title="हम सत्य की तलाश में थे" caption="Hindi · हिन्दी — with subtitles" lang="hi" className="wide" /></Reveal>
+          </div>
+        </div>
       </section>
 
       {/* 2 · THREE QUESTIONS — floating islands */}

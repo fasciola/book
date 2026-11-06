@@ -162,6 +162,19 @@ cite { font: 600 .74rem var(--ui); letter-spacing: .22em; text-transform: upperc
 .orb b { font: 600 1.4rem/1 var(--serif); } .orb span { font: 600 .62rem var(--ui); margin-top: 3px; }
 
 
+/* watch */
+.watch { background: linear-gradient(180deg, #0a0f1e 0%, #1b1f4a 45%, #0a0f1e); }
+.watch-grid { display: grid; grid-template-columns: minmax(220px, 320px) minmax(0, 1fr); gap: clamp(1.4rem, 4vw, 3.5rem); align-items: center; justify-content: center; }
+.vcard { margin: 0; }
+.vframe { position: relative; width: 100%; border-radius: 22px; overflow: hidden; background: #05070f; border: 1px solid rgba(243, 217, 140, .35); box-shadow: 0 30px 70px -20px rgba(5, 8, 30, .9), 0 0 60px -10px rgba(243, 217, 140, .25); }
+.vcard.portrait .vframe { border-radius: 30px; border-width: 3px; }
+.vframe video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: #05070f; }
+.vplay { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(180deg, rgba(8, 10, 40, .1), rgba(8, 10, 40, .5)); transition: background .3s; }
+.vplay:hover { background: linear-gradient(180deg, rgba(8, 10, 40, 0), rgba(8, 10, 40, .35)); }
+.vplay-ring { width: 76px; height: 76px; border-radius: 50%; display: grid; place-items: center; padding-inline-start: 4px; color: var(--on-gold); background: radial-gradient(circle at 30% 28%, #fff1c2, var(--gold)); box-shadow: 0 0 0 10px rgba(243, 217, 140, .22), 0 14px 40px rgba(0, 0, 0, .5); transition: transform .35s var(--ease), box-shadow .35s; }
+.vplay:hover .vplay-ring { transform: scale(1.08); box-shadow: 0 0 0 16px rgba(243, 217, 140, .28), 0 14px 40px rgba(0, 0, 0, .5); }
+.vcard figcaption { margin-top: 1rem; text-align: center; } .vcard figcaption strong { display: block; font: 600 1.4rem var(--serif); color: var(--ivory); } .vcard figcaption span { font: 500 .78rem var(--ui); letter-spacing: .12em; text-transform: uppercase; color: var(--gold-2); }
+
 /* many paths */
 .crop-cut { position: relative; width: 100%; overflow: hidden; }
 .crop-cut img { height: 100%; object-fit: cover; }
@@ -236,7 +249,8 @@ cite { font: 600 .74rem var(--ui); letter-spacing: .22em; text-transform: upperc
   .links { position: fixed; inset: 64px 0 auto 0; flex-direction: column; align-items: stretch; background: rgba(10, 15, 30, .97); padding: 1rem var(--pad) 1.6rem; border-bottom: 1px solid rgba(217, 180, 90, .2); transform: translateY(-120%); transition: transform .5s var(--ease); margin: 0; }
   .links.open { transform: none; } .links a { padding: 14px 6px; text-align: center; border-radius: 0; border-bottom: 1px solid rgba(255, 255, 255, .08); }
   .islands, .msg-grid, .triptych, .dl-grid { grid-template-columns: 1fr; } .islands { gap: 7rem; }
-  .journey, .closing-grid, .audio-feature, .two, .summit-grid, .source-grid { grid-template-columns: 1fr; }
+  .journey, .closing-grid, .audio-feature, .two, .summit-grid, .source-grid, .watch-grid { grid-template-columns: 1fr; }
+  .vcard.portrait { max-width: 300px; margin-inline: auto; }
   .summit-art { max-width: 380px; margin: 0 auto; } .compass { left: -4%; }
   .hot .tip { display: none; } .journey-art { max-width: 320px; margin: 0 auto; min-height: 400px; }
   .closing-grid { text-align: center; } .closing .btns { justify-content: center; } .books { max-width: 320px; margin-inline: auto; }
