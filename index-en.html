@@ -10,110 +10,165 @@
     gtag('config', 'G-TEXHZXHEY9');
   </script>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>English Edition — Spare Some Minutes of Your Time</title>
-    <!-- FontAwesome for Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Shared Style library -->
-    <link rel="stylesheet" href="global.css">
-    <!-- Immediate theme setter script to prevent flickering -->
-    <script>
-        (function() {
-            const savedTheme = localStorage.getItem('theme');
-            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (savedTheme === 'dark' || (!savedTheme && prefersDark)) {
-                document.documentElement.setAttribute('data-theme', 'dark');
-            }
-        })();
-    </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>English Edition — Spare Some Minutes of Your Time</title>
+  <meta name="description" content="A decade-long search across the Torah, the Gospel, the Quran and philosophy — a personal letter to every truth-seeker. Read online or download free.">
+  <link rel="icon" href="/logo.png">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="global.css">
+  <script>(function(){const t=localStorage.getItem('theme');if(t==='dark'||(!t&&window.matchMedia('(prefers-color-scheme: dark)').matches))document.documentElement.setAttribute('data-theme','dark');})();</script>
 </head>
 <body>
 
-    <!-- Video Background Container -->
-    <div class="video-container" aria-hidden="true">
-        <video autoplay muted loop playsinline id="bg-video">
-            <source src="back.mp4" type="video/mp4">
-            Your browser does not support HTML5 video.
-        </video>
+  <nav>
+    <div class="logo-container">
+      <a href="index.html" class="logo" title="Change language"><span class="logo-text">Spare Some Minutes</span></a>
     </div>
-    
-    <!-- Video opacity controller overlay -->
-    <div class="overlay" aria-hidden="true"></div>
+    <div class="menu-icon" onclick="toggleMenu()" aria-label="Toggle Menu"><i class="fas fa-bars"></i></div>
+    <div class="nav-links" id="navLinks">
+      <a href="index-en.html" class="active">Home</a>
+      <a href="read.html">Read (EN)</a>
+      <a href="read-ar.html" lang="ar" dir="rtl">الكتاب (العربية)</a>
+      <a href="chapters.html">Chapters</a>
+      <a href="about.html">About</a>
+      <a href="author.html">Author</a>
+      <a href="download.html">Download</a>
+      <a href="contact.html">Contact</a>
+      <span class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle light / dark"><i class="fas fa-moon" id="themeIcon"></i></span>
+    </div>
+  </nav>
 
-    <!-- Navigation Bar -->
-    <nav>
-        <div class="logo-container">
-            <a href="index.html" class="logo" title="Change Language / Global Selection">
-                <img src="logo-black.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-black" onerror="this.style.display='none';">
-                <img src="logo-white.png" alt="Spare Some Minutes Logo" class="nav-logo nav-logo-white" onerror="this.style.display='none';">
-                <span class="logo-text">Spare Some Minutes</span>
-            </a>
-        </div>
+  <main>
+    <!-- 1 · HERO — dawn valley, golden olive tree, doves, floating book -->
+    <header class="sky sky-hero stage">
+      <img class="bg" src="assets/cutouts/sky-dawn.jpg" alt="" aria-hidden="true" onerror="this.remove()">
+      <img class="cut screen" data-speed="0.05" style="--w:100%;--x:0;--y:0;opacity:.7" src="assets/cutouts/rays.jpg" alt="" aria-hidden="true">
+      <img class="layer mtn-far cut" data-speed="0.04" style="position:absolute;--w:100%" src="assets/cutouts/mountains-far.png" alt="" aria-hidden="true">
+      <img class="cut screen" data-speed="-0.05" style="--w:90%;--x:5%;--y:34%;opacity:.8" src="assets/cutouts/cloud-wisp.jpg" alt="" aria-hidden="true">
+      <img class="cut tree float" data-speed="-0.03" src="assets/cutouts/olive-tree.png" alt="" aria-hidden="true">
+      <img class="cut hide-sm float" data-speed="-0.12" style="--w:clamp(120px,15vw,240px);--x:78%;--y:14%;--r:6deg" src="assets/cutouts/island-book.png" alt="" aria-hidden="true">
+      <img class="cut hide-sm float" data-speed="-0.16" style="--w:clamp(90px,11vw,170px);--x:7%;--y:24%;--r:-6deg;animation-delay:-3s" src="assets/cutouts/island-lamp.png" alt="" aria-hidden="true">
+      <img class="cut" data-speed="0.1" style="--w:clamp(110px,14vw,220px);--x:62%;--y:30%;--r:-4deg" src="assets/cutouts/dove-flight.png" alt="" aria-hidden="true">
+      <img class="cut hide-sm" data-speed="0.2" style="--w:clamp(60px,7vw,110px);--x:30%;--y:18%;--r:20deg" src="assets/cutouts/f-leaf-gold.png" alt="" aria-hidden="true">
+      <img class="cut screen" data-speed="0.08" style="--w:100%;--x:0;--y:0;opacity:.6" src="assets/cutouts/sparkles.jpg" alt="" aria-hidden="true">
+      <img class="layer mtn-near cut" data-speed="-0.02" style="position:absolute;--w:100%" src="assets/cutouts/mountains-near.png" alt="" aria-hidden="true">
 
-        <div class="menu-icon" onclick="toggleMenu()" aria-label="Toggle Menu">
-            <i class="fas fa-bars"></i>
-        </div>
-
-        <div class="nav-links" id="navLinks">
-            <a href="index-en.html" class="active">Home</a>
-            <a href="read.html">Read (EN)</a>
-            <a href="read-ar.html" lang="ar" dir="rtl">الكتاب (العربية)</a>
-            <a href="chapters.html">Chapters</a>
-            <a href="about.html">About</a>
-            <a href="author.html">Author</a>
-            <a href="download.html">Download</a>
-            <a href="contact.html">Contact</a>
-            <span class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle Dark Mode">
-                <i class="fas fa-moon" id="themeIcon"></i>
-            </span>
-        </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <header class="hero">
-        <span class="sub-title" style="border-bottom: 2px solid var(--color-primary); padding-bottom: 5px; margin-bottom: 1.5rem;">English Edition</span>
-        <h1>The Earth is Home to all Creatures</h1>
-        <p>A Personal Letter to Every Truth-Seeker</p>
-        <p style="margin: 0 auto; max-width: 65ch;">A decade-long search across the Torah, the Gospel, the Quran, and philosophy. A personal letter to every truth-seeker.</p>
-
+      <div class="copy">
+        <span class="eyebrow">English Edition · A personal letter</span>
+        <h1>The Earth is <em>Home</em> to all Creatures</h1>
+        <p class="lede">A decade-long search across the Torah, the Gospel, the Quran and philosophy — written for every truth-seeker.</p>
         <div class="btn-group">
-            <a href="read.html" class="btn">Start Reading</a>
-            <a href="download.html" class="btn btn-outline">Free PDF Download</a>
+          <a href="read.html" class="btn"><i class="fas fa-book-open"></i> Begin the Journey</a>
+          <a href="download.html" class="btn btn-outline"><i class="far fa-file-pdf"></i> Free PDF</a>
         </div>
+      </div>
+      <span class="scroll-cue" aria-hidden="true">Scroll</span>
     </header>
 
-    <!-- Content Showcase Container -->
-    <main class="container">
+    <!-- 2 · THREE QUESTIONS — floating islands -->
+    <section class="dusk stage">
+      <img class="cut screen" data-speed="-0.06" style="--w:120%;--x:-10%;--y:30%;opacity:.55" src="assets/cutouts/cloud-bank.jpg" alt="" aria-hidden="true">
+      <div class="inner">
+        <div class="band-head">
+          <span class="eyebrow">Three questions</span>
+          <h2>Every road in the book returns to these</h2>
+          <p>Examined with intellectual honesty, one island at a time.</p>
+        </div>
+        <div class="islands">
+          <article class="island">
+            <img class="cut" src="assets/cutouts/island-lamp.png" alt="" aria-hidden="true">
+            <div class="glass"><span class="num">I</span><h3>What is Truth?</h3><p>Is there one universal truth? The author examines every path with intellectual honesty.</p></div>
+          </article>
+          <article class="island">
+            <img class="cut" src="assets/cutouts/island-sapling.png" alt="" aria-hidden="true">
+            <div class="glass"><span class="num">II</span><h3>Where is Happiness?</h3><p>Not fleeting pleasure, but deep contentment that survives loss and death.</p></div>
+          </article>
+          <article class="island">
+            <img class="cut" src="assets/cutouts/island-harvest.png" alt="" aria-hidden="true">
+            <div class="glass"><span class="num">III</span><h3>One Humanity</h3><p>Can divisions of religion and race be healed? The book argues Islam offers the foundation for true unity.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
 
-        <!-- Section Card 1: Main Core Questions -->
-        <article class="card">
-            <h2>Three Questions That Shape the Journey</h2>
-            <p><strong>What is Truth?</strong> Is there one universal truth? The author examines every path with intellectual honesty.</p>
-            <p><strong>Where is Happiness?</strong> Not fleeting pleasure, but deep contentment that survives loss and death.</p>
-            <p><strong>One Humanity:</strong> Can divisions of religion and race be healed? The book argues Islam offers the foundation for true unity.</p>
-        </article>
+    <!-- 3 · THE JOURNEY — four parts as four lanterns up a cliff -->
+    <section class="dusk stage" style="background:linear-gradient(180deg,#0a0f1e,#161f48 60%,#20285a)">
+      <div class="inner">
+        <div class="band-head">
+          <span class="eyebrow">The road</span>
+          <h2>Four parts, one climb</h2>
+          <p>Follow the path from the first question to the last light.</p>
+        </div>
+        <div class="journey">
+          <div class="journey-art stage">
+            <img class="cut" data-speed="-0.03" src="assets/cutouts/path-cliff.png" alt="" aria-hidden="true">
+            <img class="cut traveler" src="assets/cutouts/traveler.png" alt="" aria-hidden="true">
+            <img class="cut f-lantern float" src="assets/cutouts/f-lantern.png" alt="" aria-hidden="true">
+          </div>
+          <ol class="stops">
+            <li class="glass"><h3>A message to all truth-seekers</h3><p>The author's awakening and the search for an absolute, unifying peace.</p></li>
+            <li class="glass"><h3>The truth I have found</h3><p>Where ten years of reading, doubt and honesty led.</p></li>
+            <li class="glass"><h3>Where I have found it</h3><p>Tracing the truth through the Torah, the Gospel and the Quran.</p></li>
+            <li class="glass"><h3>The details of the truth</h3><p>Oneness of God, prayer, family, environment, peace and more.</p></li>
+          </ol>
+        </div>
+        <div class="btn-group"><a href="chapters.html" class="btn btn-outline">See all chapters</a></div>
+      </div>
+    </section>
 
-        <!-- Section Card 2: Editorial Book Quote -->
-        <article class="card">
-            <h2>From the Book</h2>
-            <p style="font-style: italic; font-size: 1.15rem; line-height: 1.8;">
-                "I say this thinking I have found the truth we sought for years... I have come to believe — with full conviction — that the original, pure message of Islam is the truth that unites all of humanity."
-            </p>
-            <p style="text-align: right; font-weight: bold; color: var(--color-accent); margin-right: 15px;">— Ahmed Attijani Ahmed Albadawi</p>
-            <div style="text-align: center; margin-top: 2rem;">
-                <a href="read.html" class="btn">Continue Reading</a>
-            </div>
-        </article>
+    <!-- 4 · QUOTE — sea of clouds -->
+    <section class="dusk quote-sea stage" style="background:linear-gradient(180deg,#20285a 0%,#6b5c9c 45%,#e5a98f 100%)">
+      <img class="cut screen" data-speed="-0.08" style="--w:130%;--x:-15%;--y:45%" src="assets/cutouts/cloud-bank.jpg" alt="" aria-hidden="true">
+      <img class="cut hide-sm" data-speed="0.12" style="--w:clamp(130px,17vw,270px);--x:8%;--y:16%;--r:-6deg" src="assets/cutouts/dove-flight.png" alt="" aria-hidden="true">
+      <img class="cut hide-sm" data-speed="-0.1" style="--w:clamp(90px,10vw,160px);--x:84%;--y:55%;--r:12deg" src="assets/cutouts/f-pages.png" alt="" aria-hidden="true">
+      <div class="inner">
+        <span class="eyebrow">From the book</span>
+        <blockquote>I have come to believe — with full conviction — that the original, pure message of Islam is the truth that unites all of humanity.</blockquote>
+        <cite>Ahmed Attijani Ahmed Albadawi</cite>
+        <div class="btn-group" style="margin-top:2.2rem"><a href="read.html" class="btn">Continue Reading</a></div>
+      </div>
+    </section>
 
-    </main>
+    <!-- 5 · LANGUAGES — orbiting orbs -->
+    <section class="dusk stage" style="background:linear-gradient(180deg,#e5a98f 0%,#7a6aa6 20%,#1b2547 60%,#0a0f1e)">
+      <div class="inner" style="text-align:center">
+        <span class="eyebrow">Eight languages</span>
+        <h2 style="margin-inline:auto">One letter, every tongue</h2>
+        <div class="orbit stage">
+          <img class="cut globe" data-speed="0" src="assets/cutouts/globe-glass.png" alt="" aria-hidden="true">
+          <a href="index-ar.html" style="--a:0deg" lang="ar"><b>ع</b>العربية</a>
+          <a href="index-en.html" style="--a:45deg"><b>A</b>English</a>
+          <a href="index-fr.html" style="--a:90deg"><b>É</b>Français</a>
+          <a href="index-de.html" style="--a:135deg"><b>ß</b>Deutsch</a>
+          <a href="index-ru.html" style="--a:180deg"><b>Я</b>Русский</a>
+          <a href="index-zh.html" style="--a:225deg"><b>中</b>中文</a>
+          <a href="reader.html?lang=nl" style="--a:270deg"><b>N</b>Nederlands</a>
+          <a href="reader.html?lang=sw" style="--a:315deg"><b>K</b>Kiswahili</a>
+        </div>
+      </div>
+    </section>
 
-    <!-- Direct WhatsApp Float action -->
-    <a href="https://wa.me/249910438069" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp">
-        <i class="fab fa-whatsapp"></i>
-    </a>
+    <!-- 6 · DOWNLOAD -->
+    <section class="dusk stage" style="background:#0a0f1e;padding-bottom:2rem">
+      <div class="inner books-cta">
+        <img class="cut float" src="assets/cutouts/books-cloud.png" alt="" aria-hidden="true">
+        <div>
+          <span class="eyebrow">Free, forever</span>
+          <h2>Take it with you</h2>
+          <p style="color:#dcd6ec">PDF editions in seven languages. Share, print and pass them on — the author asks only that the content stays unchanged.</p>
+          <div class="btn-group"><a href="download.html" class="btn"><i class="fas fa-download"></i> Download</a><a href="contact.html" class="btn btn-outline">Write to the author</a></div>
+        </div>
+      </div>
+    </section>
+    <div class="foot-hills"><img class="cut" src="assets/cutouts/hills-foot.png" alt="" aria-hidden="true"></div>
+  </main>
 
-    <!-- Shared interaction engine script -->
-    <script src="global.js"></script>
+  <a href="https://wa.me/249910438069" class="whatsapp-float" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp"><i class="fab fa-whatsapp"></i></a>
+  <footer class="no-hills" style="margin-top:0">
+    <p>&copy; 2026 Ahmed Attijani Ahmed Albadawi.</p>
+    <p><a href="contact.html">Contact</a> | <a href="about.html">About Book</a> | <a href="download.html">PDF Downloads</a></p>
+  </footer>
+  <script src="global.js"></script>
 </body>
 </html>

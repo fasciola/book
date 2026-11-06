@@ -63,7 +63,76 @@
     });
   }
 
+  /* Cut-out illustrations: hide any that have not been added yet, and let the rest drift on scroll */
+  function initCutouts() {
+    const cuts = [...document.querySelectorAll('.cut')];
+    if (!cuts.length) return;
+    cuts.forEach((img) => {
+      const miss = () => img.classList.add('is-missing');
+      img.addEventListener('error', miss, { once: true });
+      if (img.complete && img.naturalWidth === 0) miss();
+    });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const moving = cuts.filter((c) => c.dataset.speed);
+    if (!moving.length) return;
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const vh = window.innerHeight;
+      moving.forEach((c) => {
+        const host = c.parentElement.getBoundingClientRect();
+        if (host.bottom < -200 || host.top > vh + 200) return;
+        const centre = host.top + host.height / 2 - vh / 2;
+        c.style.setProperty('--py', (centre * parseFloat(c.dataset.speed)).toFixed(1) + 'px');
+      });
+    };
+    const request = () => { if (!ticking) { ticking = true; requestAnimationFrame(update); } };
+    window.addEventListener('scroll', request, { passive: true });
+    window.addEventListener('resize', request);
+    update();
+  }
+
+  /* Inner pages: add page-specific cut-out art behind the first header (no per-page markup needed) */
+  const PAGE_ART = {
+    'about':     [['island-book', 'right', '8%', 190], ['f-leaf-gold', 'left', '14%', 90]],
+    'author':    [['desk-window', 'right', '6%', 280], ['f-feather', 'left', '10%', 90]],
+    'contact':   [['dove-letter', 'right', '6%', 280], ['f-leaf-gold', 'left', '12%', 90]],
+    'chapters':  [['path-cliff', 'right', '2%', 150], ['f-lantern', 'left', '14%', 80]],
+    'download':  [['books-cloud', 'right', '6%', 200], ['f-star', 'left', '12%', 90]],
+    '_default':  [['dove-flight', 'right', '6%', 230], ['f-leaf-gold', 'left', '12%', 90]]
+  };
+
+  function initPageArt() {
+    if (document.querySelector('.sky-hero, .portal-hero')) return;
+    const host = document.querySelector('header.hero, main > header, .container > header');
+    if (!host || host.querySelector('.page-art')) return;
+    const page = (location.pathname.split('/').pop() || '').replace(/\.html$/, '');
+    const key = PAGE_ART[page] ? page : '_default';
+    const art = document.createElement('div');
+    art.className = 'page-art';
+    art.setAttribute('aria-hidden', 'true');
+    const items = [['sparkles', 'full', '0', 0]].concat(PAGE_ART[key]);
+    items.forEach(([name, side, top, w], i) => {
+      const img = document.createElement('img');
+      img.alt = '';
+      img.src = `/assets/cutouts/${name}.${name === 'sparkles' ? 'jpg' : 'png'}`;
+      img.className = 'cut' + (name === 'sparkles' ? ' screen page-sparkles' : ' hide-sm' + (i === 1 ? ' float' : ''));
+      if (name !== 'sparkles') {
+        img.style.setProperty('--w', `clamp(${Math.round(w * .55)}px, ${Math.round(w / 12)}vw, ${w}px)`);
+        img.style.setProperty('--y', top);
+        img.style.insetInlineStart = side === 'right' ? 'auto' : '3%';
+        img.style.insetInlineEnd = side === 'right' ? '3%' : 'auto';
+        img.dataset.speed = side === 'right' ? '-0.08' : '0.1';
+      }
+      art.appendChild(img);
+    });
+    host.classList.add('has-art');
+    host.prepend(art);
+  }
+
   document.addEventListener('DOMContentLoaded', () => {
+    initPageArt();
+    initCutouts();
     applyTheme(localStorage.getItem('theme') === 'light' ? 'light' : 'dark');
     applySiteLogo();
     addAsset('link', 'mobile-navigation.css', 'data-mobile-navigation');
