@@ -1,4 +1,5 @@
 import { Reveal } from '../components/Layout';
+import AudioPlayer from '../components/AudioPlayer';
 import PageHero from '../components/PageHero';
 import { AUDIO, LANGUAGES } from '../data';
 
@@ -14,15 +15,9 @@ export default function Languages() {
               <div>
                 <h2>Listen to The Search for Truth</h2>
                 <p>Listen in Arabic, French or Chinese, or pick a language below to read online.</p>
-                <div className="audio-list">
+                <div className="tracks">
                   {AUDIO.map((a) => (
-                    <div className="audio-item" key={a.lang}>
-                      <h3 lang={a.lang} dir={a.rtl ? 'rtl' : undefined}>{a.name}</h3>
-                      <audio controls preload="none" aria-label={`${a.name} audiobook`}>
-                        <source src={a.src} type="audio/mp4" />
-                      </audio>
-                      <a href={a.src} download>Download recording</a> · <a href={a.read}>Read this edition</a>
-                    </div>
+                    <AudioPlayer key={a.lang} id={a.lang} src={a.src} title={a.name} lang={a.lang} rtl={a.rtl} duration={a.duration} readHref={a.read} />
                   ))}
                 </div>
               </div>

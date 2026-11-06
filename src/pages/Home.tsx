@@ -3,7 +3,8 @@ import { Cut } from '../components/Cut';
 import { Reveal } from '../components/Layout';
 import TreeMap from '../components/TreeMap';
 import VideoCard from '../components/VideoCard';
-import { KEY_MESSAGES, LANGUAGES, PARTS, QUESTIONS, READ, SITE } from '../data';
+import AudioPlayer from '../components/AudioPlayer';
+import { AUDIO, KEY_MESSAGES, LANGUAGES, PARTS, QUESTIONS, READ, SITE } from '../data';
 
 export default function Home() {
   return (
@@ -54,6 +55,27 @@ export default function Home() {
             <Reveal><VideoCard src="/videos/story-1.mp4" ratio={478 / 850} still={4} title="The Introduction" caption="“Dear reader…” — a letter, opened" className="portrait" /></Reveal>
             <Reveal delay={0.12}><VideoCard src="/videos/story-2.mp4" ratio={848 / 478} still={5} title="हम सत्य की तलाश में थे" caption="Hindi · हिन्दी — with subtitles" lang="hi" className="wide" /></Reveal>
           </div>
+        </div>
+      </section>
+
+      {/* 1c · LISTEN — audiobooks */}
+      <section className="dusk night listen">
+        <div className="wrap">
+          <Reveal className="head center">
+            <span className="eyebrow">Listen</span>
+            <h2>Prefer to listen?</h2>
+            <p>The full book as an audiobook — about an hour in each language. It remembers where you stopped.</p>
+          </Reveal>
+          <Reveal>
+            <div className="glass listen-card">
+              <img src="/intro-poster.jpg" alt="The Search for Truth — illustrated multilingual cover" width={480} height={853} loading="lazy" />
+              <div className="tracks">
+                {AUDIO.map((a) => (
+                  <AudioPlayer key={a.lang} id={a.lang} src={a.src} title={a.name} lang={a.lang} rtl={a.rtl} duration={a.duration} readHref={a.read} />
+                ))}
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
 

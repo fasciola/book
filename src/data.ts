@@ -32,10 +32,11 @@ export const LANGUAGES: Lang[] = [
   { code: 'sw', glyph: 'K', name: 'Kiswahili', blurb: 'Soma toleo kamili la Kiswahili mtandaoni.', cta: 'Soma mtandaoni', href: 'reader.html?lang=sw', lang: 'sw' },
 ];
 
+/** Full audiobook recordings (audio-only .mp4, about an hour each). */
 export const AUDIO = [
-  { name: 'العربية', lang: 'ar', rtl: true, src: '/Arabic.mp4', read: 'index-ar.html' },
-  { name: 'Français', lang: 'fr', src: '/France.mp4', read: 'index-fr.html' },
-  { name: '中文', lang: 'zh', src: '/china.mp4', read: 'index-zh.html' },
+  { name: 'العربية', lang: 'ar', rtl: true, src: '/Arabic.mp4', read: 'index-ar.html', duration: 3456 },
+  { name: 'Français', lang: 'fr', src: '/France.mp4', read: 'index-fr.html', duration: 3571 },
+  { name: '中文', lang: 'zh', src: '/china.mp4', read: 'index-zh.html', duration: 3468 },
 ];
 
 export const QUESTIONS = [
