@@ -36,7 +36,7 @@ const languageFromPath=path=>{
   const m=p.match(/(?:^|\/)(?:index|read)-(ar|en|fr|de|ru|zh|nl|sw)(?:\.html)?(?:\?|$|\/)/);
   if(m)return ({ar:'Arabic',en:'English',fr:'French',de:'German',ru:'Russian',zh:'Chinese',nl:'Dutch',sw:'Swahili'})[m[1]];
   if(/(?:^|\/)read(?:\.html)?(?:\?|$|\/)/.test(p))return 'English';
-  if(/^(?:\/(?:index(?:\.html)?)?)?(?:\?.*)?$/.test(p))return 'Language Selector';
+  if(/^(?:\/(?:index(?:\.html)?|languages)?)?\/?(?:\?.*)?$/.test(p))return 'Language Selector';
   return 'Other / site';
 };
 const editionFromScreenName=title=>{
@@ -50,7 +50,7 @@ const editionFromScreenName=title=>{
   if(/Kiswahili|Swahili edition/i.test(t))return 'Swahili';
   if(/真理者|中文版本|Chinese edition/i.test(t))return 'Chinese';
   if(/seekers of truth|English Edition|Read Online — Spare Some Minutes/i.test(t))return 'English';
-  if(/Select Your Language/i.test(t))return 'Homepage / Selector';
+  if(/Select Your Language|A Personal Letter to Every Truth-Seeker/i.test(t))return 'Homepage / Selector';
   if(/Truth Seekers —|About the Book|About the Author|Chapters —|Contact —|Download —/i.test(t))return 'General Site Pages';
   return 'Unclassified';
 };

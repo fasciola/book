@@ -347,6 +347,8 @@ function render() {
 
   const downloads = data.events.filter(x => /file_download|download/i.test(x.name));
   const audio = data.events.filter(x => /audio|play|listen/i.test(x.name));
+  const evCount = name => data.events.find(x => x.name === name)?.count || 0;
+  const audioPlays = evCount('audio_play'), videoPlays = evCount('video_play');
   const histDownloads = downloads.reduce((n, x) => n + x.count, 0);
   const liveDownloads = (realtimeData?.events || []).find(x => /download/i.test(x.name))?.count || 0;
   const contentEvents = data.events.length > 0 ? data.events.map(x => [x.name, fmt(x.count)]) : (realtimeData?.events || []).map(x => [x.name, fmt(x.count)]);
@@ -365,7 +367,8 @@ function render() {
       ${liveDownloads > 0 && histDownloads === 0 
         ? card('Download events', fmt(liveDownloads), 'Recorded in last 30m (Live)', true, liveBadge)
         : card('Download events', fmt(histDownloads), 'Only recorded GA4 events')}
-      ${card('Audio events', fmt(audio.reduce((n, x) => n + x.count, 0)), 'Requires website event instrumentation')}
+      ${card('Audiobook plays', fmt(audioPlays), audioPlays || videoPlays ? 'audio_play events (completions: ' + fmt(evCount('audio_complete')) + ')' : 'No plays recorded yet in this period')}
+      ${card('Video plays', fmt(videoPlays), 'video_play events')}
     </div>
     ${quotaNoticeHtml}
     ${processingNoticeHtml}
