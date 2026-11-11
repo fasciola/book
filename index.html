@@ -7,7 +7,8 @@
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-TEXHZXHEY9');
+    // send_page_view off: the React app reports every route itself (src/analytics.ts)
+    gtag('config', 'G-TEXHZXHEY9', { send_page_view: false });
   </script>
 
   <meta charset="UTF-8">

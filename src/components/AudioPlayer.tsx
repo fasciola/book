@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { trackEvent } from '../analytics';
 
 interface AudioPlayerProps {
   id: string;
@@ -50,14 +51,14 @@ export default function AudioPlayer({ id, src, title, lang, rtl, duration, readH
         ref={ref}
         src={src}
         preload="none"
-        onPlay={() => setPlaying(true)}
+        onPlay={(e) => { setPlaying(true); if (e.currentTarget.currentTime < 2) trackEvent('audio_play', { audio_id: id, audio_title: title, language: lang }); }}
         onPause={() => setPlaying(false)}
         onLoadedMetadata={(e) => { setDur(e.currentTarget.duration || duration); if (resume) e.currentTarget.currentTime = resume; }}
         onTimeUpdate={(e) => {
           const t = e.currentTarget.currentTime; setTime(t);
           if (Math.abs(t - lastSave.current) > 5) { lastSave.current = t; try { localStorage.setItem(key, String(Math.floor(t))); } catch { /* ignore */ } }
         }}
-        onEnded={() => { setPlaying(false); try { localStorage.removeItem(key); } catch { /* ignore */ } }}
+        onEnded={() => { setPlaying(false); trackEvent('audio_complete', { audio_id: id, audio_title: title, language: lang }); try { localStorage.removeItem(key); } catch { /* ignore */ } }}
       />
       <div className="ap-head">
         <h3 lang={lang} dir={rtl ? 'rtl' : undefined}>{title}</h3>

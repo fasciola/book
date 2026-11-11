@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react';
+import { trackEvent } from '../analytics';
 
 interface VideoCardProps {
   src: string;
@@ -34,7 +35,7 @@ export default function VideoCard({ src, title, caption, ratio, still = 1, lang,
           playsInline
           controls={started}
           aria-label={title}
-          onPlay={() => setStarted(true)}
+          onPlay={(e) => { setStarted(true); if (e.currentTarget.currentTime < 2) trackEvent('video_play', { video_title: title, video_url: src }); }}
           onEnded={() => setStarted(false)}
         />
         {!started && (

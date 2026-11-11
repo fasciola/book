@@ -3,6 +3,7 @@ import { Link, NavLink, Outlet, useLocation } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { NAV, READ, SITE } from '../data';
 import LangMenu from './LangMenu';
+import { trackPageView } from '../analytics';
 
 export function Reveal({ children, delay = 0, className = '' }: { children: ReactNode; delay?: number; className?: string }) {
   return (
@@ -23,7 +24,7 @@ export default function Layout() {
   const [solid, setSolid] = useState(false);
   const { pathname } = useLocation();
 
-  useEffect(() => { setOpen(false); window.scrollTo({ top: 0 }); }, [pathname]);
+  useEffect(() => { setOpen(false); window.scrollTo({ top: 0 }); trackPageView(pathname); }, [pathname]);
   useEffect(() => {
     const on = () => setSolid(window.scrollY > 24);
     on();
