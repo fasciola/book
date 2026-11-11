@@ -1,15 +1,14 @@
 {
   "name": "truth-seekers-analytics",
   "main": "src/worker.js",
+  "workers_dev": false,
+  "preview_urls": false,
   "compatibility_date": "2026-10-20",
   "assets": { "directory": "./public", "binding": "ASSETS", "run_worker_first": true },
   "routes": [
     { "pattern": "analytics.truthseekersbook.com", "custom_domain": true }
   ],
   "vars": {
-    "ACCESS_AUD": "db93472aeaba087477cd75221eacc47ebea21d4dd4d6a8b98ee2233d45851882",
-    "ACCESS_TEAM_DOMAIN": "green-wave-c196.cloudflareaccess.com",
-    "GA4_PROPERTY_ID": "560815503",
-    "OWNER_EMAIL": "faisal4pillars@gmail.com,trusthseekersbook@gmail.com,asemvisionco@gmail.com"
+    "GA4_PROPERTY_ID": "560815503"
   }
 }

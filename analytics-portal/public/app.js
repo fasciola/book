@@ -428,7 +428,7 @@ async function load(fresh = false) {
     loadRealtime(fresh);
   } catch (e) {
     data = null;
-    alert.textContent = 'Analytics unavailable: ' + e.message + '. Check Cloudflare Access, the numeric GA4 property ID, and the service account permissions.';
+    alert.textContent = 'Analytics unavailable: ' + e.message + '. Check the numeric GA4 property ID, and the service account permissions.';
     alert.hidden = false;
     render();
   } finally {

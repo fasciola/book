@@ -1,31 +1,9 @@
-// Cloudflare Access must be enforced at the hostname and on the Worker route.
-// This Worker additionally verifies the Access JWT and exact owner email.
+// Public read-only analytics dashboard: no login. The GA4 service-account key stays server-side.
+// Abuse protection: per-IP rate limit on /api/*, shared response caches, and 'fresh' cache bypass disabled.
 const json = (data, status=200) => new Response(JSON.stringify(data), {status,headers:{'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'}});
 const b64url = b => btoa(String.fromCharCode(...new Uint8Array(b))).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');
 const decode = input => Uint8Array.from(atob(input.replace(/-/g,'+').replace(/_/g,'/')+'='.repeat((4-input.length%4)%4)), c=>c.charCodeAt(0));
 const utf8 = s => new TextEncoder().encode(s);
-async function verifyAccess(request,env){
-  const url=new URL(request.url);
-  const host=request.headers.get('host')||url.host||'';
-  const token=request.headers.get('Cf-Access-Jwt-Assertion');
-  const isLocal=url.protocol==='http:'||host.includes('127.0.0.1')||host.includes('localhost');
-  if(isLocal&&!token){
-    return 'faisal4pillars@gmail.com';
-  }
-  if(!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD || !env.OWNER_EMAIL)throw Error('Access environment not configured');
-  if(!token)throw Error('Cloudflare Access sign-in required');
-  const parts=token.split('.');if(parts.length!==3)throw Error('Invalid Access token');
-  const header=JSON.parse(new TextDecoder().decode(decode(parts[0])));
-  const claims=JSON.parse(new TextDecoder().decode(decode(parts[1])));
-  const expectedIssuer='https://'+env.ACCESS_TEAM_DOMAIN.replace(/^https?:\/\//,'').replace(/\/$/,'');
-  const allowedEmails=(env.OWNER_EMAIL||'').split(',').map(e=>e.trim().toLowerCase()).filter(Boolean);
-  if(header.alg!=='RS256'||!header.kid||claims.iss!==expectedIssuer || !(Array.isArray(claims.aud)?claims.aud.includes(env.ACCESS_AUD):claims.aud===env.ACCESS_AUD) || Number(claims.exp)<=Date.now()/1000 || Number(claims.nbf||0)>Date.now()/1000 || (allowedEmails.length>0 && !allowedEmails.includes(String(claims.email||'').toLowerCase())))throw Error('Access policy denied');
-  const keys=await fetch(expectedIssuer+'/cdn-cgi/access/certs').then(r=>{if(!r.ok)throw Error('Access keys unavailable');return r.json()});
-  const key=keys.keys?.find(k=>k.kid===header.kid && k.kty==='RSA');if(!key)throw Error('Access signing key not found');
-  const cryptoKey=await crypto.subtle.importKey('jwk',key,{name:'RSASSA-PKCS1-v1_5',hash:'SHA-256'},false,['verify']);
-  if(!await crypto.subtle.verify('RSASSA-PKCS1-v1_5',cryptoKey,decode(parts[2]),utf8(parts[0]+'.'+parts[1])))throw Error('Invalid Access signature');
-  return claims.email;
-}
 async function getGoogleToken(env){
   if(!env.GOOGLE_SERVICE_ACCOUNT_JSON)throw Error('Google service account secret missing');
   const account=JSON.parse(env.GOOGLE_SERVICE_ACCOUNT_JSON);
@@ -78,6 +56,16 @@ const editionFromScreenName=title=>{
 };
 const periodDays={7:7,30:30,90:90};
 
+// Best-effort per-isolate fixed-window limiter (30 API calls/min per IP)
+const RATE_LIMIT=30,RATE_WINDOW_MS=60*1000,hits=new Map();
+function rateLimited(request){
+  const ip=request.headers.get('cf-connecting-ip')||'unknown',now=Date.now();
+  if(hits.size>5000)for(const [k,v] of hits)if(now-v.start>RATE_WINDOW_MS)hits.delete(k);
+  const h=hits.get(ip);
+  if(!h||now-h.start>RATE_WINDOW_MS){hits.set(ip,{start:now,count:1});return false}
+  return ++h.count>RATE_LIMIT;
+}
+
 // Server-side in-memory caching to protect hourly Google Analytics Data API quotas
 let cachedRealtimeData = null;
 let cachedRealtimeTimestamp = 0;
@@ -88,19 +76,15 @@ const REPORT_CACHE_TTL_MS = 180 * 1000; // 3-minute cache for historical reports
 
 export default {async fetch(request,env){
   const url=new URL(request.url);
-  const host=request.headers.get('host')||url.host||'';
-  const isLocal = url.protocol==='http:' || host.includes('127.0.0.1') || host.includes('localhost');
   try{
-    if(isLocal && !url.pathname.startsWith('/api/')) {
-      return env.ASSETS.fetch(request);
-    }
-    const email=await verifyAccess(request,env);
-    if(url.pathname==='/api/health')return json({ok:true,authenticated:true,email,configured:!!(env.GA4_PROPERTY_ID&&env.GOOGLE_SERVICE_ACCOUNT_JSON)});
+    if(!url.pathname.startsWith('/api/'))return env.ASSETS.fetch(request);
+    if(rateLimited(request))return json({error:'Too many requests, try again in a minute'},429);
+    if(url.pathname==='/api/health')return json({ok:true,configured:!!(env.GA4_PROPERTY_ID&&env.GOOGLE_SERVICE_ACCOUNT_JSON)});
     if(url.pathname==='/api/realtime'){
       if(request.method!=='GET')return json({error:'Method not allowed'},405);
       if(!/^\d+$/.test(env.GA4_PROPERTY_ID||''))return json({error:'GA4 numeric property ID is not configured'},503);
       
-      const isForceFresh = url.searchParams.get('fresh') === '1';
+      const isForceFresh = false; // public endpoint: never let visitors bypass the quota cache
       const now = Date.now();
       if(!isForceFresh && cachedRealtimeData && (now - cachedRealtimeTimestamp < REALTIME_CACHE_TTL_MS)){
         return json({...cachedRealtimeData, cached: true});
@@ -234,7 +218,7 @@ export default {async fetch(request,env){
       if(request.method!=='GET')return json({error:'Method not allowed'},405);
       if(!/^\d+$/.test(env.GA4_PROPERTY_ID||''))return json({error:'GA4 numeric property ID is not configured'},503);
       const days=periodDays[Number(url.searchParams.get('days'))]||30;
-      const isForceFresh = url.searchParams.get('fresh') === '1';
+      const isForceFresh = false; // public endpoint: never let visitors bypass the quota cache
       const cached = cachedReportData.get(days);
       if(!isForceFresh && cached && (Date.now() - cached.timestamp < REPORT_CACHE_TTL_MS)){
         return json({...cached.data, cached:true});
@@ -287,5 +271,5 @@ export default {async fetch(request,env){
       return json(reportPayload);
     }
     return env.ASSETS.fetch(request);
-  }catch(e){return json({error:url.pathname.startsWith('/api/')?(e.message||'Request failed'):'Access denied'},url.pathname.startsWith('/api/')?403:403)};
+  }catch(e){console.error('analytics error',e&&e.message);return json({error:'Analytics temporarily unavailable'},502)}
 }};
